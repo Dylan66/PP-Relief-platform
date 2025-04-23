@@ -1,71 +1,53 @@
-// frontend/src/App.jsx
+// frontend/src/App.jsx (Corrected)
 
 import React from 'react';
-// Import necessary components from react-router-dom, but NOT BrowserRouter
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom'; // Keep these imports
 
-// Import Page Components
+// Import Page Components (using paths from your file)
 import HomePage from './pages/HomePage.jsx';
-import LoginPage from './pages/Auth/LoginPage.jsx';
-import RegisterPage from './pages/Auth/RegisterPage.jsx';
+import LoginPage from './pages/Auth/LoginPage.jsx'; // Correct path
+import RegisterPage from './pages/Auth/RegisterPage.jsx'; // Correct path
 import NotFoundPage from './pages/NotFoundPage.jsx';
-// Import Dashboard pages (assuming they exist or will be created)
-// import IndividualDashboard from './pages/IndividualDashboard.jsx';
-// import OrgDashboard from './pages/OrgDashboard.jsx';
-// import CenterDashboard from './pages/CenterDashboard.jsx';
-// import AdminDashboard from './pages/AdminDashboard.jsx';
+
+// Import the Dashboard Router Component (create this as discussed previously)
+import DashboardRouter from './pages/DashboardRouter.jsx'; // Assuming you create this
 
 // Import Common Components
-import Navbar from './components/common/Navbar.jsx'; // You need to create/have this
-// import Footer from './components/common/Footer.jsx'; // Optional: You need to create/have this
-import ProtectedRoute from './components/common/ProtectedRoute.jsx'; // You need to create/have this
+import Navbar from './components/common/Navbar.jsx'; // Use your Navbar path
+// import Footer from './components/common/Footer.jsx';
+
+// Import your EXISTING ProtectedRoute component (using your path)
+import ProtectedRoute from './components/common/ProtectedRoute.jsx'; // Use your ProtectedRoute path
 
 function App() {
   return (
-    // Outermost element is a div or React Fragment, NOT <Router>
-    <div className="app-container"> {/* Optional: Add a class for styling */}
-      {/* Navbar will be displayed on all pages */}
+    <div className="app-container">
       <Navbar />
 
-      {/* Main content area where routed pages will be rendered */}
-      <main className="main-content"> {/* Optional: Add a class for styling */}
+      <main className="main-content">
         <Routes>
-          {/* Public Routes */}
+          {/* === Public Routes === */}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          {/* Add other public routes like About, Contact etc. here */}
 
-          {/* --- Protected Routes (Examples) --- */}
-          {/* Wrap routes that require authentication with ProtectedRoute */}
 
-          {/* Example: Individual User Dashboard */}
-          {/*
-          <Route path="/dashboard" element={
-            <ProtectedRoute>
-              <IndividualDashboard />
-            </ProtectedRoute>
-          } />
-          */}
+          {/* === Protected Routes === */}
+          {/* Use the element prop on Route to apply ProtectedRoute */}
+          <Route element={<ProtectedRoute />}> {/* <-- Wrapper Route using ProtectedRoute */}
+            {/* Nested routes are rendered via <Outlet> inside ProtectedRoute */}
 
-          {/* Example: Request Form for Individuals */}
-          {/*
-          <Route path="/request-products" element={
-            <ProtectedRoute>
-              <RequestFormIndividual /> // Assuming this is a component, maybe inside a page
-            </ProtectedRoute>
-          } />
-           */}
+            {/* Single entry point for all dashboards */}
+            <Route path="/dashboard" element={<DashboardRouter />} />
 
-          {/* Example: Organization Dashboard (might need role check) */}
-          {/*
-          <Route path="/org/dashboard" element={
-             <ProtectedRoute requiredRole="OrgAdmin"> // Add role checking later
-               <OrgDashboard />
-             </ProtectedRoute>
-           } />
-           */}
+            {/* Add other routes that require login INSIDE this wrapper */}
+            {/* Example:
+            <Route path="/request-pads" element={<RequestPadsPage />} />
+            <Route path="/profile/edit" element={<EditProfilePage />} />
+            */}
 
-          {/* --- Add other public or protected routes here --- */}
+          </Route> {/* <-- End of ProtectedRoute wrapper */}
 
 
           {/* Catch-all route for 404 Not Found - must be last */}
@@ -73,7 +55,6 @@ function App() {
         </Routes>
       </main>
 
-      {/* Optional Footer */}
       {/* <Footer /> */}
     </div>
   );
