@@ -1,4 +1,4 @@
-# api/urls.py (Create this file)
+# api/urls.py
 
 from django.urls import path
 from . import views # Import views from the current directory (api app)
@@ -24,9 +24,12 @@ urlpatterns = [
 
     # SMS Webhook endpoint
     path('sms/webhook/', views.sms_webhook, name='sms-webhook'),
-    
-    # Get current user details
-    path('auth/user/', views.CurrentUserAPIView.as_view(), name='current-user'),
 
     # TODO: Add Authentication endpoints (Login, Logout, Register User) later using DRF or dj-rest-auth/djoser
+    # >>> REMOVE THIS LINE <<<
+    # path('auth/user/', views.CurrentUserAPIView.as_view(), name='current-user'),
+    # >>> REMOVE THIS LINE <<<
+
+    # Authentication URLs are handled by including 'dj_rest_auth.urls' and 'dj_rest_auth.registration.urls'
+    # in your project's main backend/urls.py file.
 ]
