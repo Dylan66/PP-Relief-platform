@@ -1,14 +1,15 @@
 # api/models.py
 
 from django.db import models
-from django.contrib.auth.models import User # Import standard User model
+# *** Use get_user_model() instead of importing User directly and using settings.AUTH_USER_MODEL ***
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.conf import settings # Import settings to get AUTH_USER_MODEL
 from django.db.models.signals import post_save # Import signal
 from django.dispatch import receiver # Import receiver for signals
 
-# Use the user model specified in settings (defaults to django.contrib.auth.models.User)
-AUTH_USER_MODEL = settings.AUTH_USER_MODEL
+# *** Get the actual User model class ***
+User = get_user_model()
+
 
 # Define choices for user roles
 USER_ROLE_CHOICES = [
@@ -23,7 +24,8 @@ USER_ROLE_CHOICES = [
 # New UserProfile Model to extend Django's User
 class UserProfile(models.Model):
     # One-to-one link to the standard Django User model
-    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile')
+    # *** Use the User model class here ***
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
     # *** ADD EXPLICIT ROLE FIELD ***
     role = models.CharField(
@@ -41,27 +43,17 @@ class UserProfile(models.Model):
 
 # --- Signal to create UserProfile automatically when a new User is created ---
 # This ensures every User has a linked UserProfile upon creation
-@receiver(post_save, sender=AUTH_USER_MODEL)
+# *** Use the User model class as the sender ***
+@receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         # Create profile with default role 'individual'
         UserProfile.objects.create(user=instance)
         # print(f"UserProfile created for {instance.username}") # Optional debug log
 
-# This signal is often included, but the create signal handles it for new users.
-# It might be needed if you manually create a User without the signal firing,
-# or modify profile fields when saving the User.
-@receiver(post_save, sender=AUTH_USER_MODEL)
-def save_user_profile(sender, instance, **kwargs):
-     # Ensure profile exists before trying to save it
-     if hasattr(instance, 'profile'):
-        try:
-             # Use a try-except block in case the profile wasn't created properly initially
-             instance.profile.save()
-        except UserProfile.DoesNotExist:
-             # This case should ideally be handled by create_user_profile, but as a fallback
-             UserProfile.objects.create(user=instance)
-             print(f"Warning: UserProfile created retroactively for {instance.username} during save signal.")
+
+# --- Signal to save UserProfile when User is saved ---
+# *** This signal is REMOVED, as previously decided ***
 
 
 # Update Organization and DistributionCenter to link to UserProfile
@@ -149,8 +141,9 @@ class ProductRequest(models.Model):
         related_name='product_requests'
     )
     # 2. For Individual Users (Web App - Logged In) - Linked to the User object
+    # *** Use the User model class here ***
     requester_user = models.ForeignKey(
-        AUTH_USER_MODEL, # Link to the configured Auth User model
+        User, # Link to the configured Auth User model
         on_delete=models.SET_NULL,
         null=True, blank=True,
         related_name='product_requests'

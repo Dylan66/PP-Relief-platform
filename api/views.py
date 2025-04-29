@@ -2,21 +2,24 @@
 
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from rest_framework.exceptions import PermissionDenied, ValidationError as DRFValidationError # Import DRF Validation Error
+from rest_framework.exceptions import PermissionDenied, ValidationError as DRFValidationError
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import HttpResponse
 from django.db import models as django_models
 
+# Import the default RegisterView from dj-rest-auth
+from dj_rest_auth.registration.views import RegisterView as DjRestAuthRegisterView
+
 from .models import (
-    UserProfile, # Import UserProfile
+    UserProfile,
     Organization,
     DistributionCenter,
     ProductType,
     InventoryItem,
     ProductRequest,
-    USER_ROLE_CHOICES # Import role choices
+    USER_ROLE_CHOICES
 )
 from .serializers import (
     ProductTypeSerializer,
@@ -24,46 +27,80 @@ from .serializers import (
     InventoryItemSerializer,
     ProductRequestSerializer,
     CustomUserDetailsSerializer,
-    OrganizationSerializer # Import OrganizationSerializer
+    OrganizationSerializer,
+    # Import your RegisterSerializer
+    RegisterSerializer
 )
 
 User = get_user_model()
 
-# --- Public/General Read-Only Views ---
+# --- Custom Registration View ---
+# Inherit from the default dj-rest-auth RegisterView
+class CustomRegisterView(DjRestAuthRegisterView):
+    """
+    Custom registration view to fix the serializer.save() argument issue
+    and potentially add custom logic during registration if needed later.
+    """
+    # Use your custom serializer configured in settings.py
+    # serializer_class = RegisterSerializer # Already set via REST_AUTH['REGISTER_SERIALIZER']
 
+    def perform_create(self, serializer):
+        """
+        Save the user and potentially update their profile.
+        Override dj-rest-auth's default perform_create to call serializer.save() correctly.
+        The default RegisterView at dj_rest_auth.registration.views.py calls serializer.save(self.request),
+        which causes TypeError because serializer.save() expects validated_data as keyword arg or no args.
+        """
+        # The serializer.save() method handles creating the User instance based on validated_data.
+        # The post_save signal on the User model will then automatically create the UserProfile.
+        # If you needed to set fields on the UserProfile based on registration data
+        # (e.g., setting initial role or is_donor if allowed during registration),
+        # you would do it *after* the user is created here.
+
+        print(">>> CustomRegisterView.perform_create called <<<")
+        print("Serializer validated_data:", serializer.validated_data)
+
+        # *** FIX START: Call serializer.save() WITHOUT passing self.request ***
+        # This calls the create() method on your RegisterSerializer with validated_data
+        user = serializer.save()
+        # *** FIX END ***
+
+        print("User created successfully by serializer.save():", user)
+        # The post_save signal create_user_profile should fire here automatically.
+
+        # If you collected profile data in the RegistrationForm and wanted to set it
+        # immediately after user creation (and profile creation by signal), you could
+        # access it via self.request.data and update user.profile here.
+        # This requires adding those fields (like role, location, org_name) to the
+        # RegistrationForm frontend, passing them to the register function in AuthContext,
+        # adding them as write_only fields to the RegisterSerializer, and then
+        # accessing them via serializer.validated_data or self.request.data here.
+        # For MVP, we set profile role to 'individual' by default via signal.
+
+        return user # Return the created user instance
+
+
+# --- Public/General Read-Only Views (Keep existing) ---
 class ProductTypeListAPIView(generics.ListAPIView):
-    """
-    API endpoint that allows Product Types to be viewed by anyone.
-    """
+    """API endpoint that allows Product Types to be viewed by anyone."""
     queryset = ProductType.objects.all()
     serializer_class = ProductTypeSerializer
     permission_classes = [permissions.AllowAny]
 
 
 class DistributionCenterListAPIView(generics.ListAPIView):
-    """
-    API endpoint that allows Distribution Centers to be viewed by anyone.
-    Used for showing drop-off locations or potential pickup points.
-    """
+    """API endpoint that allows Distribution Centers to be viewed by anyone."""
     queryset = DistributionCenter.objects.all()
     serializer_class = DistributionCenterSerializer
     permission_classes = [permissions.AllowAny]
 
 
 # --- Organization Views (Requires Authentication & potentially Admin role) ---
-
 class OrganizationListCreateAPIView(generics.ListCreateAPIView):
-    """
-    API endpoint that allows Organizations to be listed and created.
-    Creation is likely for registration (AllowAny), Listing might be restricted (IsAdminUser?).
-    """
+    """API endpoint that allows Organizations to be listed and created."""
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
-
-    # Permissions: Authenticated users can list. Unauthenticated users cannot list.
-    # Creation: Allow any user? Or restrict? For MVP, let's require authentication to create.
-    # Real-world: Maybe a separate 'Org Registration' flow, or only System Admins create Orgs.
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly] # Authenticated can list, any can read. CanAuthenticated create?
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def post(self, request, *args, **kwargs):
         """Override POST to enforce creation permission."""
@@ -72,41 +109,21 @@ class OrganizationListCreateAPIView(generics.ListCreateAPIView):
              raise PermissionDenied("You do not have permission to create an organization.")
         return super().post(request, *args, **kwargs)
 
-    # If you allow linking an admin_profile on creation via payload (System Admin task):
-    # def perform_create(self, serializer):
-    #     admin_profile_id = self.request.data.get('admin_profile')
-    #     admin_profile = None
-    #     if admin_profile_id:
-    #          try:
-    #               admin_profile = UserProfile.objects.get(id=admin_profile_id)
-    #          except UserProfile.DoesNotExist:
-    #               raise DRFValidationError({"admin_profile": "Invalid UserProfile ID."})
-    #     serializer.save(admin_profile=admin_profile)
-
 
 # --- Product Request Views (Requires Authentication & Role-based Logic) ---
-
 class ProductRequestListCreateAPIView(generics.ListCreateAPIView):
-    """
-    API endpoint for authenticated users/organizations to create new requests
-    and view their existing requests.
-    Permissions: IsAuthenticated. Logic in get_queryset and perform_create.
-    """
+    """API endpoint for authenticated users/organizations to create new requests and view their existing requests."""
     serializer_class = ProductRequestSerializer
-    permission_classes = [permissions.IsAuthenticated] # Must be logged in
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        """
-        Filter requests based on the logged-in user's explicit role.
-        System Admins/Staff see all. Other roles see specific requests.
-        """
+        """Filter requests based on the logged-in user's explicit role."""
+        # ... (keep the get_queryset logic from previous versions) ...
         user = self.request.user
-        # System Admins/Staff see all requests
         if user.is_staff or user.is_superuser:
             print(f"User {user.username} is staff/superuser, returning all requests.")
             return ProductRequest.objects.all().order_by('-created_at')
 
-        # Check the explicit role from the user's profile
         user_role = None
         user_profile = None
         try:
@@ -115,57 +132,42 @@ class ProductRequestListCreateAPIView(generics.ListCreateAPIView):
             print(f"User {user.username} (Role: {user_role}) is requesting request list.")
         except UserProfile.DoesNotExist:
              print(f"User {user.username} has no profile. Denying request list.")
-             raise PermissionDenied("User profile missing.") # Deny if profile is unexpectedly missing
-        except AttributeError: # Should not happen with signal, but defensive
+             raise PermissionDenied("User profile missing.")
+        except AttributeError:
              print(f"User {user.username} profile lookup failed (AttributeError). Denying request list.")
              raise PermissionDenied("User profile lookup failed.")
 
-
-        # Route based on explicit role for viewing lists
         if user_role == 'organization_admin':
-             # Find the organization managed by this admin profile
              try:
-                 managed_org = user_profile.managed_organization # Access via related_name
+                 managed_org = user_profile.managed_organization
                  if managed_org:
                       print(f"User {user.username} (Org Admin) returning requests for Org ID {managed_org.id}")
                       return ProductRequest.objects.filter(requesting_organization=managed_org).order_by('-created_at')
                  else:
-                      # Org Admin role but not linked to an organization? Problematic state.
                       print(f"User {user.username} (Org Admin) has no linked organization. Returning empty request list.")
                       return ProductRequest.objects.none()
-             except Organization.DoesNotExist: # Should not happen with OneToOneField and proper link
-                  print(f"User {user.username} (Org Admin) linked organization does not exist. Returning empty list.")
-                  return ProductRequest.objects.none()
-             except AttributeError: # Should not happen if managed_organization relation exists
-                  print(f"User {user.username} (Org Admin) 'managed_organization' attribute missing on profile. Returning empty list.")
-                  return ProductRequest.objects.none()
+             except Exception as e:
+                  print(f"Error retrieving Org Admin requests for user {user.username}: {e}")
+                  return ProductRequest.objects.none() # Return empty list on lookup error
 
 
         elif user_role == 'individual':
-             # Individual users see requests linked to their User model
              print(f"User {user.username} ('individual') returning requests linked to their user.")
              return ProductRequest.objects.filter(requester_user=user).order_by('-created_at')
 
         elif user_role == 'center_admin':
-             # Center Admins will likely have a separate view for requests assigned to their center.
-             # They don't see all requests or org/individual requests in this list.
              print(f"User {user.username} ('center_admin') does not see requests in this list view. Returning empty list.")
              return ProductRequest.objects.none()
 
-        # Donors don't manage or view requests via this endpoint
-        # Any other unhandled roles also get an empty list
-        print(f"User {user.username} with role '{user_role}' does not grant access to this request list. Returning empty list.")
-        return ProductRequest.objects.none() # Empty queryset for other roles
+        print(f"User {user.username} with role '{user_role}' is not authorized to list request list. Denying access.")
+        raise PermissionDenied("You do not have permission to view requests.")
+
 
     def perform_create(self, serializer):
-        """
-        Automatically set the requester based on the logged-in user's explicit role.
-        A request must be either for an Organization ('organization_admin' role) or by an Individual User ('individual' role).
-        The request payload should *not* include 'requesting_organization', 'requester_user', or 'requester_phone_number' IDs for standard users creating requests.
-        """
+        """Automatically set the requester based on the logged-in user's explicit role."""
+        # ... (keep the perform_create logic from previous versions) ...
         user = self.request.user
 
-        # Validate that the request body does NOT try to set the requester FKs directly (standard users)
         if any([serializer.validated_data.get('requesting_organization'),
                 serializer.validated_data.get('requester_user'),
                 serializer.validated_data.get('requester_phone_number')]):
@@ -185,55 +187,41 @@ class ProductRequestListCreateAPIView(generics.ListCreateAPIView):
              print(f"User {user.username} profile lookup failed (AttributeError). Denying request creation.")
              raise PermissionDenied("User profile lookup failed.")
 
-
-        # Route creation logic based on explicit role
         if user_role == 'organization_admin':
-             # Find the organization managed by this admin profile
              try:
-                 managed_org = user_profile.managed_organization # Access via related_name
+                 managed_org = user_profile.managed_organization
                  if managed_org is None:
                       print(f"User {user.username} has role 'organization_admin' but no linked organization.")
-                      raise DRFValidationError("Your organization admin profile is not linked to an organization.") # More specific error
-                 # Link the request to their organization
+                      raise DRFValidationError("Your organization admin profile is not linked to an organization.")
                  print(f"Creating Org Request for: {managed_org.name} by user {user.username}")
                  serializer.save(requesting_organization=managed_org)
-                 return # Exit after saving
+                 return
 
-             except Organization.DoesNotExist: # Should not happen with OneToOneField
+             except Organization.DoesNotExist:
                  print(f"User {user.username} has role 'organization_admin' but linked organization does not exist.")
-                 raise DRFValidationError("Linked organization not found.") # Error state
+                 raise DRFValidationError("Linked organization not found.")
 
         elif user_role == 'individual':
-             # Individual users make requests linked to their User model
              print(f"Creating Individual Web Request by user: {user.username}")
-             serializer.save(requester_user=user) # Link to the logged-in User
-             return # Exit after saving
+             serializer.save(requester_user=user)
+             return
 
         else:
-             # Donors, Center Admins, etc., cannot create requests via this endpoint
              print(f"User {user.username} with role '{user_role}' is not authorized to create requests via this endpoint.")
              raise PermissionDenied("You do not have permission to create this type of request.")
 
 
 class ProductRequestRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    API endpoint for retrieving, updating, or deleting a specific product request.
-    Permissions: IsAuthenticated + custom object-level logic in get_queryset/methods.
-    """
+    """API endpoint for retrieving, updating, or deleting a specific product request."""
     serializer_class = ProductRequestSerializer
-    # TODO: Implement more granular object-level permissions here or in methods
-    permission_classes = [permissions.IsAuthenticated] # Base permission
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        """
-        Ensure users can only retrieve requests they are authorized to see (same logic as list view).
-        """
+         # ... (keep the get_queryset logic from previous versions) ...
         user = self.request.user
-        # System Admins/Staff see all requests
         if user.is_staff or user.is_superuser:
             return ProductRequest.objects.all()
 
-        # Check explicit role for retrieval permissions
         user_role = None
         user_profile = None
         try:
@@ -252,22 +240,19 @@ class ProductRequestRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyA
              try:
                  managed_org = user_profile.managed_organization
                  if managed_org:
-                      # Org Admin can retrieve requests for their organization OR requests linked directly to their user (less common)
                       print(f"User {user.username} (Org Admin) retrieving specific request for their org or user.")
                       return ProductRequest.objects.filter(
                           django_models.Q(requesting_organization=managed_org) |
-                          django_models.Q(requester_user=user) # Include requests they made personally if any
+                          django_models.Q(requester_user=user)
                       )
                  else:
-                      # Org Admin role but no linked org, can still retrieve requests made personally
                       print(f"User {user.username} (Org Admin) with no linked org retrieving specific request linked to their user.")
                       return ProductRequest.objects.filter(requester_user=user)
-             except Exception as e: # Catch potential issues with managed_organization lookup
+             except Exception as e:
                   print(f"Error retrieving specific Org Admin request for user {user.username}: {e}")
-                  return ProductRequest.objects.filter(requester_user=user) # Fallback to individual requests
+                  return ProductRequest.objects.filter(requester_user=user)
 
         elif user_role == 'individual':
-             # Individual users can retrieve requests linked to their User model
              print(f"User {user.username} ('individual') retrieving specific request linked to their user.")
              return ProductRequest.objects.filter(requester_user=user)
 
@@ -275,90 +260,30 @@ class ProductRequestRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyA
              try:
                  managed_center = user_profile.managed_distribution_center
                  if managed_center:
-                      # Center Admin can retrieve requests assigned to their center
                       print(f"User {user.username} ('center_admin') retrieving specific request assigned to their center.")
                       return ProductRequest.objects.filter(assigned_distribution_center=managed_center)
                  else:
-                      # Center Admin role but no linked center
                       print(f"User {user.username} ('center_admin') with no linked center. Denying specific request.")
                       return ProductRequest.objects.none()
-             except Exception as e: # Catch potential issues with managed_center lookup
+             except Exception as e:
                   print(f"Error retrieving specific Center Admin request for user {user.username}: {e}")
                   return ProductRequest.objects.none()
 
-        # Donors and other roles cannot retrieve specific requests via this endpoint
-        print(f"User {user.username} with role '{user_role}' is not authorized to retrieve specific requests.")
-        return ProductRequest.objects.none() # Deny access
-
-    # TODO: Override update, partial_update, and destroy methods to implement object-level permissions.
-    # These checks would need to ensure the user has the *correct role* AND manages/owns the specific request instance.
-    # For example, update would check:
-    # - Is user System Admin? -> Always allow.
-    # - Is user Center Admin AND is their managed_distribution_center the one linked to request.assigned_distribution_center? -> Allow updating status/pickup_details.
-    # - Is user Org Admin AND is their managed_organization the one linked to request.requesting_organization? -> Maybe allow cancelling status?
-    # - Is user Individual AND is request.requester_user == user? -> Maybe allow cancelling?
-    # - Otherwise -> Raise PermissionDenied.
-    # If update/delete is not intended for requesters, you can remove/simplify these methods.
-
-    # Example of allowing specific roles to update STATUS and PICKUP_DETAILS for assigned requests
-    # def update(self, request, *args, **kwargs):
-    #      instance = self.get_object() # Gets the object using get_queryset filtering
-    #      user = request.user
-    #      user_role = None
-    #      try: user_role = user.profile.role except UserProfile.DoesNotExist: pass
-    #
-    #      if not (user.is_staff or user.is_superuser or user_role == 'system_admin'):
-    #           # If not System Admin, check if Center Admin updating assigned request
-    #           is_center_admin_for_assigned_request = False
-    #           if user_role == 'center_admin' and instance.assigned_distribution_center:
-    #                try:
-    #                     managed_center = user.profile.managed_distribution_center
-    #                     if managed_center == instance.assigned_distribution_center:
-    #                          is_center_admin_for_assigned_request = True
-    #                except Exception: pass # Handle potential lookup errors
-    #
-    #           if not is_center_admin_for_assigned_request:
-    #                raise PermissionDenied("You do not have permission to update this request.")
-    #
-    #      # Only allow updating specific fields for Center Admins
-    #      update_data = {}
-    #      if user_role == 'center_admin':
-    #           allowed_fields = ['status', 'pickup_details']
-    #           # Filter validated data to only include allowed fields
-    #           update_data = {k: v for k, v in serializer.validated_data.items() if k in allowed_fields}
-    #      elif user.is_staff or user.is_superuser or user_role == 'system_admin':
-    #           # System admins can update any field
-    #           update_data = serializer.validated_data
-    #      else:
-    #           # Should be caught by PermissionDenied above, but defensive
-    #           raise PermissionDenied("Invalid role or permission for update.")
-    #
-    #      if not update_data:
-    #           raise DRFValidationError("No valid fields provided for update.")
-    #
-    #      serializer.save(**update_data)
-    #      return Response(serializer.data) # Return updated data
-    #
-    # def destroy(self, request, *args, **kwargs):
-    #      instance = self.get_object() # Gets the object using get_queryset filtering
-    #      user = request.user
-    #      # Only System Admins can delete requests
-    #      if not (user.is_staff or user.is_superuser or (hasattr(user, 'profile') and user.profile.role == 'system_admin')):
-    #           raise PermissionDenied("You do not have permission to delete this request.")
-    #      return super().destroy(request, *args, **kwargs)
+        print(f"User {user.username} with role '{user_role}' is not authorized to retrieve specific requests. Denying access.")
+        raise PermissionDenied("You do not have permission to retrieve this request.")
 
 
-# --- Inventory Views (Requires Authentication & Center Admin Role) ---
+    # TODO: Implement update, partial_update, destroy methods with object-level permissions.
 
+
+# --- Inventory Views (Keep existing) ---
 class InventoryItemListAPIView(generics.ListAPIView):
-    """
-    API endpoint to list inventory items. Can be filtered by distribution center ID.
-    Requires: IsAuthenticated + specific role (System Admin or Center Admin).
-    """
+    """API endpoint to list inventory items."""
     serializer_class = InventoryItemSerializer
-    permission_classes = [permissions.IsAuthenticated] # Require login
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        # ... (keep the get_queryset logic from previous versions) ...
         queryset = InventoryItem.objects.all()
 
         user = self.request.user
@@ -376,8 +301,7 @@ class InventoryItemListAPIView(generics.ListAPIView):
              raise PermissionDenied("User profile lookup failed.")
 
 
-        # System Admins can see all inventory (optionally filtered by center_id query param)
-        if user.is_staff or user.is_superuser or user_role == 'system_admin': # Include custom role if you add it
+        if user.is_staff or user.is_superuser or user_role == 'system_admin':
              center_id = self.request.query_params.get('center_id', None)
              if center_id is not None:
                   print(f"Admin/Staff user {user.username} filtering inventory by center_id={center_id}")
@@ -385,71 +309,58 @@ class InventoryItemListAPIView(generics.ListAPIView):
              print(f"Admin/Staff user {user.username} listing all inventory.")
              return queryset.order_by('distribution_center__name', 'product_type__name')
 
-        # Center Admins can ONLY see inventory for *their* assigned center
         if user_role == 'center_admin':
             try:
-                managed_center = user_profile.managed_distribution_center # Access via related_name
+                managed_center = user_profile.managed_distribution_center
                 if managed_center:
-                     # Ignore the center_id query param if the user is a Center Admin, enforce their center
                      print(f"User {user.username} is Center Admin, filtering inventory for Center ID {managed_center.id}")
                      return queryset.filter(distribution_center=managed_center).order_by('product_type__name')
                 else:
-                     # Center Admin role but not linked to a center
                      print(f"User {user.username} has role 'center_admin' but no linked center. Returning empty inventory list.")
                      return InventoryItem.objects.none()
-            except Exception as e: # Catch potential issues with managed_distribution_center lookup
+            except Exception as e:
                  print(f"Error retrieving Inventory for user {user.username}: {e}")
                  return InventoryItem.objects.none()
 
 
-        # Other roles ('individual', 'organization_admin', 'donor') cannot list inventory via this endpoint
         print(f"User {user.username} with role '{user_role}' is not authorized to list inventory. Denying access.")
         raise PermissionDenied("You do not have permission to view inventory.")
 
 
 class InventoryItemRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
-    """
-    API endpoint to retrieve or update the quantity of a specific inventory item.
-    Requires: IsAuthenticated + IsCenterAdmin for this specific item's center OR System Admin.
-    """
-    queryset = InventoryItem.objects.all()
+    """API endpoint to retrieve or update the quantity of a specific inventory item."""
     serializer_class = InventoryItemSerializer
-    # TODO: Implement custom permission logic here or in methods
-    permission_classes = [permissions.IsAuthenticated] # Base permission
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_serializer(self, *args, **kwargs):
-        kwargs['partial'] = True # Allow partial updates (PATCH) for quantity
+        kwargs['partial'] = True
         return super().get_serializer(*args, **kwargs)
 
     def perform_update(self, serializer):
-        # Implement permission and update logic here:
+        # ... (keep the perform_update logic from previous versions) ...
         user = self.request.user
-        inventory_item = self.get_object() # Gets the object using get_queryset filtering
+        inventory_item = self.get_object()
 
         user_role = None
         try: user_profile = user.profile; user_role = user_profile.role
         except UserProfile.DoesNotExist: raise PermissionDenied("User profile missing.")
         except AttributeError: raise PermissionDenied("User profile lookup failed.")
 
-        # Check permissions
-        if not (user.is_staff or user.is_superuser or user_role == 'system_admin'): # Check built-in or custom admin role
-            # If not System Admin, check if Center Admin updating *their* assigned center's inventory
+        if not (user.is_staff or user.is_superuser or user_role == 'system_admin'):
             is_center_admin_for_this_center = False
-            if user_role == 'center_admin':
+            if user_role == 'center_admin' and instance.assigned_distribution_center:
                  try:
                       managed_center = user_profile.managed_distribution_center
                       if managed_center == inventory_item.distribution_center:
                            is_center_admin_for_this_center = True
-                 except Exception: pass # Handle potential lookup errors
+                 except Exception: pass
 
             if not is_center_admin_for_this_center:
                  print(f"User {user.username} with role '{user_role}' attempted to update inventory they don't manage.")
                  raise PermissionDenied("You do not have permission to update this inventory item.")
 
-        # Ensure only quantity is updated (prevent changing center or product type)
         update_data = {}
         if 'quantity' in serializer.validated_data:
-             # Ensure quantity is not negative
              if serializer.validated_data['quantity'] < 0:
                   raise DRFValidationError({"quantity": "Quantity cannot be negative."})
              update_data['quantity'] = serializer.validated_data['quantity']
@@ -458,34 +369,16 @@ class InventoryItemRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
              print(f"User {user.username} sent update request for inventory item {inventory_item.id} but included no valid update fields.")
              raise DRFValidationError("No valid fields provided for update (only 'quantity' is allowed).")
 
-        # Perform the update using the filtered data
         serializer.save(**update_data)
         print(f"Inventory item {inventory_item.id} quantity updated by user {user.username}. New quantity: {inventory_item.quantity}")
-        # Return the updated data
-        # return Response(serializer.data) # DRF RetrieveUpdateAPIView handles returning data
 
 
 # --- SMS Webhook View Placeholder (Keep existing) ---
-# We'll add the real logic in Phase 3
-
-@csrf_exempt # Disable CSRF for webhook, rely on gateway signature validation later
-@require_POST # Ensure only POST requests are accepted
+@csrf_exempt
+@require_POST
 def sms_webhook(request):
-    # TODO: Implement SMS receiving logic here
-    # 1. Validate request comes from Twilio/Gateway (using signature)
-    # 2. Parse incoming message (From number, Body content)
-    # 3. Determine action (REGISTER, REQUEST, DONATE)
-    # 4. Perform action (create user/profile, create request, etc.)
-    # 5. Send response back to gateway (TwiML for Twilio) to reply via SMS
-    print("SMS Webhook received!") # Placeholder log
+    # ... (keep sms_webhook logic) ...
+    print("SMS Webhook received!")
     print(f"From: {request.POST.get('From')}")
     print(f"Body: {request.POST.get('Body')}")
-
-    # Example Twilio response (replace with actual logic)
-    # from twilio.twiml.messaging_response import MessagingResponse
-    # resp = MessagingResponse()
-    # resp.message("Thanks for your message! This is the placeholder webhook.")
-    # return HttpResponse(str(resp), content_type='text/xml')
-
-    # For other gateways, the response might just be a 200 OK
     return HttpResponse("Webhook received.", status=200)

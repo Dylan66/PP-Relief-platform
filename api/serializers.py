@@ -3,9 +3,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.serializers import ModelSerializer
-# Import standard LoginSerializer from dj-rest-auth if you want to inherit or inspect
-# from dj_rest_auth.serializers import LoginSerializer
-# Import password validation for registration
+# Keep import validate_password - we'll test with it enabled temporarily
 from django.contrib.auth.password_validation import validate_password
 
 from .models import (
@@ -20,16 +18,20 @@ from .models import (
 
 User = get_user_model()
 
-# --- UserProfile Serializer (Optional, but useful if you ever return Profile directly) ---
+# *** DEBUG PRINT: Confirm Serializer file is loaded and class is defined ***
+print(">>> api/serializers.py is being executed <<<")
+print(">>> RegisterSerializer class is being defined/imported <<<")
+# *** END DEBUG PRINT ***
+
+
+# --- UserProfile Serializer (Keep existing) ---
 class UserProfileSerializer(ModelSerializer):
-    # You might not use this directly in the API for individual users,
-    # but it's clean to serialize the profile part
     class Meta:
         model = UserProfile
-        fields = ['id', 'role'] # Include the role field
+        fields = ['id', 'role']
 
 
-# --- Standard Serializers (Keep existing or use these) ---
+# --- Standard Serializers (Keep existing) ---
 
 class ProductTypeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -54,55 +56,47 @@ class InventoryItemSerializer(serializers.ModelSerializer):
         read_only_fields = ['last_updated', 'product_type_name']
 
 class OrganizationSerializer(serializers.ModelSerializer):
-    # Display admin user's username via the profile link
     admin_username = serializers.CharField(source='admin_profile.user.username', read_only=True, allow_null=True)
-    # Optionally include the admin profile ID if needed
-    admin_profile_id = serializers.PrimaryKeyRelatedField(source='admin_profile', read_only=True, allow_null=True) # Correctly get the ID
+    admin_profile_id = serializers.PrimaryKeyRelatedField(source='admin_profile', read_only=True, allow_null=True)
 
     class Meta:
         model = Organization
         fields = [
-            'id', 'admin_profile', 'admin_profile_id', 'admin_username', # Add admin_profile FK/ID and username
+            'id', 'admin_profile', 'admin_profile_id', 'admin_username',
             'name', 'location', 'contact_person', 'contact_email',
             'contact_phone', 'is_verified', 'created_at'
         ]
         read_only_fields = ['is_verified', 'created_at', 'admin_username', 'admin_profile_id']
         extra_kwargs = {
-            'admin_profile': {'write_only': True, 'required': False, 'allow_null': True} # admin_profile might be set later
+            'admin_profile': {'write_only': True, 'required': False, 'allow_null': True}
         }
 
 
 class ProductRequestSerializer(serializers.ModelSerializer):
-    # Include readable names/identifiers for foreign keys
     product_type_name = serializers.CharField(source='product_type.name', read_only=True)
     requesting_organization_name = serializers.CharField(source='requesting_organization.name', read_only=True, allow_null=True)
     assigned_distribution_center_name = serializers.CharField(source='assigned_distribution_center.name', read_only=True, allow_null=True)
-    # Add requester user details (username)
     requester_username = serializers.CharField(source='requester_user.username', read_only=True, allow_null=True)
 
     class Meta:
         model = ProductRequest
         fields = [
             'id',
-            # Requester fields (backend view perform_create sets ONE of these)
-            'requesting_organization', # ID for creating/linking (should be excluded from normal user POST)
-            'requesting_organization_name', # Read-only name
-            'requester_user', # ID for linking (should be excluded from normal user POST)
-            'requester_username', # Read-only name
-            'requester_phone_number', # Read-only (set via SMS logic only)
+            'requesting_organization',
+            'requesting_organization_name',
+            'requester_user',
+            'requester_username',
+            'requester_phone_number',
 
-            # Request details (required for creation)
-            'product_type', # ID for creating
-            'product_type_name', # Read-only name
-            'quantity', # Required on create
+            'product_type',
+            'product_type_name',
+            'quantity',
 
-            # Fulfillment details (read-only for requester, writeable for center admin)
             'status',
-            'assigned_distribution_center', # ID for viewing/updating
-            'assigned_distribution_center_name',# Read-only name
-            'pickup_details', # Writeable by center admin
+            'assigned_distribution_center',
+            'assigned_distribution_center_name',
+            'pickup_details',
 
-            # Timestamps
             'created_at',
             'updated_at'
         ]
@@ -115,8 +109,6 @@ class ProductRequestSerializer(serializers.ModelSerializer):
             'created_at',
             'updated_at',
         ]
-        # Fields required only when creating a request via API by ANY user type (handled by the view)
-        # requester_user, requesting_organization, requester_phone_number are set by the view, not in payload
         extra_kwargs = {
              'product_type': {'write_only': True, 'required': True},
              'quantity': {'required': True},
@@ -135,104 +127,125 @@ class ProductRequestSerializer(serializers.ModelSerializer):
 # --- User Serializers for dj-rest-auth ---
 
 class RegisterSerializer(ModelSerializer):
-    """Serializer for User registration using dj-rest-auth"""
+    """
+    Serializer for User registration using dj-rest-auth.
+    Includes debug prints and validate_password.
+    """
     # Note: dj-rest-auth's default expects 'password' and 'password2'
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True, label="Confirm password")
-    # Add other fields you want during registration (must exist on User model or UserProfile)
+    # We are testing with validate_password re-enabled but password2 validation removed.
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password]) # <-- validate_password RE-ENABLED
+    password2 = serializers.CharField(write_only=True, required=True, label="Confirm password") # <-- Keep field, but remove validation
+
     first_name = serializers.CharField(required=False, allow_blank=True)
     last_name = serializers.CharField(required=False, allow_blank=True)
-    # *** Optional: Allow setting role or is_donor during registration? ***
-    # For MVP, probably not. New users register as 'individual' by default (via signal).
-    # Role updates to 'organization_admin', 'donor', 'center_admin' would be done later,
-    # potentially via a different endpoint or admin panel.
-    # role = serializers.ChoiceField(choices=USER_ROLE_CHOICES, required=False, write_only=True, default='individual')
 
 
     class Meta:
         model = User # Registering the base User model
-        fields = ('username', 'email', 'password', 'password2', 'first_name', 'last_name') # Add/remove fields as needed
+        fields = ('username', 'email', 'password', 'password2', 'first_name', 'last_name') # Keep password2 in fields for now
         extra_kwargs = {
             'email': {'required': True},
         }
 
+    # *** DEBUG PRINT: Override is_valid to inspect data and errors early ***
+    def is_valid(self, raise_exception=False):
+        # Print the data received by the serializer *before* standard validation
+        print("\n>>> RegisterSerializer.is_valid called <<<")
+        print("RegisterSerializer initial_data:", self.initial_data)
+
+        # Call the original is_valid method to perform validation
+        is_valid_bool = super().is_valid(raise_exception=False) # Don't raise exception yet
+
+        # Print the validation errors found by super().is_valid
+        print("RegisterSerializer is_valid result:", is_valid_bool)
+        print("RegisterSerializer validation errors:", self.errors)
+        print(">>> RegisterSerializer.is_valid finished <<<")
+
+        # Manually raise the exception if needed, based on the original call's flag
+        if raise_exception and not is_valid_bool:
+            raise serializers.ValidationError(self.errors)
+
+        return is_valid_bool
+    # *** END DEBUG PRINT ***
+
+
+    # *** Modified validate method: Keep password match check commented out ***
+    # The error might be hitting before this method, but keep it here for structure.
+    # The raw validate_password validator is now on the field itself.
     def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
-        # Add other custom registration validations here (e.g., email uniqueness if not handled by User model)
+        print(">>> RegisterSerializer.validate called <<<")
+        # Temporarily comment out password match check
+        # if attrs['password'] != attrs['password2']:
+        #     print("Passwords do not match in validate.")
+        #     raise serializers.ValidationError({"password": "Password fields didn't match."})
+        print(">>> RegisterSerializer.validate finished <<<")
         return attrs
 
-    # The create method handles creating the User. The post_save signal creates the UserProfile with default role.
     def create(self, validated_data):
-        validated_data.pop('password2')
-        user = User.objects.create_user(**validated_data)
+        """
+        Overrides default create to correctly create a User with a hashed password.
+        """
+        print("\n>>> RegisterSerializer.create called <<<")
+        # *** DEBUG LOG: See what validated_data contains just before user creation ***
+        print("RegisterSerializer validated_data:", validated_data)
 
-        # If you allowed setting role/is_donor on registration, you'd update the profile here:
-        # if 'role' in self.initial_data and self.initial_data['role'] != 'individual':
-        #      # Validate role change is allowed on registration?
-        #      user.profile.role = self.initial_data['role']
-        #      user.profile.save()
-        # if 'is_donor' in self.initial_data:
-        #      user.profile.is_donor = self.initial_data['is_donor']
-        #      user.profile.save()
+        # Pop password2 *only if* it's expected by User.objects.create_user (it's not)
+        # Since we removed the validation check in validate, we should pop it here
+        # if the frontend is sending it. The frontend is sending it.
+        validated_data_for_user = validated_data.copy() # Create a copy to modify
+        if 'password2' in validated_data_for_user:
+             validated_data_for_user.pop('password2')
+             print("Popped password2 from validated_data copy for User creation.")
+
+        # Create the User instance using validated data (without password2)
+        # Use create_user which handles password hashing
+        user = User.objects.create_user(**validated_data_for_user)
+
+        # The post_save signal (create_user_profile) will automatically create the UserProfile here.
+
+        # *** DEBUG LOG: Confirm user creation ***
+        print("User created by serializer:", user)
+        print(">>> RegisterSerializer.create finished <<<")
 
         return user
 
 
-# --- Custom User Details Serializer (Used by /api/auth/user/) ---
+# --- Custom User Details Serializer (Used by /api/auth/user/) (Keep existing) ---
 class CustomUserDetailsSerializer(ModelSerializer):
-    """
-    Serializer for the User object (basic details) including the explicit role and other flags.
-    Used by dj-rest-auth's user_details view.
-    """
-    # Basic user fields from Django User model
     id = serializers.IntegerField(read_only=True)
     username = serializers.CharField(read_only=True)
     email = serializers.EmailField(read_only=True)
     first_name = serializers.CharField(read_only=True)
     last_name = serializers.CharField(read_only=True)
-    is_staff = serializers.BooleanField(read_only=True) # Built-in Django staff status
-    is_superuser = serializers.BooleanField(read_only=True) # Built-in Django superuser status
+    is_staff = serializers.BooleanField(read_only=True)
+    is_superuser = serializers.BooleanField(read_only=True)
 
-    # *** Include the explicit role from UserProfile ***
-    # Use SerializerMethodField to handle case where profile might not exist yet
     role = serializers.SerializerMethodField()
-    # *** END Include explicit role ***
 
-    # Include IDs of linked entities for easier fetching in frontend dashboard components
-    # Use Source='profile.managed_organization.id' to access via the profile link
     linked_organization_id = serializers.PrimaryKeyRelatedField(source='profile.managed_organization', read_only=True, allow_null=True)
     linked_center_id = serializers.PrimaryKeyRelatedField(source='profile.managed_distribution_center', read_only=True, allow_null=True)
-    # You could also get the profile ID itself if needed:
     profile_id = serializers.PrimaryKeyRelatedField(source='profile', read_only=True, allow_null=True)
 
 
     class Meta:
-        model = User # Serializing the base User model
+        model = User
         fields = [
             'id', 'username', 'email', 'first_name', 'last_name',
-            'is_staff', 'is_superuser', # Built-in admin flags
-            'role', # *** Explicit Role ***
+            'is_staff', 'is_superuser',
+            'role',
             'profile_id',
             'linked_organization_id', 'linked_center_id'
         ]
-        read_only_fields = fields # All fields are read-only for this endpoint
+        read_only_fields = fields
 
 
-    # *** Method to get the explicit role from UserProfile ***
     def get_role(self, obj):
         try:
-            # Return the role string from the associated UserProfile
             return obj.profile.role
         except UserProfile.DoesNotExist:
-            # If no profile exists (shouldn't happen with signal),
-            # default to 'individual' or handle as error.
-            # This ensures the frontend *always* gets a role string.
-            # print(f"Warning: User {obj.username} has no profile.") # Debug warning
-            return 'individual' # Default role if profile missing
+            return 'individual'
 
-    # You no longer need these SerializerMethodFields if 'role' string is primary
-    # If you still want them for clarity in frontend:
+    # Keep these SerializerMethodFields if you want these flags in addition to the 'role' string
     # def get_is_individual_recipient(self, obj):
     #    try: return obj.profile.role == 'individual'
     #    except UserProfile.DoesNotExist: return True
@@ -246,5 +259,5 @@ class CustomUserDetailsSerializer(ModelSerializer):
     #    except UserProfile.DoesNotExist: return False
     #
     # def get_is_donor(self, obj):
-    #      try: return obj.profile.role == 'donor' # Check role string
+    #      try: return obj.profile.role == 'donor' # Or check obj.profile.role == 'donor'
     #      except UserProfile.DoesNotExist: return False

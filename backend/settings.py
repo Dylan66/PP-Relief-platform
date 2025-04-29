@@ -185,7 +185,7 @@ REST_AUTH = {
 
     # Registration settings (adjust as needed)
     'REGISTER_EMAIL_VERIFICATION': False, # Set to True for production w/ email backend
-    'REGISTER_AUTO_LOGIN': True, # Auto-login user after successful registration (Optional, set to False if you want them to log in after)
+    'REGISTER_AUTO_LOGIN': False, # Auto-login user after successful registration (Optional, set to False if you want them to log in after)
     # 'EMAIL_VERIFICATION_REQUIRED': True, # Require email verification to login (only if VERIFICATION_REGISTRATION is True)
 }
 
