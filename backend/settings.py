@@ -42,12 +42,12 @@ INSTALLED_APPS = [
 
     # Third-party apps
     'rest_framework',
-    'rest_framework.authtoken', # Required by dj-rest-auth Token Authentication
-    'allauth', # Required by dj-rest-auth registration
-    'allauth.account', # Required by dj-rest-auth registration
-    'allauth.socialaccount', # Required by dj-rest-auth.registration.views
-    'dj_rest_auth', # Core dj-rest-auth app
-    'dj_rest_auth.registration', # dj-rest-auth registration app
+    'rest_framework.authtoken', # *** REQUIRED for Token model ***
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 
     # Optional: CORS middleware (install django-cors-headers)
     # 'corsheaders',
@@ -62,18 +62,16 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # Optional: CORS middleware (install django-cors-headers)
+    # Optional: CORS middleware
     # 'corsheaders.middleware.CorsMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware', # Required by django-allauth
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
-# Optional: CORS settings (install django-cors-headers if using)
-# CORS_ALLOW_ALL_ORIGINS = True # WARNING: NOT safe for production, use CORS_ALLOWED_ORIGINS
-# CORS_ALLOWED_ORIGINS = [ # Example
-#     "http://localhost:5173", # Your frontend dev server
-# ]
+# Optional: CORS settings
+# CORS_ALLOW_ALL_ORIGINS = True # WARNING: NOT safe for production
+# CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -101,29 +99,20 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'), # Use BASE_DIR directly
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
-    # Later you might switch to PostgreSQL:
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'your_db_name',
-    #     'USER': 'your_db_user',
-    #     'PASSWORD': 'your_db_password',
-    #     'HOST': 'localhost', # or your db host
-    #     'PORT': '5432',
-    # }
 }
 
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+         'OPTIONS': {'min_length': 8}, # Example: require minimum 8 characters
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -157,69 +146,56 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # --- Django REST Framework Settings ---
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # Use Token Authentication for API requests
-        'rest_framework.authentication.TokenAuthentication',
-        # SessionAuthentication is useful for browsable API & potentially web app if not fully decoupled
-        'rest_framework.authentication.SessionAuthentication', # Keep for admin access or browsable API
+        'rest_framework.authentication.TokenAuthentication', # Use Token Authentication
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        # Default to denying access unless explicitly allowed per view
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
-        # Or during early development, temporarily use:
-        # 'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10 # Default pagination size
+    'PAGE_SIZE': 10
 }
 
 # --- dj-rest-auth & allauth Settings ---
-SITE_ID = 1 # Required by allauth/dj-rest-auth
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' # For testing registration email verification
+SITE_ID = 1
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# Configure dj-rest-auth to use your custom serializers
 REST_AUTH = {
-    'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer', # Default login serializer
-    'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.TokenSerializer', # Default token serializer
-    'USER_DETAILS_SERIALIZER': 'api.serializers.CustomUserDetailsSerializer', # <-- Use your custom serializer for user details
-    'REGISTER_SERIALIZER': 'api.serializers.RegisterSerializer', # Use your custom serializer for registration
+    'LOGIN_SERIALIZER': 'dj_rest_auth.serializers.LoginSerializer',
+    'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.TokenSerializer',
+    'USER_DETAILS_SERIALIZER': 'api.serializers.CustomUserDetailsSerializer',
+    'REGISTER_SERIALIZER': 'api.serializers.RegisterSerializer',
 
     # Registration settings (adjust as needed)
-    'REGISTER_EMAIL_VERIFICATION': False, # Set to True for production w/ email backend
-    'REGISTER_AUTO_LOGIN': False, # Auto-login user after successful registration (Optional, set to False if you want them to log in after)
-    # 'EMAIL_VERIFICATION_REQUIRED': True, # Require email verification to login (only if VERIFICATION_REGISTRATION is True)
+    'REGISTER_EMAIL_VERIFICATION': False,
+    'REGISTER_AUTO_LOGIN': True, # *** SET THIS TO TRUE ***
+    # 'EMAIL_VERIFICATION_REQUIRED': True,
+
+    # Optional: specify the token model if you used a custom one (not needed for default)
+    # 'TOKEN_MODEL': 'rest_framework.authtoken.models.Token', # Default is fine
 }
 
-# allauth settings (adjust as needed)
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email' # Allow login with username or email
-ACCOUNT_EMAIL_REQUIRED = True # Make email required for registration
-ACCOUNT_EMAIL_VERIFICATION = 'none' # 'mandatory' or 'optional' if REGISTER_EMAIL_VERIFICATION is True
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True # Optional: Allow clicking link to confirm
-ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5 # Lockout after failed attempts
-ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300 # Lockout duration in seconds (5 minutes)
-ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True # Log out other sessions on password change
-ACCOUNT_UNIQUE_EMAIL = True # Ensure email is unique
-ACCOUNT_USERNAME_REQUIRED = True # Make username required
+# allauth settings
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_FORMS = {
-    # Optional: Use custom forms instead of default allauth forms
     # 'signup': 'path.to.your.CustomSignupForm',
     # 'login': 'path.to.your.CustomLoginForm',
 }
 
-# Set the authentication backends
 AUTHENTICATION_BACKENDS = (
-    # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
-    # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-# Redirect URLs (adjust as needed)
-# These are primarily used by Django's built-in views if you use them,
-# but dj-rest-auth redirects mostly happen via API responses.
-# However, setting them can be good practice.
-LOGIN_REDIRECT_URL = '/dashboard/' # URL to redirect after successful login (React handles routing from here)
-ACCOUNT_LOGOUT_REDIRECT_URL = '/' # URL to redirect after logout
-# LOGIN_URL = '/login/' # Default Django login URL, used by @login_required etc.
+LOGIN_REDIRECT_URL = '/dashboard/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 
-# Ensure user model is correctly configured (usually AUTH_USER_MODEL is sufficient)
-# AUTH_USER_MODEL = 'auth.User' # Default unless you created a custom User model
+# AUTH_USER_MODEL = 'auth.User' # Default is fine

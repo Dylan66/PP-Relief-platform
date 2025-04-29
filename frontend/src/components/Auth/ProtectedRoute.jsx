@@ -10,6 +10,20 @@ const ProtectedRoute = ({ allowedRoles }) => {
   // Get authentication state and flags from the AuthContext
   const { user, isLoading, isAuthenticated, isSystemAdmin, isOrgAdmin, isCenterAdmin, isDonor, isIndividualRecipient } = useAuth();
   const location = useLocation(); // Get current location to redirect back after login
+   
+  
+  // *** DEBUG LOG: Log state when ProtectedRoute renders ***
+   console.log("ProtectedRoute rendering.", {
+    location: location.pathname, // The path the user is trying to access
+    isLoadingContext: isLoading, // Is the authentication context currently loading?
+    isAuthenticatedContext: isAuthenticated, // Is the user considered authenticated (based on !!user)?
+    userContext: !!user, // Does the user object exist in context?
+    userRole: user?.role, // The user's explicit role string if user exists
+    // Include derived flags for clarity if needed:
+    // isSystemAdmin: isSystemAdmin, isOrgAdmin: isOrgAdmin, ...
+});
+// *** END DEBUG LOG ***
+
 
   // --- Check Context Loading State ---
   // While the initial authentication check is happening, show a loading indicator

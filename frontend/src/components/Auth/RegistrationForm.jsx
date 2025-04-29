@@ -71,18 +71,22 @@ const RegistrationForm = () => {
       last_name: formData.last_name,
     };
 
-    // *** DEBUG LOG: See the data object being sent to AuthContext's register function ***
     console.log("RegistrationForm: Data object being sent to AuthContext register:", registrationAttemptData);
-    // *** END DEBUG LOG ***
 
 
     try {
        console.log("RegistrationForm: Calling register function with:", registrationAttemptData);
       await register(registrationAttemptData);
 
-      alert("Registration successful! You will now be taken to your dashboard.");
-      // navigate('/dashboard'); // assuming auto-login
-      // navigate('/login'); // if auto-login is OFF
+      // --- Handle successful registration ---
+      alert("Registration successful! You will now be taken to your dashboard."); // Keep alert for now
+
+      // *** DEBUG LOG: See if execution reaches here after alert ***
+      console.log("RegistrationForm: Reached point after alert and before navigation/cleanup.");
+      // *** END DEBUG LOG ***
+
+      // navigate('/dashboard'); // assuming auto-login - this should be commented out
+      // navigate('/login'); // if auto-login is OFF - this should be commented out
 
     } catch (err) {
       console.error("RegistrationForm: Caught error during registration!", err);
@@ -162,13 +166,11 @@ const RegistrationForm = () => {
 
       <div style={styles.formGroup}>
         <label htmlFor="password">Password:</label>
-        {/* *** THIS INPUT's NAME ATTRIBUTE MUST BE 'password' *** */}
         <input type="password" id="password" name="password" value={formData.password} onChange={handleInputChange} required style={styles.input} autoComplete="new-password" />
       </div>
 
        <div style={styles.formGroup}>
         <label htmlFor="password2">Confirm Password:</label>
-        {/* THIS INPUT's NAME ATTRIBUTE MUST BE 'password2' */}
         <input type="password" id="password2" name="password2" value={formData.password2} onChange={handleInputChange} required style={styles.input} autoComplete="new-password" />
       </div>
 

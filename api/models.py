@@ -1,11 +1,13 @@
 # api/models.py
 
 from django.db import models
-# *** Use get_user_model() instead of importing User directly and using settings.AUTH_USER_MODEL ***
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save # Import signal
 from django.dispatch import receiver # Import receiver for signals
+# *** Import the Token model ***
+from rest_framework.authtoken.models import Token
+
 
 # *** Get the actual User model class ***
 User = get_user_model()
@@ -24,7 +26,6 @@ USER_ROLE_CHOICES = [
 # New UserProfile Model to extend Django's User
 class UserProfile(models.Model):
     # One-to-one link to the standard Django User model
-    # *** Use the User model class here ***
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
     # *** ADD EXPLICIT ROLE FIELD ***
@@ -41,9 +42,8 @@ class UserProfile(models.Model):
     def __str__(self):
         return f"Profile for {self.user.username} ({self.get_role_display()})"
 
-# --- Signal to create UserProfile automatically when a new User is created ---
+# --- Signal 1: Create UserProfile automatically when a new User is created ---
 # This ensures every User has a linked UserProfile upon creation
-# *** Use the User model class as the sender ***
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -52,29 +52,37 @@ def create_user_profile(sender, instance, created, **kwargs):
         # print(f"UserProfile created for {instance.username}") # Optional debug log
 
 
+# --- Signal 2: Create an Auth Token automatically when a new User is created ---
+# *** ADD THIS NEW SIGNAL BLOCK ***
+# This is needed if REGISTER_AUTO_LOGIN is True and you use TokenAuthentication
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        # This fires *after* the user object (and its profile by the previous signal) is created.
+        # Create a Token for the new user instance.
+        Token.objects.create(user=instance)
+        print(f"Auth Token created for user: {instance.username}") # Optional debug log
+# *** END NEW SIGNAL BLOCK ***
+
+
 # --- Signal to save UserProfile when User is saved ---
-# *** This signal is REMOVED, as previously decided ***
+# *** This signal is REMOVED ***
 
 
 # Update Organization and DistributionCenter to link to UserProfile
-# Use OneToOneField here if one Org/Center = one admin profile is the intended model
-# Use ForeignKey if one admin profile can manage multiple Orgs/Centers
-# Let's stick with OneToOneField as in previous steps, ensuring admin_profile is nullable.
 class Organization(models.Model):
-    # Link to the UserProfile of the admin user for this organization
-    # Setting null=True, blank=True allows organizations to exist without a linked admin initially
     admin_profile = models.OneToOneField(
         UserProfile,
         on_delete=models.SET_NULL,
         null=True, blank=True,
-        related_name='managed_organization' # Use reverse relation 'managed_organization' on UserProfile
+        related_name='managed_organization'
     )
     name = models.CharField(max_length=200)
     location = models.CharField(max_length=255, help_text="City, Area or specific address")
     contact_person = models.CharField(max_length=100, blank=True)
     contact_email = models.EmailField(blank=True)
     contact_phone = models.CharField(max_length=20, blank=True)
-    is_verified = models.BooleanField(default=False) # For admin verification
+    is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -83,12 +91,11 @@ class Organization(models.Model):
         return f"{self.name} ({self.location})"
 
 class DistributionCenter(models.Model):
-    # Link to the UserProfile of the admin user for this center
     admin_profile = models.OneToOneField(
         UserProfile,
         on_delete=models.SET_NULL,
         null=True, blank=True,
-        related_name='managed_distribution_center' # Use reverse relation 'managed_distribution_center' on UserProfile
+        related_name='managed_distribution_center'
     )
     name = models.CharField(max_length=200)
     location = models.CharField(max_length=255, help_text="Full address for pickup")
@@ -112,7 +119,7 @@ REQUEST_STATUS_CHOICES = [
 ]
 
 class ProductType(models.Model):
-    name = models.CharField(max_length=100, unique=True) # e.g., 'Sanitary Pads (Regular)', 'Tampons (Super)'
+    name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
 
     def __str__(self):
@@ -125,30 +132,26 @@ class InventoryItem(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = ('distribution_center', 'product_type') # Each center can only have one entry per product type
-        verbose_name_plural = "Inventory Items" # Fix plural in admin
+        unique_together = ('distribution_center', 'product_type')
+        verbose_name_plural = "Inventory Items"
 
     def __str__(self):
         return f"{self.quantity} x {self.product_type.name} at {self.distribution_center.name}"
 
 class ProductRequest(models.Model):
     # --- Requester Information (Only ONE should be set via perform_create logic in the view) ---
-    # 1. For Organizations (Web App) - Linked to the Organization itself
     requesting_organization = models.ForeignKey(
         Organization,
         on_delete=models.SET_NULL,
         null=True, blank=True,
         related_name='product_requests'
     )
-    # 2. For Individual Users (Web App - Logged In) - Linked to the User object
-    # *** Use the User model class here ***
     requester_user = models.ForeignKey(
         User, # Link to the configured Auth User model
         on_delete=models.SET_NULL,
         null=True, blank=True,
         related_name='product_requests'
     )
-    # 3. For Individual Users (SMS) - Stored as phone number
     requester_phone_number = models.CharField(
         max_length=20,
         blank=True, null=True,
@@ -177,27 +180,20 @@ class ProductRequest(models.Model):
 
     # --- Model Validation ---
     def clean(self):
-        """
-        Ensure that exactly one primary requester type (org, user, phone) is set.
-        This validation relies on the perform_create logic setting *only one* of these fields.
-        """
         requester_fields_set = [
             self.requesting_organization is not None,
-            self.requester_user is not None, # User is set for individual web requests
-            self.requester_phone_number not in [None, ''] # Phone number is set for SMS requests
+            self.requester_user is not None,
+            self.requester_phone_number not in [None, '']
         ]
-
         num_requesters_set = sum(requester_fields_set)
 
         if num_requesters_set == 0:
-            # This case should ideally be prevented by form/serializer validation requiring at least quantity/product type
             raise ValidationError("A request must have a requester (Organization, User, or Phone Number).")
         if num_requesters_set > 1:
-            # This prevents saving if multiple fields are accidentally set
             raise ValidationError("A request cannot have multiple primary requester types.")
 
     def save(self, *args, **kwargs):
-        self.clean() # Run validation before saving
+        self.clean()
         super().save(*args, **kwargs)
 
     def __str__(self):
