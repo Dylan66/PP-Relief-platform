@@ -4,10 +4,10 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied, ValidationError as DRFValidationError
 from django.contrib.auth import get_user_model
-from django.views.decorators.csrf import csrf_exempt
+# Import ensure_csrf_cookie decorator
+from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie # <-- Import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
-from django.http import HttpResponse
-from django.db import models as django_models
+from django.http import HttpResponse, JsonResponse # Import JsonResponse
 
 # Import the default RegisterView from dj-rest-auth
 from dj_rest_auth.registration.views import RegisterView as DjRestAuthRegisterView
@@ -28,56 +28,40 @@ from .serializers import (
     ProductRequestSerializer,
     CustomUserDetailsSerializer,
     OrganizationSerializer,
-    # Import your RegisterSerializer
     RegisterSerializer
 )
 
 User = get_user_model()
 
-# --- Custom Registration View ---
-# Inherit from the default dj-rest-auth RegisterView
+# --- CSRF Cookie View ---
+@ensure_csrf_cookie # This decorator tells Django to set the csrftoken cookie
+def csrf_cookie_view(request):
+    """
+    A simple view to set the CSRF cookie.
+    The frontend can make a GET request to this endpoint on page load.
+    """
+    print(">>> CSRF cookie view hit. Django should set the csrftoken cookie. <<<")
+    # You can return anything, like a simple success message or just an empty JSON response
+    # Returning a JsonResponse is cleaner than HttpResponse for an API context.
+    return JsonResponse({"message": "CSRF cookie set"})
+
+
+# --- Custom Registration View (Keep existing) ---
 class CustomRegisterView(DjRestAuthRegisterView):
+    # ... (keep existing code from previous step) ...
     """
     Custom registration view to fix the serializer.save() argument issue
     and potentially add custom logic during registration if needed later.
     """
-    # Use your custom serializer configured in settings.py
-    # serializer_class = RegisterSerializer # Already set via REST_AUTH['REGISTER_SERIALIZER']
-
     def perform_create(self, serializer):
-        """
-        Save the user and potentially update their profile.
-        Override dj-rest-auth's default perform_create to call serializer.save() correctly.
-        The default RegisterView at dj_rest_auth.registration.views.py calls serializer.save(self.request),
-        which causes TypeError because serializer.save() expects validated_data as keyword arg or no args.
-        """
-        # The serializer.save() method handles creating the User instance based on validated_data.
-        # The post_save signal on the User model will then automatically create the UserProfile.
-        # If you needed to set fields on the UserProfile based on registration data
-        # (e.g., setting initial role or is_donor if allowed during registration),
-        # you would do it *after* the user is created here.
-
+        # ... (keep perform_create logic from previous step) ...
         print(">>> CustomRegisterView.perform_create called <<<")
         print("Serializer validated_data:", serializer.validated_data)
 
-        # *** FIX START: Call serializer.save() WITHOUT passing self.request ***
-        # This calls the create() method on your RegisterSerializer with validated_data
         user = serializer.save()
-        # *** FIX END ***
 
         print("User created successfully by serializer.save():", user)
-        # The post_save signal create_user_profile should fire here automatically.
-
-        # If you collected profile data in the RegistrationForm and wanted to set it
-        # immediately after user creation (and profile creation by signal), you could
-        # access it via self.request.data and update user.profile here.
-        # This requires adding those fields (like role, location, org_name) to the
-        # RegistrationForm frontend, passing them to the register function in AuthContext,
-        # adding them as write_only fields to the RegisterSerializer, and then
-        # accessing them via serializer.validated_data or self.request.data here.
-        # For MVP, we set profile role to 'individual' by default via signal.
-
-        return user # Return the created user instance
+        return user
 
 
 # --- Public/General Read-Only Views (Keep existing) ---
@@ -95,7 +79,7 @@ class DistributionCenterListAPIView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
 
-# --- Organization Views (Requires Authentication & potentially Admin role) ---
+# --- Organization Views (Keep existing) ---
 class OrganizationListCreateAPIView(generics.ListCreateAPIView):
     """API endpoint that allows Organizations to be listed and created."""
     queryset = Organization.objects.all()
@@ -104,20 +88,18 @@ class OrganizationListCreateAPIView(generics.ListCreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """Override POST to enforce creation permission."""
-        # Only System Admins/Staff can create Organizations via this endpoint
         if not (request.user.is_authenticated and (request.user.is_staff or request.user.is_superuser)):
              raise PermissionDenied("You do not have permission to create an organization.")
         return super().post(request, *args, **kwargs)
 
 
-# --- Product Request Views (Requires Authentication & Role-based Logic) ---
+# --- Product Request Views (Keep existing) ---
 class ProductRequestListCreateAPIView(generics.ListCreateAPIView):
     """API endpoint for authenticated users/organizations to create new requests and view their existing requests."""
     serializer_class = ProductRequestSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        """Filter requests based on the logged-in user's explicit role."""
         # ... (keep the get_queryset logic from previous versions) ...
         user = self.request.user
         if user.is_staff or user.is_superuser:
@@ -148,7 +130,7 @@ class ProductRequestListCreateAPIView(generics.ListCreateAPIView):
                       return ProductRequest.objects.none()
              except Exception as e:
                   print(f"Error retrieving Org Admin requests for user {user.username}: {e}")
-                  return ProductRequest.objects.none() # Return empty list on lookup error
+                  return ProductRequest.objects.none()
 
 
         elif user_role == 'individual':
@@ -350,7 +332,7 @@ class InventoryItemRetrieveUpdateAPIView(generics.RetrieveUpdateAPIView):
             is_center_admin_for_this_center = False
             if user_role == 'center_admin' and instance.assigned_distribution_center:
                  try:
-                      managed_center = user_profile.managed_distribution_center
+                      managed_center = user.profile.managed_distribution_center
                       if managed_center == inventory_item.distribution_center:
                            is_center_admin_for_this_center = True
                  except Exception: pass

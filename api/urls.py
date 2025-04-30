@@ -5,6 +5,7 @@ from . import views # Import views from the current directory (api app)
 
 # Define URL patterns for the api app
 urlpatterns = [
+    path('csrf/', views.csrf_cookie_view, name='csrf_cookie'),
     # Public endpoints
     path('product-types/', views.ProductTypeListAPIView.as_view(), name='product-type-list'),
     path('distribution-centers/', views.DistributionCenterListAPIView.as_view(), name='distribution-center-list'),

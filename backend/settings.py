@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
 
     # Optional: CORS middleware (install django-cors-headers)
-    # 'corsheaders',
+    'corsheaders',
 
     # Your apps
     'api.apps.ApiConfig', # Your custom app
@@ -71,8 +71,23 @@ MIDDLEWARE = [
 
 # Optional: CORS settings
 # CORS_ALLOW_ALL_ORIGINS = True # WARNING: NOT safe for production
-# CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173",
+"http://127.0.0.1:5173",]
 
+CORS_ALLOW_CREDENTIALS = True # Needed if you use cookies or authentication headers (like your token)
+
+# --- CSRF Settings (Add/Update these) ---
+# Set CSRF cookie to be accessible by JavaScript
+CSRF_COOKIE_HTTPONLY = False # <-- ADD/ENSURE THIS IS FALSE IN DEVELOPMENT
+# Set CSRF cookie to be secure (True in production, can be False for http in dev)
+CSRF_COOKIE_SECURE = False # <-- Set to False for http in development, True in production
+
+# Explicitly trust your frontend development origin for CSRF checks (Keep this, it might help)
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    # Add your production frontend URL here later
+]
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [

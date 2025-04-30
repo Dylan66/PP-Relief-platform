@@ -72,6 +72,9 @@ class OrganizationSerializer(serializers.ModelSerializer):
         }
 
 
+# api/serializers.py
+
+# ... (other imports and serializers) ...
 class ProductRequestSerializer(serializers.ModelSerializer):
     product_type_name = serializers.CharField(source='product_type.name', read_only=True)
     requesting_organization_name = serializers.CharField(source='requesting_organization.name', read_only=True, allow_null=True)
@@ -82,46 +85,56 @@ class ProductRequestSerializer(serializers.ModelSerializer):
         model = ProductRequest
         fields = [
             'id',
-            'requesting_organization',
-            'requesting_organization_name',
-            'requester_user',
-            'requester_username',
-            'requester_phone_number',
+            # Requester fields (backend view perform_create sets ONE of these)
+            'requesting_organization', # Keep in fields
+            'requesting_organization_name', # Read-only name
+            'requester_user', # Keep in fields
+            'requester_username', # Read-only name
+            'requester_phone_number', # Keep in fields
 
+            # Request details (required for creation)
             'product_type',
             'product_type_name',
             'quantity',
 
+            # Fulfillment details (read-only for requester, writeable for center admin)
             'status',
             'assigned_distribution_center',
             'assigned_distribution_center_name',
             'pickup_details',
 
+            # Timestamps
             'created_at',
             'updated_at'
         ]
         read_only_fields = [
-            'requesting_organization_name',
+            'requesting_organization_name', # Keep these derived read-only fields
             'requester_username',
             'assigned_distribution_center_name',
             'product_type_name',
-            'requester_phone_number',
-            'created_at',
-            'updated_at',
+            'created_at', # Timestamps are set automatically
+            'updated_at', # Timestamps are set automatically
+            # *** The fields marked as write_only or read_only in extra_kwargs should NOT be listed here ***
         ]
         extra_kwargs = {
+             # These are the fields where read_only/write_only is explicitly set
              'product_type': {'write_only': True, 'required': True},
              'quantity': {'required': True},
 
+            # These should be write_only as the view sets them based on the logged-in user
             'requesting_organization': {'write_only': True, 'required': False, 'allow_null': True},
             'requester_user': {'write_only': True, 'required': False, 'allow_null': True},
             'requester_phone_number': {'write_only': True, 'required': False, 'allow_null': True, 'allow_blank': True},
 
+            # Status, Assigned Center, Pickup Details are typically updated by admins, not set on creation POST by requester
             'status': {'read_only': True},
             'assigned_distribution_center': {'read_only': True},
             'pickup_details': {'read_only': True},
 
         }
+
+
+# ... (rest of the file) ...
 
 
 # --- User Serializers for dj-rest-auth ---
