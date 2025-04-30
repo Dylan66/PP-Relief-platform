@@ -1,0 +1,93 @@
+/* src/components/common/Navbar.module.css */
+
+.navbar {
+    background-color: var(--color-secondary-brown); /* Brown background from variables */
+    padding: 0.8rem 1.5rem; /* Vertical and horizontal padding */
+    color: var(--color-white); /* White text */
+    position: fixed; /* Make the navbar stick to the top */
+    top: 0;
+    left: 0;
+    width: 100%; /* Full width */
+    z-index: 1000; /* Ensure it stays on top of other content */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional subtle shadow */
+  }
+  
+  .navbarContainer {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space out brand and nav links */
+    align-items: center; /* Vertically align items */
+    max-width: 1200px; /* Optional: Limit max width */
+    margin: 0 auto; /* Center the container */
+  }
+  
+  .navbarBrand {
+    color: var(--color-white); /* White color for brand text */
+    font-size: 1.4rem; /* Larger font size for brand */
+    font-weight: bold; /* Bold font weight */
+    text-decoration: none; /* Remove underline */
+  }
+  
+  .navbarBrand:hover {
+      text-decoration: none; /* No underline on hover for brand */
+      opacity: 0.9; /* Slight opacity change on hover */
+  }
+  
+  .navbarNav {
+    display: flex; /* Use flexbox for nav links */
+    align-items: center; /* Vertically align links */
+  }
+  
+  /* Style for navigation links */
+  .navLink {
+    color: var(--color-white); /* White color for links */
+    text-decoration: none; /* Remove underline */
+    margin-left: 1.5rem; /* Space between links */
+    font-size: 1rem; /* Standard font size */
+    transition: color 0.2s ease; /* Smooth color transition */
+  }
+  
+  .navLink:hover {
+    color: var(--color-accent-light-pink); /* Light pink on hover */
+    text-decoration: underline; /* Underline on hover */
+  }
+  
+  /* Style for logout button */
+  .navButton {
+    color: var(--color-white); /* White color */
+    background-color: transparent; /* No background */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor */
+    margin-left: 1.5rem; /* Space to the left */
+    font-size: 1rem;
+    transition: color 0.2s ease; /* Smooth color transition */
+    padding: 0; /* Remove default padding */
+  }
+  
+  .navButton:hover {
+    color: var(--color-accent-light-pink); /* Light pink on hover */
+    text-decoration: underline; /* Underline on hover */
+  }
+  
+  .navbarText {
+    color: var(--color-accent-light-pink); /* Use a different color for welcome text */
+    margin-right: 1.5rem; /* Space between welcome text and links */
+    font-size: 1rem;
+  }
+  
+  /* Optional: Add some basic responsiveness (simplified) */
+  @media (max-width: 768px) {
+    .navbarContainer {
+      flex-direction: column; /* Stack brand and nav links vertically */
+      align-items: flex-start; /* Align items to the start */
+    }
+    .navbarNav {
+      margin-top: 1rem; /* Add space between stacked items */
+      margin-left: 0; /* Remove left margin */
+      flex-direction: column; /* Stack nav links vertically */
+      align-items: flex-start; /* Align links to the start */
+    }
+    .navLink, .navButton, .navbarText {
+      margin-left: 0; /* Remove left margin */
+      margin-bottom: 0.5rem; /* Add bottom margin for stacked links */
+    }
+  }

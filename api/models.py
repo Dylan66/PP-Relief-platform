@@ -1,25 +1,21 @@
 # api/models.py
 
 from django.db import models
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model # Import standard User model
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save # Import signal
 from django.dispatch import receiver # Import receiver for signals
-# *** Import the Token model ***
-from rest_framework.authtoken.models import Token
 
-
-# *** Get the actual User model class ***
+# Get the actual User model class
 User = get_user_model()
 
 
 # Define choices for user roles
 USER_ROLE_CHOICES = [
-    ('individual', 'Individual Recipient'), # Can request products for themselves
-    ('organization_admin', 'Organization Admin'), # Manages an organization's requests
-    ('donor', 'Donor'),                       # Donates products or money
-    ('center_admin', 'Distribution Center Admin'), # Manages a distribution center
-    # 'system_admin' is covered by User.is_staff/is_superuser, no need for a separate role choice here
+    ('individual', 'Individual Recipient'),
+    ('organization_admin', 'Organization Admin'),
+    ('donor', 'Donor'),
+    ('center_admin', 'Distribution Center Admin'),
 ]
 
 
@@ -37,39 +33,29 @@ class UserProfile(models.Model):
     )
     # *** END ADD EXPLICIT ROLE FIELD ***
 
-    # Add other potential user-specific fields here later (e.g., preferred location, household size)
+    # *** ADD LOCATION FIELD TO USERPROFILE ***
+    location = models.CharField(
+        max_length=255,
+        blank=True, # Make location optional initially
+        help_text="Location for individuals or primary location for donors/admins."
+    )
+    # *** END ADD LOCATION FIELD ***
+
+    # Add other potential user-specific fields here later
 
     def __str__(self):
         return f"Profile for {self.user.username} ({self.get_role_display()})"
 
-# --- Signal 1: Create UserProfile automatically when a new User is created ---
-# This ensures every User has a linked UserProfile upon creation
+# --- Signal to create UserProfile automatically when a new User is created ---
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        # Create profile with default role 'individual'
         UserProfile.objects.create(user=instance)
-        # print(f"UserProfile created for {instance.username}") # Optional debug log
+
+# --- No save_user_profile signal needed ---
 
 
-# --- Signal 2: Create an Auth Token automatically when a new User is created ---
-# *** ADD THIS NEW SIGNAL BLOCK ***
-# This is needed if REGISTER_AUTO_LOGIN is True and you use TokenAuthentication
-@receiver(post_save, sender=User)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        # This fires *after* the user object (and its profile by the previous signal) is created.
-        # Create a Token for the new user instance.
-        Token.objects.create(user=instance)
-        print(f"Auth Token created for user: {instance.username}") # Optional debug log
-# *** END NEW SIGNAL BLOCK ***
-
-
-# --- Signal to save UserProfile when User is saved ---
-# *** This signal is REMOVED ***
-
-
-# Update Organization and DistributionCenter to link to UserProfile
+# Update Organization and DistributionCenter to link to UserProfile (Keep existing)
 class Organization(models.Model):
     admin_profile = models.OneToOneField(
         UserProfile,
@@ -110,7 +96,7 @@ class DistributionCenter(models.Model):
         return f"{self.name} ({self.location})"
 
 
-# Choices for Product Request Status
+# Choices for Product Request Status (Keep existing)
 REQUEST_STATUS_CHOICES = [
     ('Pending', 'Pending'),
     ('Ready', 'Ready for Pickup'),
@@ -139,7 +125,7 @@ class InventoryItem(models.Model):
         return f"{self.quantity} x {self.product_type.name} at {self.distribution_center.name}"
 
 class ProductRequest(models.Model):
-    # --- Requester Information (Only ONE should be set via perform_create logic in the view) ---
+    # --- Requester Information (Keep existing) ---
     requesting_organization = models.ForeignKey(
         Organization,
         on_delete=models.SET_NULL,
@@ -160,11 +146,11 @@ class ProductRequest(models.Model):
     )
     # --- End Requester Information ---
 
-    # What was requested?
+    # What was requested? (Keep existing)
     product_type = models.ForeignKey(ProductType, on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField()
 
-    # Fulfillment Details
+    # Fulfillment Details (Keep existing)
     status = models.CharField(max_length=20, choices=REQUEST_STATUS_CHOICES, default='Pending')
     assigned_distribution_center = models.ForeignKey(
         DistributionCenter,
@@ -174,11 +160,11 @@ class ProductRequest(models.Model):
     )
     pickup_details = models.TextField(blank=True, help_text="Instructions for pickup, e.g., date/time/code")
 
-    # Timestamps
+    # Timestamps (Keep existing)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # --- Model Validation ---
+    # --- Model Validation (Keep existing) ---
     def clean(self):
         requester_fields_set = [
             self.requesting_organization is not None,

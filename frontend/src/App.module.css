@@ -1,0 +1,8 @@
+/* frontend/src/App.module.css */
+
+.mainContent {
+    /* Add padding to the top to prevent content from being hidden behind the fixed navbar */
+    /* Adjust the value (e.g., 60px) based on the actual height of your Navbar */
+    padding-top: 60px; /* Example: Adjust this value based on your Navbar height */
+    /* Add other general layout styles here if needed */
+  }

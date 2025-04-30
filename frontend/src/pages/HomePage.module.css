@@ -1,0 +1,89 @@
+/* src/pages/HomePage/HomePage.module.css */
+
+.homePageContainer {
+    padding: 1rem; /* Add some padding around the main content */
+    max-width: 1200px; /* Optional: Limit max width */
+    margin: 0 auto; /* Center the content */
+    /* We will add padding-top to the main content container in App.jsx */
+    /* padding-top: 60px; */ /* Example, adjust based on navbar height */
+  }
+  
+  .heroSection {
+    background-color: var(--color-accent-light-pink); /* Light pink background from variables */
+    padding: 4rem 1rem; /* Generous padding */
+    text-align: center; /* Center content */
+    margin-bottom: 2rem; /* Space below the hero section */
+    border-radius: 8px; /* Rounded corners */
+  }
+  
+  .heroContent h1 {
+    color: var(--color-text); /* Ensure heading color */
+    font-size: 2.5rem; /* Larger font size */
+    margin-bottom: 0.5rem;
+  }
+  
+  .heroContent p {
+    color: var(--color-text); /* Ensure paragraph color */
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .ctaButton {
+    display: inline-block; /* Make it a block for padding/margin */
+    background-color: var(--color-primary-pink); /* Primary color for button */
+    color: var(--color-white); /* White text */
+    padding: 0.8rem 2rem; /* Padding */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* No underline */
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .ctaButton:hover {
+    background-color: #cf7a61; /* Slightly darker pink on hover */
+    text-decoration: none; /* Still no underline on hover */
+  }
+  
+  .section {
+    margin-bottom: 3rem; /* Space between sections */
+    padding: 1rem 0; /* Padding top/bottom */
+    /* Optional: Add a background or border to sections */
+     background-color: var(--color-white);
+     border-radius: 8px;
+     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+     padding: 1.5rem; /* Adjust padding if adding background/shadow */
+  }
+  
+  .section h2 {
+      color: var(--color-primary-pink); /* Color section headings */
+      text-align: center;
+      margin-bottom: 1.5rem;
+  }
+  
+  /* Add styles for specific sections or elements within sections as needed */
+  /* Example for steps if you add them back: */
+  /*
+  .howItWorksSteps {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+  }
+  .step {
+      flex: 1 1 250px;
+      background-color: var(--color-white);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      text-align: center;
+  }
+  .step h3 {
+      color: var(--color-secondary-brown);
+      margin-bottom: 0.8rem;
+  }
+  .step p {
+      color: var(--color-text);
+      font-size: 0.95rem;
+  }
+  */

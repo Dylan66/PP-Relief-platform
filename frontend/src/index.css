@@ -1,68 +1,85 @@
+/* frontend/src/index.css */
+
+/* Clean up default Vite/React boilerplate */
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Remove default font family, line height, font weight, color scheme, etc. if they conflict */
+  /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; */
+  /* line-height: 1.5; */
+  /* font-weight: 400; */
+  /* color-scheme: light dark; */
+  /* color: rgba(255, 255, 255, 0.87); */
+  /* background-color: #242424; */
+  /* font-synthesis: none; */
+  /* text-rendering: optimizeLegibility; */
+  /* -webkit-font-smoothing: antialiased; */
+  /* -moz-osx-font-smoothing: grayscale; */
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Define CSS Variables for the color palette */
+  --color-primary-pink: #E9967A; /* A warm, natural pink/coral */
+  --color-secondary-brown: #d28c8c; /* A soft tan/beige */
+  --color-background: #FAF0E6; /* Linen - light background */
+  --color-text: #333; /* Dark gray for body text */
+  --color-accent-light-pink: #FFDAB9; /* Peach Puff - lighter highlight */
+  --color-border: #ccc; /* Light gray border */
+  --color-white: #fff;
+  --color-black: #000;
+
+  /* Add some functional colors if needed later */
+  --color-success: #28a745;
+  --color-error: #dc3545;
+}
+
+/* Basic global styles */
+body {
+  margin: 0; /* Remove default body margin */
+  font-family: 'Arial', sans-serif; /* Use a common sans-serif font like Arial */
+  background-color: var(--color-background); /* Set global background color */
+  color: var(--color-text); /* Set global text color */
+  line-height: 1.6; /* Improve readability */
+}
+
+/* Remove default padding/margin from common elements */
+* {
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--color-text); /* Ensure headings use the text color */
+    margin-top: 0; /* Remove default top margin */
+    margin-bottom: 0.5em; /* Add some bottom margin */
+}
+
+p {
+    margin-bottom: 1em; /* Add bottom margin to paragraphs */
 }
 
 a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
+    color: var(--color-primary-pink); /* Style links with primary color */
+    text-decoration: none; /* Remove underline */
+    transition: color 0.2s ease; /* Smooth color transition on hover */
 }
+
 a:hover {
-  color: #535bf2;
+    color: #cf7a61; /* Slightly different color on hover */
+    text-decoration: underline; /* Add underline on hover */
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
+/* Remove default button styles if they conflict with custom ones */
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
+    /* border-radius: 8px; */
+    /* border: 1px solid transparent; */
+    /* padding: 0.6em 1.2em; */
+    /* font-size: 1em; */
+    /* font-weight: 500; */
+    /* font-family: inherit; */
+    /* background-color: #1a1a1a; */
+    /* cursor: pointer; */
+    /* transition: border-color 0.25s; */
 }
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+/* button:hover { border-color: #646cff; } */
+/* button:focus, button:focus-visible { outline: 4px auto -webkit-focus-ring-color; } */
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-}
+
+/* Remove media query default styles if they conflict */
+/* @media (prefers-color-scheme: light) { ... } */
