@@ -1,41 +1,42 @@
 /* frontend/src/index.css */
 
 /* Clean up default Vite/React boilerplate */
-:root {
+/* :root { */
   /* Remove default font family, line height, font weight, color scheme, etc. if they conflict */
-  /* font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; */
-  /* line-height: 1.5; */
-  /* font-weight: 400; */
-  /* color-scheme: light dark; */
-  /* color: rgba(255, 255, 255, 0.87); */
-  /* background-color: #242424; */
-  /* font-synthesis: none; */
-  /* text-rendering: optimizeLegibility; */
-  /* -webkit-font-smoothing: antialiased; */
-  /* -moz-osx-font-smoothing: grayscale; */
+/* } */
 
+/* Define CSS Variables for the color palette */
+:root {
+  /* Suggested Palette */
+  --color-primary-rose: #C16E70;       /* Earthy Rose for actions/highlights */
+  --color-secondary-beige: #F0E6D9;    /* Warm Beige for containers/sections */
+  --color-text-dark: #5A4A42;          /* Coffee Bean for body text */
+  --color-accent-rose-light: #E0B0AE;  /* Dusty Rose for softer accents */
+  --color-background-light: #FEFBF6;   /* Ivory/Cream for page background */
+  --color-border-soft: #D3C0B0;        /* Soft Brown-Gray for borders */
 
-  /* Define CSS Variables for the color palette */
-  --color-primary-pink: #E9967A; /* A warm, natural pink/coral */
-  --color-secondary-brown: #d28c8c; /* A soft tan/beige */
-  --color-background: #FAF0E6; /* Linen - light background */
-  --color-text: #333; /* Dark gray for body text */
-  --color-accent-light-pink: #FFDAB9; /* Peach Puff - lighter highlight */
-  --color-border: #ccc; /* Light gray border */
+  /* Standard colors */
   --color-white: #fff;
   --color-black: #000;
 
-  /* Add some functional colors if needed later */
-  --color-success: #28a745;
-  --color-error: #dc3545;
+  /* Functional colors (adjust if needed) */
+  --color-success: #4CAF50; /* Standard Green */
+  --color-error: #F44336;   /* Standard Red */
+
+  /* Typography (Optional - can define font sizes, weights) */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-large: 1.25rem; /* 20px */
+  --font-size-small: 0.9rem; /* 14px */
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
 }
 
 /* Basic global styles */
 body {
   margin: 0; /* Remove default body margin */
   font-family: 'Arial', sans-serif; /* Use a common sans-serif font like Arial */
-  background-color: var(--color-background); /* Set global background color */
-  color: var(--color-text); /* Set global text color */
+  background-color: var(--color-background-light); /* Use new background variable */
+  color: var(--color-text-dark); /* Use new text color variable */
   line-height: 1.6; /* Improve readability */
 }
 
@@ -45,7 +46,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: var(--color-text); /* Ensure headings use the text color */
+    color: var(--color-text-dark); /* Headings use dark text color */
     margin-top: 0; /* Remove default top margin */
     margin-bottom: 0.5em; /* Add some bottom margin */
 }
@@ -55,31 +56,21 @@ p {
 }
 
 a {
-    color: var(--color-primary-pink); /* Style links with primary color */
+    color: var(--color-primary-rose); /* Style links with primary color */
     text-decoration: none; /* Remove underline */
     transition: color 0.2s ease; /* Smooth color transition on hover */
 }
 
 a:hover {
-    color: #cf7a61; /* Slightly different color on hover */
-    text-decoration: underline; /* Add underline on hover */
+    color: var(--color-accent-rose-light); /* Use lighter rose on hover */
+    text-decoration: underline;
 }
 
 /* Remove default button styles if they conflict with custom ones */
 button {
-    /* border-radius: 8px; */
-    /* border: 1px solid transparent; */
-    /* padding: 0.6em 1.2em; */
-    /* font-size: 1em; */
-    /* font-weight: 500; */
-    /* font-family: inherit; */
-    /* background-color: #1a1a1a; */
-    /* cursor: pointer; */
-    /* transition: border-color 0.25s; */
+    /* Add common button resets or default styles here */
+    /* Example: background: none; border: none; cursor: pointer; */
 }
-/* button:hover { border-color: #646cff; } */
-/* button:focus, button:focus-visible { outline: 4px auto -webkit-focus-ring-color; } */
-
 
 /* Remove media query default styles if they conflict */
 /* @media (prefers-color-scheme: light) { ... } */

@@ -5,4 +5,13 @@
     /* Adjust the value (e.g., 60px) based on the actual height of your Navbar */
     padding-top: 60px; /* Example: Adjust this value based on your Navbar height */
     /* Add other general layout styles here if needed */
+    min-height: calc(100vh - 60px); /* Ensure main content takes at least viewport height minus navbar */
+    /* You might add padding-bottom if you have a fixed footer */
   }
+  
+  /* Style the overall app container if needed */
+  /* .appContainer { */
+  /*   display: flex; */
+  /*   flex-direction: column; */
+  /*   min-height: 100vh; */
+  /* } */
