@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model # Import standard User model
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save # Import signal
 from django.dispatch import receiver # Import receiver for signals
-
+from rest_framework.authtoken.models import Token 
 # Get the actual User model class
 User = get_user_model()
 
@@ -53,7 +53,18 @@ def create_user_profile(sender, instance, created, **kwargs):
         UserProfile.objects.create(user=instance)
 
 # --- No save_user_profile signal needed ---
-
+# --- ADD Signal to create Auth Token automatically ---
+# This signal is triggered AFTER a User object is saved.
+# It runs IN ADDITION TO the create_user_profile signal.
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        # Check if a token already exists for this user (shouldn't for new users created here)
+        # This check is mostly for safety if you have existing users or rerun migrations oddly.
+        if not Token.objects.filter(user=instance).exists():
+            Token.objects.create(user=instance)
+            print(f"Auth Token created for new user: {instance.username}") # Optional debug log
+# *** END ADD Signal ***
 
 # Update Organization and DistributionCenter to link to UserProfile (Keep existing)
 class Organization(models.Model):

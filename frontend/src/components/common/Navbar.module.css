@@ -1,93 +1,118 @@
 /* src/components/common/Navbar.module.css */
 
 .navbar {
-    background-color: var(--color-secondary-beige); /* Brown background from variables */
-    padding: 0.8rem 1.5rem; /* Vertical and horizontal padding */
-    color: var(--color-text-dark); /* Dark text for navbar */
-    position: fixed; /* Make the navbar stick to the top */
-    top: 0;
-    left: 0;
-    width: 100%; /* Full width */
-    z-index: 1000; /* Ensure it stays on top of other content */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional subtle shadow */
-  }
-  
+  background-color: var(--color-white);
+  padding: 0.8rem 1.5rem;
+  color: var(--color-purple);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  border-bottom: none;
+}
+
+.navbarContainer {
+  display: flex;
+  justify-content: space-between; /* Keep space between brand and nav links container */
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navbarBrand {
+  color: var(--color-purple);
+  font-size: 1.4rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.navbarBrand:hover {
+    text-decoration: none;
+    opacity: 0.9;
+}
+
+.navbarNav {
+  display: flex;
+  align-items: center;
+  /* *** FIX START: Center items horizontally within the navbarNav flex container *** */
+  justify-content: center; /* Center flex items */
+  flex-grow: 1; /* Allow this container to grow and take available space */
+  /* *** FIX END *** */
+}
+
+/* Style for navigation links */
+.navLink {
+  color: var(--color-black);
+  text-decoration: none;
+  margin-left: 1.5rem; /* Keep spacing between links */
+  font-size: 1rem;
+  /* *** FIX START: Make text bold *** */
+  font-weight: bold;
+  /* *** FIX END *** */
+  transition: color 0.2s ease;
+}
+
+.navLink:first-child {
+    margin-left: 0; /* Remove left margin for the first link to align it properly */
+}
+
+
+.navLink:hover {
+  color: var(--color-accent-light-pink);
+  text-decoration: underline;
+}
+
+/* Style for logout button */
+.navButton {
+  color: var(--color-white);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 1.5rem; /* Space to the left */
+  font-size: 1rem;
+  /* *** FIX START: Make text bold *** */
+  font-weight: bold;
+  /* *** FIX END *** */
+  transition: color 0.2s ease;
+  padding: 0;
+}
+
+.navButton:hover {
+  color: var(--color-accent-light-pink);
+  text-decoration: underline;
+}
+
+.navbarText {
+  color: var(--color-accent-light-pink);
+  margin-right: 1.5rem; /* Space between welcome text and links */
+  font-size: 1rem;
+  /* *** FIX START: Make text bold *** */
+  font-weight: bold;
+  /* *** FIX END *** */
+}
+
+/* Optional: Add some basic responsiveness (simplified) */
+@media (max-width: 768px) {
   .navbarContainer {
-    display: flex; /* Use flexbox for layout */
-    justify-content: space-between; /* Space out brand and nav links */
-    align-items: center; /* Vertically align items */
-    max-width: 1200px; /* Optional: Limit max width */
-    margin: 0 auto; /* Center the container */
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
-  .navbarBrand {
-    color: var(--color-text-dark); /* Dark color for brand text */
-    font-size: 1.4rem; /* Larger font size for brand */
-    font-weight: bold; /* Bold font weight */
-    text-decoration: none; /* Remove underline */
-  }
-  
-  .navbarBrand:hover {
-      text-decoration: none; /* No underline on hover for brand */
-      opacity: 0.9; /* Slight opacity change on hover */
-  }
-  
   .navbarNav {
-    display: flex; /* Use flexbox for nav links */
-    align-items: center; /* Vertically align links */
+    margin-top: 1rem;
+    margin-left: 0;
+    flex-direction: column;
+    align-items: flex-start; /* Align links to the start when stacked */
+    /* *** FIX START: Remove centering when stacked vertically *** */
+    justify-content: flex-start;
+    flex-grow: 0; /* Prevent it from taking full width when stacked */
+    /* *** FIX END *** */
   }
-  
-  /* Style for navigation links */
-  .navLink {
-    color: var(--color-text-dark); /* Dark color for links */
-    text-decoration: none; /* Remove underline */
-    margin-left: 1.5rem; /* Space between links */
-    font-size: 1rem; /* Standard font size */
-    transition: color 0.2s ease; /* Smooth color transition */
+  .navLink, .navButton, .navbarText {
+    margin-left: 0; /* Remove left margin */
+    margin-bottom: 0.5rem; /* Add bottom margin for stacked links */
   }
-  
-  .navLink:hover {
-    color: var(--color-primary-rose); /* Primary rose on hover */
-    text-decoration: underline; /* Underline on hover */
+  .navLink:first-child {
+      margin-left: 0; /* Ensure no margin */
   }
-  
-  /* Style for logout button */
-  .navButton {
-    color: var(--color-text-dark); /* Dark color */
-    background-color: transparent; /* No background */
-    border: none; /* No border */
-    cursor: pointer; /* Pointer cursor */
-    margin-left: 1.5rem; /* Space to the left */
-    font-size: 1rem;
-    transition: color 0.2s ease; /* Smooth color transition */
-    padding: 0; /* Remove default padding */
-  }
-  
-  .navButton:hover {
-    color: var(--color-primary-rose); /* Primary rose on hover */
-    text-decoration: underline; /* Underline on hover */
-  }
-  
-  .navbarText {
-    color: var(--color-primary-rose); /* Use primary rose for welcome text */
-    margin-right: 1.5rem; /* Space between welcome text and links */
-    font-size: 1rem;
-  }
-  
-  /* Optional: Add some basic responsiveness (simplified) */
-  @media (max-width: 768px) {
-    .navbarContainer {
-      flex-direction: column; /* Stack brand and nav links vertically */
-      align-items: flex-start; /* Align items to the start */
-    }
-    .navbarNav {
-      margin-top: 1rem; /* Add space between stacked items */
-      margin-left: 0; /* Remove left margin */
-      flex-direction: column; /* Stack nav links vertically */
-      align-items: flex-start; /* Align links to the start */
-    }
-    .navLink, .navButton, .navbarText {
-      margin-left: 0; /* Remove left margin */
-      margin-bottom: 0.5rem; /* Add bottom margin for stacked links */
-    }
-  }
+}

@@ -23,6 +23,21 @@ const Navbar = () => {
 
         {/* Navigation Links */}
         <div className={styles.navbarNav}>
+
+          {/* === New Public Navigation Links === */}
+          {/* These links are visible to all users */}
+           <Link to="/" className={styles.navLink}>Home</Link> {/* Link to the homepage */}
+           <Link to="/about" className={styles.navLink}>About Us</Link> {/* Link to an About Us page (needs route/component) */}
+           <Link to="/learn" className={styles.navLink}>Learn More</Link> {/* Link to Learn More/Education page (needs route/component) */}
+           <Link to="/receive" className={styles.navLink}>Receive Products</Link> {/* Link to Receive Products info/form page (needs route/component) */}
+           <Link to="/donate" className={styles.navLink}>Donate Now</Link> {/* Link to Donate page (needs route/component) */}
+          {/* === End New Public Links === */}
+
+          {/* Add a separator if desired */}
+          {/* <span className={styles.separator}>|</span> */}
+
+
+          {/* === Authentication Links (Conditional) === */}
           {isAuthenticated ? (
             <>
               {/* Links when logged in */}
@@ -37,9 +52,11 @@ const Navbar = () => {
             <>
               {/* Link when logged out - Changed to just 'Login' */}
               <Link to="/login" className={styles.navLink}>Login</Link>
-               {/* Removed Register link as requested */}
+               {/* Removed Register link from Navbar as requested */}
             </>
           )}
+          {/* === End Authentication Links === */}
+
         </div>
       </div>
     </nav>

@@ -158,7 +158,9 @@ export const AuthProvider = ({ children }) => {
     console.log('AuthContext: Attempting registration with form data:', userData);
     setIsLoading(true);
     try {
-      const backendData = { /* ... */ password: userData.password, password2: userData.password2, /* ... */ };
+      const backendData = { username: userData.username,email: userData.email,
+        
+        password: userData.password, password2: userData.password2, /* ... */ };
       console.log('AuthContext: Sending data to backend:', backendData);
       const response = await apiClient.post('/auth/registration/', backendData);
       console.log('AuthContext: Registration API call successful:', response.data);
