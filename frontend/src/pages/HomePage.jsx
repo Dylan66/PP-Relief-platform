@@ -10,6 +10,8 @@ import styles from './HomePage.module.css';
 // Corrected the file extension from .jpg to .jpeg
 const companyHeroImageUrl = '/company_hero_image.jpeg'; // <--- FIX: Changed .jpg to .jpeg
 
+// NOTE: Assuming your logo image is in the `public` folder
+const companyLogoUrl = '/company_hero_image.jpeg'; // Use the provided filename
 
 const HomePage = () => {
   const { isAuthenticated } = useAuth();
@@ -17,58 +19,94 @@ const HomePage = () => {
   return (
     <div className={styles.homePageContainer}>
 
-      {/* === Section 1: Company picture, front and center === */}
+      {/* === Section 1: Hero with Logo and Text === */}
       <section className={styles.heroSection}>
+        <p className={styles.heroTextAbove}>MANY HANDS. ONE MISSION. HER POWER.</p>
         <img
-          src={companyHeroImageUrl} // Use the defined image URL
-          alt="Her Ubuntu Company Picture" // Add a meaningful alt text describing the image
-          className={styles.heroImage} // Apply image styling
+          src={companyLogoUrl} // Use the defined logo URL
+          alt="Her Ubuntu Logo" // Updated alt text for the logo
+          className={styles.heroLogo} // Apply logo styling
         />
+        <h1 className={styles.heroTextBelow}>HER UBUNTU</h1>
       </section>
 
 
-      {/* === Section 2: Three text boxes organized horizontally === */}
-      {/* Apply general section styles defined in HomePage.module.css */}
+      {/* === Section 2: Articles Section (Using the new structure) === */}
       <section className={styles.section}>
-        <h2>What We Do</h2> {/* Heading for this section */}
-        {/* Container for the three horizontal boxes using flexbox */}
-        {/* This style is defined in HomePage.module.css */}
-        <div className={styles.threeBoxesContainer}>
-          {/* Text Box 1: Distribution */}
-          {/* Apply style for individual box, defined in HomePage.module.css */}
-          <div className={styles.textBox}>
-            <h3>Accessible Distribution</h3> {/* Heading within the box */}
-            <p>We provide easy access to essential menstrual products through a network of local distribution centers across Kenya.</p> {/* Paragraph within the box */}
+        {/* Container for the three horizontal article boxes */}
+        <div className={styles.articlesContainer}>
+
+          {/* Article Box 1 */}
+          <div className={styles.articleBox}>
+            <div className={styles.articleImagePlaceholder}></div> {/* Image Placeholder */}
+            <p className={styles.articleCategory}>CATEGORY</p>
+            <h3 className={styles.articleTitle}>ARTICLE TITLE</h3>
+            <p className={styles.articleDescription}>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
           </div>
-          {/* Text Box 2: Education */}
-          <div className={styles.textBox}>
-            <h3>Health Education</h3>
-            <p>Our platform and community programs offer vital information on menstrual health, hygiene, and related conditions, breaking down stigma and myths.</p>
+
+          {/* Article Box 2 */}
+          <div className={styles.articleBox}>
+            <div className={styles.articleImagePlaceholder}></div> {/* Image Placeholder */}
+            <p className={styles.articleCategory}>CATEGORY</p>
+            <h3 className={styles.articleTitle}>ARTICLE TITLE</h3>
+            <p className={styles.articleDescription}>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
           </div>
-          {/* Text Box 3: Community Support */}
-          <div className={styles.textBox}>
-            <h3>Empowering Community</h3>
-            <p>We connect individuals in need and organizations with donors, volunteers, and resources, fostering a supportive network.</p>
+
+          {/* Article Box 3 */}
+          <div className={styles.articleBox}>
+            <div className={styles.articleImagePlaceholder}></div> {/* Image Placeholder */}
+            <p className={styles.articleCategory}>CATEGORY</p>
+            <h3 className={styles.articleTitle}>ARTICLE TITLE</h3>
+            <p className={styles.articleDescription}>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
           </div>
+
         </div>
-         {/* Optional Call to Action below the boxes */}
-         {/* *** FIX START: Corrected JSX Conditional Rendering *** */}
-         {!isAuthenticated && (
+        {/* Remove the old CTA text or adapt if needed for the new design */}
+        {/* {!isAuthenticated && (
              <p className={styles.sectionCtaText}>Ready to make a difference or get help? <Link to="/register">Register Now</Link> or <Link to="/login">Login</Link>.</p>
           )}
-           {/* This block renders ONLY if isAuthenticated is true */}
            {isAuthenticated && (
              <p className={styles.sectionCtaText}><Link to="/dashboard">Go to your Dashboard</Link> to manage requests or donations.</p>
-          )}
-         {/* *** FIX END *** */}
+          )} */}
       </section>
 
 
-      {/* === Section 3: Address on left, two smaller text boxes on right === */}
-      <section className={styles.section}>
+      {/* === Section 3: Footer Section (Replaces Contact/Get Involved) === */}
+      <footer className={styles.section}> {/* Use footer semantic tag */}
+        <div className={styles.footerSectionContainer}>
+
+          {/* Address & Social Links */} 
+          <div className={styles.footerAddressBox}>
+            {/* Use p tags for address lines directly */}
+            <p><strong>Address:</strong></p> 
+            <p>Level 1, 12 Sample St, Sydney NSW 2000</p>
+            <p><strong>Contact:</strong></p>
+            <p><a href="mailto:info@relume.io">info@relume.io</a></p>
+            <p><a href="tel:18001234567">1800 123 4567</a></p>
+
+            {/* Social Media Icons Placeholder */}
+            <div className={styles.socialIconsContainer}>
+              {/* Replace spans with actual icons (e.g., from react-icons) */}
+              <span className={styles.socialIcon}>IG</span> 
+              <span className={styles.socialIcon}>FB</span>
+              <span className={styles.socialIcon}>LI</span>
+              <span className={styles.socialIcon}>YT</span>
+              <span className={styles.socialIcon}>X</span>
+            </div>
+          </div>
+
+          {/* Two Placeholder Boxes on Right */}
+          <div className={styles.footerPlaceholdersContainer}>
+            <div className={styles.footerPlaceholderBox}></div>
+            <div className={styles.footerPlaceholderBox}></div>
+          </div>
+
+        </div>
+      </footer>
+      {/* Remove the old Section 3 */}
+      {/* <section className={styles.section}>
          <h2>Get In Touch / Get Involved</h2>
         <div className={styles.contactSectionContainer}>
-
           <div className={styles.contactAddressBox}>
             <h3>Contact Us</h3>
             <p>Her Ubuntu Initiative</p>
@@ -78,7 +116,6 @@ const HomePage = () => {
             <p>Email: <a href="mailto:info@herubuntu.org">info@herubuntu.org</a></p>
             <p>Phone: <a href="tel:+254712345678">+254 712 345 678</a></p>
           </div>
-
           <div className={styles.getInvolvedBoxesContainer}>
             <div className={styles.getInvolvedTextBox}>
               <h3>Need Products?</h3>
@@ -93,9 +130,8 @@ const HomePage = () => {
                 {isAuthenticated && <p><Link to="/dashboard">Go to Dashboard</Link> to find donation options.</p>}
             </div>
           </div>
-
         </div>
-      </section>
+      </section> */}
 
     </div>
   );

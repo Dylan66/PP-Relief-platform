@@ -2,227 +2,266 @@
 
 /* === General Page Container === */
 .homePageContainer {
-  padding: 1rem;
-  max-width: 1200px;
+  padding: 0; /* Remove padding if sections handle it */
+  max-width: 100%; /* Allow full width */
   margin: 0 auto;
+  font-family: sans-serif; /* Basic font */
+  background-color: var(--color-white); /* Assuming white background from image */
 }
 
-/* === Section 1: Hero with Image === */
+/* === Section 1: Hero with Logo and Text === */
 .heroSection {
-  padding: 2rem 1rem;
+  padding: 3rem 1rem; /* Adjust padding */
   text-align: center;
   margin-bottom: 3rem;
-  border-bottom: 1px solid var(--color-border);
+  /* Remove border if not needed */
+  /* border-bottom: 1px solid var(--color-border); */
+  display: flex; /* Use flexbox for layout */
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  gap: 1rem; /* Space between elements */
 }
 
-.heroImage {
+.heroTextAbove {
+  color: #d8bfd8; /* Light purple/lavender color */
+  font-size: 1.2rem; /* Adjust size as needed */
+  font-weight: bold; /* Make it bold */
+  letter-spacing: 1px; /* Add some letter spacing */
+  text-transform: uppercase; /* Uppercase text */
+}
+
+.heroLogo {
   display: block;
-  max-width: 100%;
+  max-width: 300px; /* Limit logo size */
   height: auto;
-  margin: 0 auto;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin: 1rem auto; /* Center and add vertical margin */
+  /* Remove border/shadow if not needed */
+  /* border-radius: 8px; */
+  /* box-shadow: 0 4px 8px rgba(0,0,0,0.1); */
 }
 
-/* Optional: Styles for tagline text below the image */
-/*
-.heroTagline h1 { ... }
-*/
+.heroTextBelow {
+  color: #4b0082; /* Indigo/darker purple */
+  font-size: 2.5rem; /* Larger font size */
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2); /* Subtle text shadow */
+  /* Use a specific font if you have one */
+  /* font-family: 'YourDisplayFont', sans-serif; */
+}
 
 
-/* === General Section Styling === */
+/* === General Section Styling (Applies to Articles and Footer) === */
 .section {
   margin-bottom: 3rem;
-  padding: 1.5rem;
-   background-color: var(--color-white); /* Section background remains white */
-   border-radius: 8px;
-   box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+  padding: 2rem 5%; /* Padding relative to viewport width */
+   background-color: #f8f9fa; /* Light gray background for sections */
+  /* Remove individual section shadows/borders if the container has one or if not desired */
+  /* border-radius: 8px; */
+  /* box-shadow: 0 2px 4px rgba(0,0,0,0.08); */
 }
 
+/* Remove section headings if not used in the new design */
+/*
 .section h2 {
     color: var(--color-primary-pink);
     text-align: center;
     margin-bottom: 1.5rem;
 }
+*/
 
-.sectionCtaText {
-    text-align: center;
-    margin-top: 2rem;
-    font-size: 1.1rem;
-    font-weight: bold;
-}
-.sectionCtaText a {
-    color: var(--color-secondary-brown);
-    font-weight: bold;
-    transition: color 0.2s ease;
-}
-.sectionCtaText a:hover {
-     color: var(--color-primary-pink);
-}
+/* Remove CTA text styles if not used in the new design */
+/*
+.sectionCtaText { ... }
+.sectionCtaText a { ... }
+.sectionCtaText a:hover { ... }
+*/
 
 
-/* === Section 2: Three text boxes organized horizontally === */
-.threeBoxesContainer {
-    display: flex;
-    justify-content: space-around;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    padding-top: 1rem;
+/* === Section 2: Articles Section === */
+.articlesContainer {
+  display: flex;
+  justify-content: space-around; /* Distribute items */
+  gap: 2rem; /* Space between articles */
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  padding: 1rem 0; /* Padding top/bottom */
 }
 
-/* Styling for each individual text box in Section 2 */
-.textBox {
-    flex: 1 1 280px;
-    padding: 1.5rem;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    /* *** FIX START: Change background color to purple *** */
-    background-color: var(--color-purple); /* Use purple background */
-    color: var(--color-white); /* Set text color to white for readability on purple */
-    /* *** FIX END *** */
-    text-align: center;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+.articleBox {
+  flex: 1 1 300px; /* Flex properties for responsiveness */
+  background-color: var(--color-white); /* White background for article boxes */
+  padding: 1.5rem;
+  border: 1px solid #dee2e6; /* Lighter border */
+  border-radius: 4px; /* Slight rounding */
+  text-align: left; /* Align text left */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-/* Styling for headings within text boxes (ensure they are visible on purple) */
-.textBox h3 {
-    color: var(--color-accent-light-pink); /* Use a lighter color for headings on purple */
-    margin-bottom: 0.8rem;
+.articleImagePlaceholder {
+  width: 100%;
+  height: 180px; /* Fixed height for placeholder */
+  background-color: #e9ecef; /* Placeholder color */
+  margin-bottom: 1rem;
+  border-radius: 4px; /* Match box rounding */
 }
 
-/* Styling for paragraphs within text boxes (already set to white above) */
-.textBox p {
-    /* color: var(--color-white); // Already set on the parent .textBox */
-    font-size: 0.95rem;
+.articleCategory {
+  font-size: 0.8rem;
+  color: #6c757d; /* Secondary text color */
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+}
+
+.articleTitle {
+  font-size: 1.1rem;
+  color: #212529; /* Primary text color */
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.articleDescription {
+  font-size: 0.9rem;
+  color: #495057; /* Slightly darker secondary text */
+  line-height: 1.5;
 }
 
 
-/* === Section 3: Address on left, two smaller text boxes on right === */
-.contactSectionContainer {
-    display: flex;
-    justify-content: space-between;
-    gap: 3rem;
-    flex-wrap: wrap;
-     padding-top: 1rem;
+/* === Footer Section (Replaces Section 3) === */
+.footerSectionContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 3rem; /* Gap between address and right side */
+  flex-wrap: wrap; /* Allow wrapping */
+  padding-top: 1rem;
+  align-items: flex-start; /* Align items to the top */
 }
 
 /* Styling for the Address and Contact Info box on the left */
-.contactAddressBox {
-    flex: 1 1 350px;
-    padding: 1.5rem;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    /* *** FIX START: Change background color to purple *** */
-    background-color: var(--color-purple); /* Use purple background */
-    color: var(--color-white); /* Set text color to white */
-    /* *** FIX END *** */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    text-align: left;
+.footerAddressBox {
+  flex: 1 1 300px; /* Adjust flex basis */
+  /* background-color: transparent; /* Remove background if section has one */
+  /* padding: 0; Remove padding if not needed */
+  /* border: none; Remove border */
+  /* box-shadow: none; Remove shadow */
+  text-align: left;
 }
 
-/* Styling for heading within the address box (ensure visible on purple) */
-.contactAddressBox h3 {
-    color: var(--color-accent-light-pink); /* Use lighter color for headings on purple */
-    margin-bottom: 1rem;
+.footerAddressBox h3 {
+  /* Style heading if needed, or remove if just using <p> */
+  font-size: 1rem;
+  font-weight: bold;
+  color: #212529;
+  margin-bottom: 0.8rem;
 }
 
-/* Styling for paragraphs within the address box (already set to white above) */
-.contactAddressBox p {
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-    /* color: var(--color-white); // Already set on parent */
-}
-.contactAddressBox p:last-child {
-    margin-bottom: 0;
-}
-/* Style links within the address box (ensure visible on purple) */
-.contactAddressBox a {
-     color: var(--color-accent-light-pink); /* Use lighter color for links on purple */
-      transition: color 0.2s ease;
-}
-.contactAddressBox a:hover {
-    color: var(--color-white); /* Highlight with white on hover */
+.footerAddressBox p {
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+  color: #495057; /* Adjust color as needed */
+  line-height: 1.4;
 }
 
-
-/* Container for the two smaller text boxes on the right */
-.getInvolvedBoxesContainer {
-    flex: 1 1 350px;
-    display: flex;
-    flex-direction: row; /* Arrange children horizontally */
-    gap: 1.5rem; /* Space between the two smaller boxes horizontally */
-    flex-wrap: wrap; /* Allow the smaller boxes to wrap */
+.footerAddressBox a {
+   color: #e83e8c; /* Link color (adjust to match theme) */
+   text-decoration: none;
+   transition: color 0.2s ease;
+}
+.footerAddressBox a:hover {
+  color: #c2185b; /* Darker hover color */
 }
 
-/* Styling for each individual smaller text box on the right */
-.getInvolvedTextBox {
-    flex: 1;
-    padding: 1.5rem;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    /* *** FIX START: Change background color to purple *** */
-    background-color: var(--color-purple); /* Use purple background */
-    color: var(--color-white); /* Set text color to white */
-    /* *** FIX END *** */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    text-align: left;
+.socialIconsContainer {
+  display: flex;
+  gap: 1rem; /* Space between icons */
+  margin-top: 1rem; /* Space above icons */
 }
 
-/* Styling for headings within smaller text boxes (ensure visible on purple) */
-.getInvolvedTextBox h3 {
-    color: var(--color-accent-light-pink); /* Use lighter color for headings on purple */
-    margin-bottom: 0.8rem;
+.socialIcon {
+  /* Basic styling for icon placeholders */
+  font-size: 1.2rem;
+  color: #6c757d; /* Placeholder color */
+  /* Replace with actual icon styles */
+  cursor: pointer;
+}
+.socialIcon:hover {
+    color: #212529;
 }
 
-/* Styling for paragraphs within smaller text boxes (already set to white above) */
-.getInvolvedTextBox p {
-    font-size: 0.95rem;
-    /* color: var(--color-white); // Already set on parent */
+/* Container for the two placeholder boxes on the right */
+.footerPlaceholdersContainer {
+  flex: 2 1 400px; /* Take more space, adjust basis */
+  display: flex;
+  flex-direction: row; /* Arrange children horizontally */
+  gap: 2rem; /* Space between the two smaller boxes horizontally */
+  flex-wrap: wrap; /* Allow the smaller boxes to wrap */
 }
-/* Style links within the smaller text boxes (ensure visible on purple) */
-.getInvolvedTextBox a {
-    color: var(--color-accent-light-pink); /* Use lighter color for links on purple */
-    font-weight: bold;
-    transition: color 0.2s ease;
-}
-.getInvolvedTextBox a:hover {
-     color: var(--color-white); /* Highlight with white on hover */
+
+/* Styling for each individual smaller placeholder box on the right */
+.footerPlaceholderBox {
+  flex: 1 1 180px; /* Allow them to take space */
+  height: 120px; /* Example fixed height */
+  background-color: #e9ecef; /* Placeholder color */
+  border-radius: 4px;
+  /* Add border/shadow if needed */
+  /* border: 1px solid var(--color-border-light); */
+  /* box-shadow: 0 1px 3px rgba(0,0,0,0.05); */
 }
 
 
 /* --- Basic Responsiveness --- */
-/* When screen is narrower than 768px, stack the main flex items in Section 2 and Section 3 */
+/* Adjust breakpoints and styles as needed */
+@media (max-width: 992px) {
+  .footerSectionContainer {
+    gap: 2rem;
+  }
+  .footerPlaceholdersContainer {
+    flex-basis: 300px; /* Adjust basis on medium screens */
+    gap: 1.5rem;
+  }
+}
+
 @media (max-width: 768px) {
-  /* Stack the three boxes in Section 2 vertically */
-  .threeBoxesContainer {
+  /* Stack the articles vertically */
+  .articlesContainer {
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.5rem;
   }
-  .textBox {
-      flex-basis: auto;
-       text-align: left;
+  .articleBox {
+    flex-basis: auto; /* Full width */
   }
 
-  /* Stack the address box and the 'get involved' boxes container in Section 3 vertically */
-  .contactSectionContainer {
-      flex-direction: column;
-      gap: 2rem;
+  /* Stack the footer sections vertically */
+  .footerSectionContainer {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center; /* Center items when stacked */
   }
-   .contactAddressBox, .getInvolvedBoxesContainer {
-       flex-basis: auto;
-   }
+  .footerAddressBox,
+  .footerPlaceholdersContainer {
+    flex-basis: auto; /* Full width */
+    width: 100%;
+    max-width: 400px; /* Limit width */
+  }
 
-   .contactAddressBox { text-align: left; }
+  .footerAddressBox {
+    text-align: center; /* Center address text */
+  }
 
-   /* The container for the two smaller boxes should now stack its children vertically on small screens */
-   .getInvolvedBoxesContainer {
-       flex-direction: column; /* Stack the smaller boxes vertically on small screens */
-       gap: 1rem;
-   }
-   /* Remove flex basis for stacked smaller boxes */
-   .getInvolvedTextBox {
-        flex-basis: auto;
-        text-align: left;
-   }
+  .socialIconsContainer {
+    justify-content: center; /* Center icons */
+  }
 
+  /* Stack the two footer placeholders vertically */
+  .footerPlaceholdersContainer {
+    flex-direction: column; /* Stack the smaller boxes */
+    align-items: center; /* Center them */
+    gap: 1.5rem;
+  }
+  .footerPlaceholderBox {
+    flex-basis: auto;
+    width: 80%; /* Adjust width */
+    max-width: 300px;
+  }
 }

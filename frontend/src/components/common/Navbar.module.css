@@ -1,118 +1,113 @@
 /* src/components/common/Navbar.module.css */
 
 .navbar {
-  background-color: var(--color-white);
-  padding: 0.8rem 1.5rem;
-  color: var(--color-purple);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  border-bottom: none;
+  background-color: var(--color-background-navbar, #ffffff); /* White or theme background */
+  padding: 0.8rem 2rem; /* Adjust padding */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  border-bottom: 1px solid var(--color-border, #e0e0e0);
 }
 
 .navbarContainer {
   display: flex;
-  justify-content: space-between; /* Keep space between brand and nav links container */
+  justify-content: space-between; /* Pushes brand left, nav+auth right */
   align-items: center;
-  max-width: 1200px;
+  max-width: 1200px; /* Or your desired max width */
   margin: 0 auto;
 }
 
 .navbarBrand {
-  color: var(--color-purple);
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: bold;
+  color: var(--color-primary-pink, #e83e8c); /* Theme color */
   text-decoration: none;
 }
 
-.navbarBrand:hover {
-    text-decoration: none;
-    opacity: 0.9;
-}
-
+/* Container for main navigation links */
 .navbarNav {
   display: flex;
   align-items: center;
-  /* *** FIX START: Center items horizontally within the navbarNav flex container *** */
-  justify-content: center; /* Center flex items */
-  flex-grow: 1; /* Allow this container to grow and take available space */
-  /* *** FIX END *** */
+  gap: 1.5rem; /* Spacing between main nav links */
+  /* This container will stay towards the left/center */
+  flex-grow: 1; /* Allow this section to take up available space */
+  justify-content: center; /* Center the links within this section */
 }
 
-/* Style for navigation links */
+/* New container specifically for Authentication links/buttons */
+.navbarAuth {
+  display: flex;
+  align-items: center;
+  gap: 1rem; /* Spacing between auth items */
+  margin-left: auto; /* Pushes this div to the far right */
+}
+
 .navLink {
-  color: var(--color-black);
+  color: var(--color-text-primary, #333);
   text-decoration: none;
-  margin-left: 1.5rem; /* Keep spacing between links */
-  font-size: 1rem;
-  /* *** FIX START: Make text bold *** */
-  font-weight: bold;
-  /* *** FIX END *** */
+  padding: 0.5rem 0; /* Add padding for better click area */
   transition: color 0.2s ease;
+  display: flex; /* Needed to align icon and text */
+  align-items: center; /* Vertically align icon and text */
+  gap: 0.4rem; /* Space between icon and text */
+  font-weight: bold; /* Make nav links bold */
+  /* Optional: Add a specific font family */
+  /* font-family: 'Your Preferred Font', sans-serif; */
 }
 
-.navLink:first-child {
-    margin-left: 0; /* Remove left margin for the first link to align it properly */
-}
-
-
-.navLink:hover {
-  color: var(--color-accent-light-pink);
-  text-decoration: underline;
-}
-
-/* Style for logout button */
-.navButton {
-  color: var(--color-white);
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-  margin-left: 1.5rem; /* Space to the left */
-  font-size: 1rem;
-  /* *** FIX START: Make text bold *** */
-  font-weight: bold;
-  /* *** FIX END *** */
-  transition: color 0.2s ease;
-  padding: 0;
-}
-
-.navButton:hover {
-  color: var(--color-accent-light-pink);
-  text-decoration: underline;
+.navLink:hover,
+.navLink:focus {
+  color: var(--color-primary-pink, #e83e8c);
 }
 
 .navbarText {
-  color: var(--color-accent-light-pink);
-  margin-right: 1.5rem; /* Space between welcome text and links */
-  font-size: 1rem;
-  /* *** FIX START: Make text bold *** */
-  font-weight: bold;
-  /* *** FIX END *** */
+  color: var(--color-text-secondary, #555);
+  margin-right: 0.5rem; /* Spacing next to the text */
+  display: flex; /* Needed to align icon and text */
+  align-items: center; /* Vertically align icon and text */
+  gap: 0.4rem; /* Space between icon and text */
 }
 
-/* Optional: Add some basic responsiveness (simplified) */
+.navButton {
+  background-color: var(--color-primary-pink, #e83e8c);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.navButton:hover {
+  background-color: var(--color-secondary-brown, #c2185b); /* Darker shade on hover */
+}
+
+/* Styling for the authentication icon */
+.authIcon {
+  font-size: 1.1rem; /* Adjust icon size */
+  /* Optional: add a little margin if needed, though gap handles spacing */
+  /* margin-right: 0.4rem; */
+}
+
+/* Responsive adjustments if needed */
 @media (max-width: 768px) {
   .navbarContainer {
-    flex-direction: column;
-    align-items: flex-start;
+      flex-direction: column; /* Stack brand and nav items */
+      align-items: flex-start; /* Align items to the start */
   }
   .navbarNav {
-    margin-top: 1rem;
-    margin-left: 0;
-    flex-direction: column;
-    align-items: flex-start; /* Align links to the start when stacked */
-    /* *** FIX START: Remove centering when stacked vertically *** */
-    justify-content: flex-start;
-    flex-grow: 0; /* Prevent it from taking full width when stacked */
-    /* *** FIX END *** */
+      margin-top: 1rem;
+      flex-direction: column; /* Stack nav links */
+      align-items: flex-start;
+      width: 100%;
+      gap: 0.5rem;
   }
-  .navLink, .navButton, .navbarText {
-    margin-left: 0; /* Remove left margin */
-    margin-bottom: 0.5rem; /* Add bottom margin for stacked links */
+  .navbarAuth {
+      margin-left: 0; /* Reset margin */
+      margin-top: 1rem; /* Add space above */
+      width: 100%; /* Take full width */
+      justify-content: flex-start; /* Align items to start */
+      flex-wrap: wrap; /* Allow wrapping */
   }
-  .navLink:first-child {
-      margin-left: 0; /* Ensure no margin */
+  .navLink {
+      padding: 0.8rem 0;
   }
 }
