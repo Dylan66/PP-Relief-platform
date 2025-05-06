@@ -43,3 +43,279 @@
   /* background-repeat: no-repeat; */
   /* background-position: center; */
 }
+
+.pageContainer {
+  max-width: 100%; /* or a specific max-width like '1140px' for a container effect */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem; /* px-4 */
+  padding-right: 1rem; /* px-4 */
+  padding-top: 3rem; /* py-12 */
+  padding-bottom: 3rem; /* py-12 */
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .pageContainer {
+    padding-top: 4rem; /* md:py-16 */
+    padding-bottom: 4rem; /* md:py-16 */
+  }
+  .heroSection {
+    flex-direction: row; /* md:flex-row */
+  }
+}
+
+.heroSection {
+  display: flex;
+  flex-direction: column; /* flex-col */
+  align-items: center; /* items-center */
+  margin-bottom: 4rem; /* mb-16 */
+  background-color: #f5f3ff; /* bg-violet-50 */
+  padding: 2rem; /* p-8 */
+  border-radius: 0.5rem; /* rounded-lg */
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .heroSection {
+    margin-bottom: 6rem; /* md:mb-24 */
+  }
+}
+
+.heroTextContainer {
+  text-align: left;
+  margin-bottom: 2rem; /* mb-8 */
+}
+
+.heroHeading {
+  font-size: 2.25rem; /* text-4xl */
+  line-height: 2.5rem;
+  font-weight: 700; /* font-bold */
+  margin-bottom: 1rem; /* mb-4 */
+  line-height: 1.2; /* leading-tight, approximation */
+  color: #2d3748; /* text-gray-800 */
+}
+
+.heroParagraph {
+  font-size: 1.125rem; /* text-lg */
+  line-height: 1.75rem;
+  color: #4a5568; /* text-gray-700 */
+  margin-bottom: 2rem; /* mb-8 */
+}
+
+.heroButtons {
+  display: flex;
+}
+
+.heroButtons > button:not(:last-child) {
+  margin-right: 1rem; /* space-x-4 */
+}
+
+.heroImage {
+  width: 100%; /* w-full */
+}
+
+/* Small devices (phones, 640px and up) */
+@media (min-width: 640px) {
+  .heroHeading {
+    font-size: 3rem; /* sm:text-5xl */
+    line-height: 1;
+  }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .heroTextContainer {
+    width: 60%; /* md:w-3/5 */
+    margin-bottom: 0; /* md:mb-0 */
+    padding-right: 2rem; /* md:pr-8 */
+  }
+  .heroGraphicContainer {
+    width: 40%; /* md:w-2/5 */
+  }
+  .heroSection { /* Moved from previous media query for consolidation */
+    flex-direction: row; /* md:flex-row */
+    margin-bottom: 6rem; /* md:mb-24 */
+  }
+  .pageContainer { /* Moved from previous media query for consolidation */
+    padding-top: 4rem; /* md:py-16 */
+    padding-bottom: 4rem; /* md:py-16 */
+  }
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+  .heroTextContainer {
+    padding-right: 3rem; /* lg:pr-12 */
+  }
+  .heroHeading {
+    font-size: 3.75rem; /* lg:text-6xl */
+    line-height: 1;
+  }
+}
+
+.infoSection {
+  margin-bottom: 4rem; /* mb-16 */
+}
+
+.infoSection > .infoRow:not(:first-child) {
+  margin-top: 3rem; /* space-y-12 */
+}
+
+.infoRow {
+  display: grid;
+  gap: 2rem; /* gap-8 */
+}
+
+/* Selects the first infoRow specifically for 2-column layout on medium screens */
+.infoSection > .infoRow:first-child {
+  /* Default to 1 column for mobile */
+}
+
+/* Selects the second infoRow specifically for 3-column layout on medium screens */
+.infoSection > .infoRow:nth-child(2) {
+  /* Default to 1 column for mobile */
+}
+
+.infoHeading {
+  font-size: 1.5rem; /* text-2xl */
+  line-height: 2rem;
+  font-weight: 600; /* font-semibold */
+  margin-bottom: 0.75rem; /* mb-3 */
+  color: #2d3748; /* text-gray-800 */
+}
+
+.infoText {
+  color: #4a5568; /* text-gray-700 */
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .infoSection {
+    margin-bottom: 6rem; /* md:mb-24 */
+  }
+
+  /* First infoRow: Mission & Vision */
+  .infoSection > .infoRow:first-child {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* md:grid-cols-2 */
+  }
+
+  /* Second infoRow: Values */
+  .infoSection > .infoRow:nth-child(2) {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* md:grid-cols-3 */
+  }
+
+  .heroTextContainer {
+    width: 60%; /* md:w-3/5 */
+    margin-bottom: 0; /* md:mb-0 */
+    padding-right: 2rem; /* md:pr-8 */
+  }
+  .heroGraphicContainer {
+    width: 40%; /* md:w-2/5 */
+  }
+  .heroSection { /* Moved from previous media query for consolidation */
+    flex-direction: row; /* md:flex-row */
+    margin-bottom: 6rem; /* md:mb-24 */
+  }
+  .pageContainer { /* Moved from previous media query for consolidation */
+    padding-top: 4rem; /* md:py-16 */
+    padding-bottom: 4rem; /* md:py-16 */
+  }
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+  .infoRow {
+    gap: 3rem; /* lg:gap-12 */
+  }
+  .heroTextContainer {
+    padding-right: 3rem; /* lg:pr-12 */
+  }
+  .heroHeading {
+    font-size: 3.75rem; /* lg:text-6xl */
+    line-height: 1;
+  }
+}
+
+.articlesSection {
+  margin-bottom: 4rem; /* mb-16 */
+}
+
+.articlesGrid {
+  display: grid;
+  gap: 2rem; /* gap-8 */
+  /* Default to 1 column for mobile */
+}
+
+.articleCard {
+  padding: 1rem; /* p-4 */
+}
+
+.articleImagePlaceholder {
+  background-color: #e5e7eb; /* bg-gray-200 */
+  height: 12rem; /* h-48 */
+  margin-bottom: 1rem; /* mb-4 */
+  border-radius: 0.25rem; /* rounded */
+}
+
+.articleHeading {
+  font-size: 1.25rem; /* text-xl */
+  line-height: 1.75rem;
+  font-weight: 600; /* font-semibold */
+  margin-bottom: 0.5rem; /* mb-2 */
+  color: #2d3748; /* text-gray-800 */
+}
+
+.articleText {
+  color: #4a5568; /* text-gray-700 */
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .articlesSection {
+    margin-bottom: 6rem; /* md:mb-24 */
+  }
+  .articlesGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* md:grid-cols-3 */
+  }
+  .infoSection {
+    margin-bottom: 6rem; /* md:mb-24 */
+  }
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+  .articlesGrid {
+    gap: 3rem; /* lg:gap-12 */
+  }
+  .infoRow {
+    gap: 3rem; /* lg:gap-12 */
+  }
+}
+
+.footer {
+  text-align: left;
+  font-size: 0.875rem; /* text-sm */
+  line-height: 1.25rem;
+  color: #4a5568; /* text-gray-700 */
+  margin-top: 3rem; /* mt-12 */
+  padding-top: 2rem; /* py-8 */
+  padding-bottom: 2rem; /* py-8 */
+  border-top: 1px solid #e5e7eb; /* border-t, assuming default border color */
+}
+
+.footerText {
+  margin-bottom: 0.25rem; /* mb-1 */
+}
+
+.footerTextLast {
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+.socialLinks {
+  display: flex;
+}
+
+.socialLinks > a:not(:last-child) {
+  margin-right: 1.25rem; /* space-x-5 */
+}

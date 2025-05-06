@@ -4,49 +4,49 @@ import styles from './AboutUs.module.css'; // Import the CSS module
 const AboutUs = () => {
   return (
     // Increased vertical padding for overall spacing if needed
-    <div className="container mx-auto px-4 py-12 md:py-16">
+    <div className={styles.pageContainer}>
 
       {/* Hero Section: Text Left, Graphic Right */}
       {/* Added light lavender background (bg-violet-50 or similar) and padding */}
-      <div className="flex flex-col md:flex-row items-center mb-16 md:mb-24 bg-violet-50 p-8 rounded-lg">
+      <div className={styles.heroSection}>
         {/* Text & Buttons Container (Left) */}
         {/* Adjusted width to md:w-3/5 for a roughly 40% width, pr for spacing */}
-        <div className="md:w-3/5 text-left mb-8 md:mb-0 md:pr-8 lg:pr-12">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight text-gray-800">
+        <div className={styles.heroTextContainer}>
+          <h1 className={styles.heroHeading}>
             Empowering Women through Menstrual Health Awareness
           </h1>
-          <p className="text-lg text-gray-700 mb-8">
+          <p className={styles.heroParagraph}>
             Our mission is to raise awareness about menstrual health and
             empower women with the knowledge and resources they need. We
             envision a world where every woman has access to safe and hygienic
             menstrual products.
           </p>
-          <div className="flex space-x-4">
+          <div className={styles.heroButtons}>
             <button className={styles.donateButton}>Donate</button>
             <button className={styles.registerButton}>Register</button>
           </div>
         </div>
         {/* Graphic Container (Right) */}
-        <div className="md:w-2/5">
-          <img src="/images/her-ubuntu.svg" alt="Her Ubuntu" className="w-full" />
+        <div className={styles.heroGraphicContainer}>
+          <img src="/images/her-ubuntu.svg" alt="Her Ubuntu" className={styles.heroImage} />
         </div>
       </div>
 
       {/* Combined Mission/Vision/Values Section */}
-      <div className="mb-16 md:mb-24 space-y-12"> {/* Add space between the two rows */}
+      <div className={styles.infoSection}> {/* Add space between the two rows */}
         {/* Row 1: Mission & Vision */}
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-          <div>
-            <h2 className="text-2xl font-semibold mb-3 text-gray-800">Our Mission:</h2>
-            <p className="text-gray-700">
+        <div className={styles.infoRow}>
+          <div className={styles.infoBlock}>
+            <h2 className={styles.infoHeading}>Our Mission:</h2>
+            <p className={styles.infoText}>
               To eradicate period poverty globally by ensuring access to
               menstrual products and empowering individuals with
               comprehensive and engaging menstrual health knowledge.
             </p>
           </div>
-          <div>
-            <h2 className="text-2xl font-semibold mb-3 text-gray-800">Our Vision:</h2>
-            <p className="text-gray-700">
+          <div className={styles.infoBlock}>
+            <h2 className={styles.infoHeading}>Our Vision:</h2>
+            <p className={styles.infoText}>
               A world where period poverty is eliminated, and all individuals,
               regardless of location or circumstance, can manage their
               menstruation with dignity, knowledge, and without limitation.
@@ -55,24 +55,24 @@ const AboutUs = () => {
         </div>
 
         {/* Row 2: Values (Empowerment, Dignity, Compassion) */}
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-12"> 
-           <div> {/* Removed md:w-1/3, letting grid handle sizing */}
-             <h2 className="text-2xl font-semibold mb-3 text-gray-800">Empowerment:</h2>
-             <p className="text-gray-700">
+        <div className={styles.infoRow}>
+           <div className={styles.infoBlock}> {/* Removed md:w-1/3, letting grid handle sizing */}
+             <h2 className={styles.infoHeading}>Empowerment:</h2>
+             <p className={styles.infoText}>
                We believe in equipping people with the knowledge and resources
                to take control of their health and futures.
              </p>
            </div>
-           <div>
-             <h2 className="text-2xl font-semibold mb-3 text-gray-800">Dignity:</h2>
-             <p className="text-gray-700">
+           <div className={styles.infoBlock}>
+             <h2 className={styles.infoHeading}>Dignity:</h2>
+             <p className={styles.infoText}>
                We champion the inherent worth and right to respect for every menstruating
                individual.
              </p>
            </div>
-           <div>
-             <h2 className="text-2xl font-semibold mb-3 text-gray-800">Compassion:</h2>
-             <p className="text-gray-700">
+           <div className={styles.infoBlock}>
+             <h2 className={styles.infoHeading}>Compassion:</h2>
+             <p className={styles.infoText}>
                We approach our work with empathy and understanding for the
                diverse experiences of individuals around the world.
              </p>
@@ -82,33 +82,33 @@ const AboutUs = () => {
 
 
       {/* Articles Section (Remains Horizontal) */}
-      <div className="mb-16 md:mb-24"> {/* Added bottom margin */}
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-12"> {/* Increased gap */}
+      <div className={styles.articlesSection}> {/* Added bottom margin */}
+        <div className={styles.articlesGrid}> {/* Increased gap */}
           {/* Article 1 */}
-          <div className="p-4">
-            <div className="bg-gray-200 h-48 mb-4 rounded"></div>
-            <h3 className="text-xl font-semibold mb-2 text-gray-800">ARTICLE TITLE</h3>
-            <p className="text-gray-700">
+          <div className={styles.articleCard}>
+            <div className={styles.articleImagePlaceholder}></div>
+            <h3 className={styles.articleHeading}>ARTICLE TITLE</h3>
+            <p className={styles.articleText}>
               Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
               diam nonummy nibh euismod tincidunt ut laoreet dolore magna
               aliquam erat volutpat.
             </p>
           </div>
           {/* Article 2 */}
-          <div className="p-4">
-            <div className="bg-gray-200 h-48 mb-4 rounded"></div>
-            <h3 className="text-xl font-semibold mb-2 text-gray-800">ARTICLE TITLE</h3>
-            <p className="text-gray-700">
+          <div className={styles.articleCard}>
+            <div className={styles.articleImagePlaceholder}></div>
+            <h3 className={styles.articleHeading}>ARTICLE TITLE</h3>
+            <p className={styles.articleText}>
               Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
               diam nonummy nibh euismod tincidunt ut laoreet dolore magna
               aliquam erat volutpat.
             </p>
           </div>
           {/* Article 3 */}
-          <div className="p-4">
-            <div className="bg-gray-200 h-48 mb-4 rounded"></div>
-            <h3 className="text-xl font-semibold mb-2 text-gray-800">ARTICLE TITLE</h3>
-            <p className="text-gray-700">
+          <div className={styles.articleCard}>
+            <div className={styles.articleImagePlaceholder}></div>
+            <h3 className={styles.articleHeading}>ARTICLE TITLE</h3>
+            <p className={styles.articleText}>
               Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
               diam nonummy nibh euismod tincidunt ut laoreet dolore magna
               aliquam erat volutpat.
@@ -119,12 +119,12 @@ const AboutUs = () => {
 
        {/* Footer Section */}
        {/* Adjusted text alignment and spacing */}
-       <footer className="text-left text-sm text-gray-700 mt-12 py-8 border-t">
-            <p className="mb-1"><strong>Address:</strong> Level 1, 12 Sample St, Sydney NSW 2000</p>
-            <p className="mb-1"><strong>Contact:</strong> info@relume.io</p>
-            <p className="mb-4">1800 123 4567</p>
+       <footer className={styles.footer}>
+            <p className={styles.footerText}><strong>Address:</strong> Level 1, 12 Sample St, Sydney NSW 2000</p>
+            <p className={styles.footerText}><strong>Contact:</strong> info@relume.io</p>
+            <p className={styles.footerTextLast}>1800 123 4567</p>
             {/* Social Media Icons */}
-            <div className="flex space-x-5"> {/* Increased spacing */} 
+            <div className={styles.socialLinks}> {/* Increased spacing */}
                 {/* Replace spans with actual icons later */}
                 <a href="#" aria-label="Instagram">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
