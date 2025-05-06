@@ -12,4 +12,4 @@ function RequestPage() {
     );
 }
 
-export default RequestPage
+export default RequestPage;

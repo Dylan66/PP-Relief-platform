@@ -1,0 +1,45 @@
+.donateButton {
+  background-color: #e6e0fa;
+  color: #333;
+  padding: 0.75rem 2rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.donateButton:hover {
+  background-color: #d4c8f8;
+}
+
+.registerButton {
+  background-color: #fad4e6;
+  color: #333;
+  padding: 0.75rem 2rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+.registerButton:hover {
+  background-color: #f8c8e0;
+}
+
+.graphicPlaceholder {
+  position: relative;
+  /* Placeholder style for the graphic area */
+  min-height: 300px; /* Give it some height */
+  background-color: #f3f4f6; /* Light gray placeholder */
+  border-radius: 0.5rem; /* rounded-lg */
+  display: flex; /* Optional: To center content if needed */
+  align-items: center; /* Optional: To center content if needed */
+  justify-content: center; /* Optional: To center content if needed */
+  /* Consider setting a background image here later */
+  /* background-image: url('/path/to/your/graphic.svg'); */
+  /* background-size: contain; */
+  /* background-repeat: no-repeat; */
+  /* background-position: center; */
+}
