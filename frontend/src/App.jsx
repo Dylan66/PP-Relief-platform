@@ -12,6 +12,7 @@ import NotFoundPage from './pages/NotFoundPage.jsx';       // Make sure NotFound
 import UnauthorizedPage from './pages/UnauthorizedPage.jsx'; // Make sure UnauthorizedPage.jsx exists
 import AboutUs from './pages/AboutUs.jsx'; // Import the new AboutUs page using the correct name
 import Information from './pages/Information.jsx'; // Import the Information page
+import RequestPage from './pages/RequestPage.jsx'; // Import the RequestPage
 
 // Import the Dashboard Router Component (create this as discussed previously)
 // Ensure this file exists at this exact path
@@ -60,6 +61,7 @@ function App() {
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
             <Route path="/about" element={<AboutUs />} /> {/* Add the route for the About page */}
             <Route path="/information" element={<Information />} /> {/* Add the route for the Information page */}
+            <Route path="/request-products" element={<RequestPage />} /> {/* Add the route for the RequestPage */}
 
             {/* Add other potential public routes here (e.g., About, Contact) */}
 

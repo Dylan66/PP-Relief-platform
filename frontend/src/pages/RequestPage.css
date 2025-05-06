@@ -1,0 +1,115 @@
+/* frontend/src/pages/RequestPage.css */
+
+.request-page-container {
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+}
+
+.nav-logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+.nav-lang {
+    /* Style for language selector if needed */
+}
+
+.page-section {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.light-pink-background {
+    background-color: #FDF2F8; /* A very light pink, adjust as needed */
+}
+
+.section-heading {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #000;
+}
+
+.section-text {
+    font-size: 16px;
+    color: #333;
+    max-width: 600px;
+    margin: 0 auto 20px auto;
+    line-height: 1.6;
+}
+
+.buttons-section {
+    padding: 40px 20px;
+    text-align: center;
+    padding-bottom: 50px;
+}
+
+.button-base {
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.register-button {
+    /* Extends button-base */
+    background-color: #D6D6F5; /* Light purple */
+    color: #000;
+}
+
+.donate-button {
+    /* Extends button-base */
+    background-color: #F5D6F0; /* Light pink */
+    color: #000;
+}
+
+.footer {
+    background-color: #f8f9fa;
+    padding: 30px 20px;
+    text-align: left;
+    border-top: 1px solid #eee;
+}
+
+.footer-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.footer-contact p {
+    margin: 5px 0;
+}
+
+.footer-social-icons {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+.footer-social-icons span {
+    /* Placeholder style for icons */
+    font-weight: bold;
+} 
