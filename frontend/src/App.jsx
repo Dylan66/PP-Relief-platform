@@ -11,6 +11,7 @@ import RegisterPage from './pages/Auth/RegisterPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';       // Make sure NotFoundPage.jsx exists
 import UnauthorizedPage from './pages/UnauthorizedPage.jsx'; // Make sure UnauthorizedPage.jsx exists
 import AboutUs from './pages/AboutUs.jsx'; // Import the new AboutUs page using the correct name
+import Information from './pages/Information.jsx'; // Import the Information page
 
 // Import the Dashboard Router Component (create this as discussed previously)
 // Ensure this file exists at this exact path
@@ -58,6 +59,7 @@ function App() {
             {/* Route for unauthorized access - accessible even if not logged in to display the message */}
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
             <Route path="/about" element={<AboutUs />} /> {/* Add the route for the About page */}
+            <Route path="/information" element={<Information />} /> {/* Add the route for the Information page */}
 
             {/* Add other potential public routes here (e.g., About, Contact) */}
 

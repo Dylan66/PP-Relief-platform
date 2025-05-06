@@ -1,0 +1,140 @@
+/* General Page Container */
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    font-family: sans-serif; /* Basic font */
+}
+
+/* Hero Sections (shared styles) */
+.heroSection {
+    width: 100%;
+    padding: 60px 20px; /* Vertical and horizontal padding */
+    display: flex;
+    /* justify-content: center; Default removed, will be set by modifiers */
+    box-sizing: border-box;
+}
+
+.heroSectionAlignLeft {
+    justify-content: flex-start;
+}
+
+.heroSectionAlignRight {
+    justify-content: flex-end;
+}
+
+.heroContent {
+    max-width: 700px; /* Max width for the content within hero sections */
+    /* text-align: left; Already default for block elements, but can be kept for explicitness if desired */
+}
+
+.heroSectionPink {
+    background-color: #FCE7F3; /* Light pink */
+}
+
+.heroHeading {
+    font-size: 2.5rem; /* Large heading */
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #111827; /* Dark gray text */
+    line-height: 1.2;
+}
+
+.heroParagraph {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    color: #374151; /* Medium gray text */
+}
+
+.learnMoreButton {
+    background-color: #FBCFE8; /* Pink button */
+    color: #86198F; /* Darker pink text for contrast */
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.learnMoreButton:hover {
+    background-color: #F9A8D4; /* Slightly darker pink on hover */
+}
+
+/* Articles Section */
+.articlesSection {
+    width: 100%;
+    max-width: 1200px; /* Max width for the articles section */
+    padding: 40px 20px;
+    margin: 0 auto; /* Center the section */
+    background-color: #F9FAFB; /* Very light gray background for this section */
+}
+
+.articlesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+    gap: 30px; /* Gap between cards */
+}
+
+.articleCard {
+    background-color: #FFFFFF; /* White background for cards */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.articleTitle {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #6B7280; /* Gray for article title */
+}
+
+.articleText {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #4B5563; /* Darker gray for text */
+}
+
+/* Footer Section */
+.footer {
+    background-color: #FFFFFF; /* White background */
+    color: #374151; /* Text color */
+    padding: 40px 20px;
+    text-align: left;
+    width: 100%;
+    max-width: 1200px; /* Max width for footer content */
+    margin: 40px auto 0; /* Top margin, centered */
+    box-sizing: border-box;
+    border-top: 1px solid #E5E7EB; /* Light border top */
+}
+
+.footerContent {
+    margin-bottom: 20px;
+}
+
+.footerText {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.socialLinks {
+    display: flex;
+    gap: 20px; /* Space between icons */
+    margin-top: 20px; /* Space above icons */
+}
+
+.socialLinks a img {
+    width: 24px; /* Size for social icons */
+    height: 24px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.socialLinks a:hover img {
+    opacity: 1;
+} 

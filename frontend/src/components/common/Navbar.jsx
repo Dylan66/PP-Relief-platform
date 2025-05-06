@@ -28,7 +28,7 @@ const Navbar = () => {
           {/* These links are visible to all users */}
            <Link to="/" className={styles.navLink}>Home</Link> {/* Link to the homepage */}
            <Link to="/about" className={styles.navLink}>About Us</Link> {/* Link to an About Us page (needs route/component) */}
-           <Link to="/learn" className={styles.navLink}>Learn More</Link> {/* Link to Learn More/Education page (needs route/component) */}
+           <Link to="/information" className={styles.navLink}>Learn More</Link> {/* Updated Link to Information page */}
            <Link to="/receive" className={styles.navLink}>Receive Products</Link> {/* Link to Receive Products info/form page (needs route/component) */}
            <Link to="/donate" className={styles.navLink}>Donate Now</Link> {/* Link to Donate page (needs route/component) */}
           {/* === End New Public Links === */}
