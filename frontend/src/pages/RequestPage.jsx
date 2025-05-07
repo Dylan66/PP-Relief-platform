@@ -1,6 +1,7 @@
 // frontend/src/pages/RequestPage.jsx
 import React from 'react';
 import './RequestPage.css'; // Import the CSS file
+import Footer from '../components/common/Footer'; // Import the Footer component
 
 function RequestPage() {
     return (
@@ -58,24 +59,7 @@ function RequestPage() {
                 <button className="button-base donate-button">Donate</button>
             </section>
 
-            {/* Footer */}
-            <footer className="footer">
-                <div className="footer-content">
-                    <p><strong>Address:</strong> Level 1, 12 Sample St, Sydney NSW 2000</p>
-                    <div className="footer-contact">
-                        <p><strong>Contact:</strong></p>
-                        <p>info@relume.io</p>
-                        <p>1800 123 4567</p>
-                    </div>
-                    <div className="footer-social-icons">
-                        <span>[IG]</span>
-                        <span>[FB]</span>
-                        <span>[LN]</span>
-                        <span>[YT]</span>
-                        <span>[X]</span>
-                    </div>
-                </div>
-            </footer>
+            <Footer /> {/* Use the new Footer component */}
         </div>
     );
 }

@@ -212,16 +212,14 @@
 
 /* --- Basic Responsiveness --- */
 /* Adjust breakpoints and styles as needed */
+
+/* Non-footer related styles for medium screens */
 @media (max-width: 992px) {
-  .footerSectionContainer {
-    gap: 2rem;
-  }
-  .footerPlaceholdersContainer {
-    flex-basis: 300px; /* Adjust basis on medium screens */
-    gap: 1.5rem;
-  }
+  /* Example: .articlesContainer might have adjustments here if needed */
+  /* .heroSection { padding: 2.5rem 1rem; } */
 }
 
+/* Non-footer related styles for small screens */
 @media (max-width: 768px) {
   /* Stack the articles vertically */
   .articlesContainer {
@@ -231,37 +229,22 @@
   .articleBox {
     flex-basis: auto; /* Full width */
   }
+  /* Example: .heroTextBelow { font-size: 2.2rem; } */
+}
 
-  /* Stack the footer sections vertically */
-  .footerSectionContainer {
-    flex-direction: column;
-    gap: 2rem;
-    align-items: center; /* Center items when stacked */
+/* Non-footer related styles for very small screens */
+@media (max-width: 576px) {
+  .heroTextAbove {
+    font-size: 1rem;
   }
-  .footerAddressBox,
-  .footerPlaceholdersContainer {
-    flex-basis: auto; /* Full width */
-    width: 100%;
-    max-width: 400px; /* Limit width */
+  .heroTextBelow {
+    font-size: 2rem;
   }
-
-  .footerAddressBox {
-    text-align: center; /* Center address text */
+  .section {
+    padding: 1.5rem 3%;
   }
-
-  .socialIconsContainer {
-    justify-content: center; /* Center icons */
+  .articleBox {
+    padding: 1rem;
   }
-
-  /* Stack the two footer placeholders vertically */
-  .footerPlaceholdersContainer {
-    flex-direction: column; /* Stack the smaller boxes */
-    align-items: center; /* Center them */
-    gap: 1.5rem;
-  }
-  .footerPlaceholderBox {
-    flex-basis: auto;
-    width: 80%; /* Adjust width */
-    max-width: 300px;
-  }
+  /* Add any other specific adjustments for non-footer elements */
 }

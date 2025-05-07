@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './Information.module.css'; // CSS module for this page
+import Footer from '../components/common/Footer'; // Import the new Footer component
 
 const Information = () => {
   return (
@@ -69,21 +70,7 @@ const Information = () => {
         </div>
       </div>
 
-      {/* Footer Section */}
-      <footer className={styles.footer}>
-        <div className={styles.footerContent}>
-            <p className={styles.footerText}><strong>Address:</strong> Level 1, 12 Sample St, Sydney NSW 2000</p>
-            <p className={styles.footerText}><strong>Contact:</strong> info@relume.io</p>
-            <p className={styles.footerText}>1800 123 4567</p>
-        </div>
-        <div className={styles.socialLinks}>
-            <a href="#" aria-label="Instagram"><img src="/images/instagram-icon.svg" alt="Instagram" /></a>
-            <a href="#" aria-label="Facebook"><img src="/images/facebook-icon.svg" alt="Facebook" /></a>
-            <a href="#" aria-label="LinkedIn"><img src="/images/linkedin-icon.svg" alt="LinkedIn" /></a>
-            <a href="#" aria-label="YouTube"><img src="/images/youtube-icon.svg" alt="YouTube" /></a>
-            <a href="#" aria-label="Twitter"><img src="/images/twitter-icon.svg" alt="Twitter" /></a>
-        </div>
-      </footer>
+      <Footer /> {/* Use the new Footer component */}
     </div>
   );
 };

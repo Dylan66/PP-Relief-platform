@@ -1,0 +1,44 @@
+.footer {
+  text-align: left; /* text-center */
+  padding-top: 2rem; /* pt-8 */
+  padding-bottom: 2rem; /* pb-8 */
+  padding-left: 5%; /* Added horizontal padding */
+  padding-right: 5%; /* Added horizontal padding */
+  border-top: 1px solid #e5e7eb; /* border-t border-gray-200 */
+  margin-top: 4rem; /* mt-16 */
+  width: 100%; /* Ensure the footer takes full available width */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.footerText {
+  margin-bottom: 0.5rem; /* mb-2 */
+  color: #4b5563; /* text-gray-600 */
+}
+
+.footerTextLast {
+  color: #4b5563; /* text-gray-600 */
+  margin-bottom: 1rem; /* mb-4 */
+}
+
+.socialLinks {
+  display: flex;
+  justify-content: left; /* jusltify-center */
+  gap: 1.5rem; /* space-x-6 (gap is more modern for flex) */
+}
+
+.socialLinks > a:not(:last-child) {
+  /* This can be removed if using gap property in .socialLinks */
+  /* margin-right: 1.5rem; */ /* For older browser support if not using gap */
+}
+
+/* Ensure SVGs in links are sized and colored appropriately */
+.socialLinks a svg {
+  width: 1.5rem; /* w-6 (24px) */
+  height: 1.5rem; /* h-6 (24px) */
+  fill: #4b5563; /* text-gray-600, or a specific icon color */
+  transition: fill 0.3s;
+}
+
+.socialLinks a:hover svg {
+  fill: #1f2937; /* text-gray-800, or a darker hover color */
+} 

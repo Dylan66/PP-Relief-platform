@@ -3,6 +3,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import Footer from '../components/common/Footer'; // Import the new Footer component
 
 import styles from './HomePage.module.css';
 
@@ -70,39 +71,8 @@ const HomePage = () => {
           )} */}
       </section>
 
+      <Footer /> {/* Use the new Footer component */}
 
-      {/* === Section 3: Footer Section (Replaces Contact/Get Involved) === */}
-      <footer className={styles.section}> {/* Use footer semantic tag */}
-        <div className={styles.footerSectionContainer}>
-
-          {/* Address & Social Links */} 
-          <div className={styles.footerAddressBox}>
-            {/* Use p tags for address lines directly */}
-            <p><strong>Address:</strong></p> 
-            <p>Level 1, 12 Sample St, Sydney NSW 2000</p>
-            <p><strong>Contact:</strong></p>
-            <p><a href="mailto:info@relume.io">info@relume.io</a></p>
-            <p><a href="tel:18001234567">1800 123 4567</a></p>
-
-            {/* Social Media Icons Placeholder */}
-            <div className={styles.socialIconsContainer}>
-              {/* Replace spans with actual icons (e.g., from react-icons) */}
-              <span className={styles.socialIcon}>IG</span> 
-              <span className={styles.socialIcon}>FB</span>
-              <span className={styles.socialIcon}>LI</span>
-              <span className={styles.socialIcon}>YT</span>
-              <span className={styles.socialIcon}>X</span>
-            </div>
-          </div>
-
-          {/* Two Placeholder Boxes on Right */}
-          <div className={styles.footerPlaceholdersContainer}>
-            <div className={styles.footerPlaceholderBox}></div>
-            <div className={styles.footerPlaceholderBox}></div>
-          </div>
-
-        </div>
-      </footer>
       {/* Remove the old Section 3 */}
       {/* <section className={styles.section}>
          <h2>Get In Touch / Get Involved</h2>

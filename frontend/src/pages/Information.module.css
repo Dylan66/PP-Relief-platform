@@ -97,44 +97,4 @@
     font-size: 1rem;
     line-height: 1.5;
     color: #4B5563; /* Darker gray for text */
-}
-
-/* Footer Section */
-.footer {
-    background-color: #FFFFFF; /* White background */
-    color: #374151; /* Text color */
-    padding: 40px 20px;
-    text-align: left;
-    width: 100%;
-    max-width: 1200px; /* Max width for footer content */
-    margin: 40px auto 0; /* Top margin, centered */
-    box-sizing: border-box;
-    border-top: 1px solid #E5E7EB; /* Light border top */
-}
-
-.footerContent {
-    margin-bottom: 20px;
-}
-
-.footerText {
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-    line-height: 1.5;
-}
-
-.socialLinks {
-    display: flex;
-    gap: 20px; /* Space between icons */
-    margin-top: 20px; /* Space above icons */
-}
-
-.socialLinks a img {
-    width: 24px; /* Size for social icons */
-    height: 24px;
-    opacity: 0.7;
-    transition: opacity 0.3s ease;
-}
-
-.socialLinks a:hover img {
-    opacity: 1;
 } 

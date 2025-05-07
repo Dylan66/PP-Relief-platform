@@ -1,4 +1,5 @@
 import React from 'react';
+import Footer from '../components/common/Footer';
 
 const DonationsPage = () => {
   return (
@@ -45,23 +46,7 @@ const DonationsPage = () => {
         </section>
       </main>
 
-      <footer style={styles.footer}>
-        <div style={styles.footerContact}>
-          <p><strong>Address:</strong></p>
-          <p>Level 1, 12 Sample St, Sydney NSW 2000</p>
-          <p style={{ marginTop: '10px' }}><strong>Contact:</strong></p>
-          <p>info@relume.io</p>
-          <p>1800 123 4567</p>
-        </div>
-        <div style={styles.socialIcons}>
-          {/* Using simple text placeholders for icons */}
-          <span style={styles.socialIcon}>📷</span>
-          <span style={styles.socialIcon}>👤</span>
-          <span style={styles.socialIcon}>🔗</span>
-          <span style={styles.socialIcon}>▶️</span>
-          <span style={styles.socialIcon}>✕</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
@@ -72,6 +57,8 @@ const styles = {
     backgroundColor: '#f0f0f0', // Light grey background for the page overall
     color: '#333',
     minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
   },
   header: {
     display: 'flex',
@@ -127,6 +114,7 @@ const styles = {
     maxWidth: '1200px',
     margin: '0 auto', // Center content if page is wider
     backgroundColor: '#f8f9fa', // Background for the main content area below header
+    flexGrow: 1,
   },
   heroSection: {
     textAlign: 'left',
@@ -185,31 +173,6 @@ const styles = {
     fontSize: '0.95em',
     color: '#333',
     lineHeight: '1.7',
-  },
-  footer: {
-    backgroundColor: '#f8f9fa', // Consistent background
-    padding: '40px 50px', // Match header horizontal padding
-    borderTop: '1px solid #dee2e6',
-    marginTop: 'auto', // Pushes footer to bottom if content is short
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    flexWrap: 'wrap', // Allow wrapping on smaller screens
-    gap: '20px',
-  },
-  footerContact: {
-    fontSize: '0.9em',
-    lineHeight: '1.6',
-    color: '#4A4A4A',
-  },
-  socialIcons: {
-    display: 'flex',
-    gap: '20px',
-  },
-  socialIcon: {
-    fontSize: '1.4em', // Make icons a bit larger
-    color: '#4A4A4A',
-    cursor: 'pointer',
   },
 };
 

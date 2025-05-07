@@ -248,26 +248,29 @@
 }
 
 .articleCard {
-  padding: 1rem; /* p-4 */
+  background-color: white; /* bg-white */
+  border-radius: 0.5rem; /* rounded-lg */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-lg */
+  overflow: hidden; /* overflow-hidden */
 }
 
 .articleImagePlaceholder {
-  background-color: #e5e7eb; /* bg-gray-200 */
   height: 12rem; /* h-48 */
-  margin-bottom: 1rem; /* mb-4 */
-  border-radius: 0.25rem; /* rounded */
+  background-color: #e5e7eb; /* bg-gray-200 */
+  /* In a real scenario, this would be an <img> tag or a div with a background image */
 }
 
 .articleHeading {
   font-size: 1.25rem; /* text-xl */
   line-height: 1.75rem;
   font-weight: 600; /* font-semibold */
-  margin-bottom: 0.5rem; /* mb-2 */
-  color: #2d3748; /* text-gray-800 */
+  padding: 1rem; /* p-4 */
+  color: #1f2937; /* text-gray-800 */
 }
 
 .articleText {
-  color: #4a5568; /* text-gray-700 */
+  padding: 0 1rem 1rem; /* px-4 pb-4 */
+  color: #4b5563; /* text-gray-600 */
 }
 
 /* Medium devices (tablets, 768px and up) */
@@ -278,7 +281,7 @@
   .articlesGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr)); /* md:grid-cols-3 */
   }
-  .infoSection {
+  .infoSection { /* Consolidation from previous query */
     margin-bottom: 6rem; /* md:mb-24 */
   }
 }
@@ -288,34 +291,14 @@
   .articlesGrid {
     gap: 3rem; /* lg:gap-12 */
   }
-  .infoRow {
+  .infoRow { /* Consolidation from previous query */
     gap: 3rem; /* lg:gap-12 */
   }
 }
 
-.footer {
-  text-align: left;
-  font-size: 0.875rem; /* text-sm */
-  line-height: 1.25rem;
-  color: #4a5568; /* text-gray-700 */
-  margin-top: 3rem; /* mt-12 */
-  padding-top: 2rem; /* py-8 */
-  padding-bottom: 2rem; /* py-8 */
-  border-top: 1px solid #e5e7eb; /* border-t, assuming default border color */
-}
-
-.footerText {
-  margin-bottom: 0.25rem; /* mb-1 */
-}
-
-.footerTextLast {
-  margin-bottom: 1rem; /* mb-4 */
-}
-
-.socialLinks {
-  display: flex;
-}
-
-.socialLinks > a:not(:last-child) {
-  margin-right: 1.25rem; /* space-x-5 */
+/* Ensure the page container does not get too wide on very large screens */
+@media (min-width: 1280px) { /* xl screens */
+  .pageContainer {
+    max-width: 1140px; /* Example: Or use Tailwind's xl container width */
+  }
 }
