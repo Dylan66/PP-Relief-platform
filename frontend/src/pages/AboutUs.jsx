@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link
 import styles from './AboutUs.module.css'; // Import the CSS module
 
 const AboutUs = () => {
@@ -23,7 +24,9 @@ const AboutUs = () => {
           </p>
           <div className={styles.heroButtons}>
             <button className={styles.donateButton}>Donate</button>
-            <button className={styles.registerButton}>Register</button>
+            <Link to="/register" className={styles.registerButtonLink}>
+              <button className={styles.registerButton}>Register</button>
+            </Link>
           </div>
         </div>
         {/* Graphic Container (Right) */}

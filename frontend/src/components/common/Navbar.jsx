@@ -47,9 +47,12 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              {/* Logged-out view: Icon, Login link */}
+              {/* Logged-out view: Icon, Login link, Register link */}
               <Link to="/login" className={styles.navLink}>
                 <FaUser className={styles.authIcon} /> Login
+              </Link>
+              <Link to="/register" className={styles.navLink}>
+                Register
               </Link>
             </>
           )}
