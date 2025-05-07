@@ -42,30 +42,31 @@ const Information = () => {
         <div className={styles.articlesGrid}>
           {/* Article 1 */}
           <div className={styles.articleCard}>
-            <h3 className={styles.articleTitle}>ARTICLE TITLE</h3>
+            <h3 className={styles.articleTitle}>Finding the Right Menstrual Products</h3>
             <p className={styles.articleText}>
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
-              diam nonummy nibh euismod tincidunt ut laoreet dolore magna
-              aliquam erat volutpat.
+            Navigating the world of pads, tampons, cups, and more can be overwhelming! 
+            This article breaks down the different choices available, discussing pros, 
+            cons, and how to find the best fit for your body and lifestyle. 
+            Make informed choices for comfort and confidence every month.
             </p>
           </div>
           {/* Article 2 */}
           <div className={styles.articleCard}>
-            <h3 className={styles.articleTitle}>ARTICLE TITLE</h3>
+            <h3 className={styles.articleTitle}>Debunking Common Menstrual Myths</h3>
             <p className={styles.articleText}>
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
-              diam nonummy nibh euismod tincidunt ut laoreet dolore magna
-              aliquam erat volutpat.
+            From "you can't swim on your period" to harmful beliefs about cleanliness, 
+            misinformation about menstruation is everywhere. 
+            We tackle the most common myths head-on with factual, 
+            easy-to-understand information. Arm yourself with knowledge and help us bust the stigma!
             </p>
           </div>
           {/* Article 3 */}
           <div className={styles.articleCard}>
-            <h3 className={styles.articleTitle}>ARTICLE TITLE</h3>
+            <h3 className={styles.articleTitle}>Understanding Endometriosis: More Than Just Bad Cramp</h3>
             <p className={styles.articleText}>
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
-              diam nonummy nibh euismod tincidunt ut laoreet dolore magna
-              aliquam erat volutpat.
-            </p>
+            Severe period pain can sometimes be a sign of something more. 
+            Endometriosis is a common but often misunderstood condition that affects millions. Learn about its symptoms, impact on health, and why early diagnosis and support are crucial. 
+            Your health matters, and understanding the signs is key.</p>
           </div>
         </div>
       </div>

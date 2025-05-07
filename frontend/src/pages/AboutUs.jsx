@@ -24,7 +24,9 @@ const AboutUs = () => {
             menstrual products.
           </p>
           <div className={styles.heroButtons}>
-            <button className={styles.donateButton}>Donate</button>
+            <Link to="/donations" className={styles.donateButtonLink}>
+              <button className={styles.donateButton}>Donate</button>
+            </Link>
             <Link to="/register" className={styles.registerButtonLink}>
               <button className={styles.registerButton}>Register</button>
             </Link>

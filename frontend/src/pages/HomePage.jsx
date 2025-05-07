@@ -41,24 +41,25 @@ const HomePage = () => {
           <div className={styles.articleBox}>
             <div className={styles.articleImagePlaceholder}></div> {/* Image Placeholder */}
             <p className={styles.articleCategory}>CATEGORY</p>
-            <h3 className={styles.articleTitle}>ARTICLE TITLE</h3>
-            <p className={styles.articleDescription}>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+            <h3 className={styles.articleTitle}>Delivering Dignity: Menstrual Product Distribution</h3>
+            <p className={styles.articleDescription}>So far, we've distributed thousands of essential menstrual product packs to individuals in need across diverse communities globally. This provides crucial access, helping over 7,000 individuals manage their periods hygienically and maintain their dignity and daily routines.</p>
           </div>
 
           {/* Article Box 2 */}
           <div className={styles.articleBox}>
             <div className={styles.articleImagePlaceholder}></div> {/* Image Placeholder */}
             <p className={styles.articleCategory}>CATEGORY</p>
-            <h3 className={styles.articleTitle}>ARTICLE TITLE</h3>
-            <p className={styles.articleDescription}>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+            <h3 className={styles.articleTitle}>Sharing Knowledge: Empowering Through Education</h3>
+            <p className={styles.articleDescription}>We've conducted dozens of workshops and created accessible resources that have educated hundreds of (e.g., over 1,800) people on menstrual health. Our focus on debunking myths and sharing vital information empowers individuals to understand their bodies and make informed decisions.
+            </p>
           </div>
 
           {/* Article Box 3 */}
           <div className={styles.articleBox}>
             <div className={styles.articleImagePlaceholder}></div> {/* Image Placeholder */}
             <p className={styles.articleCategory}>CATEGORY</p>
-            <h3 className={styles.articleTitle}>ARTICLE TITLE</h3>
-            <p className={styles.articleDescription}>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+            <h3 className={styles.articleTitle}> Building Reach: Expanding Access to Information</h3>
+            <p className={styles.articleDescription}>Beyond direct sessions, we've developed a growing library of online resources, making reliable menstrual health information available to anyone, anywhere. This digital reach helps break down barriers and extends our mission to a global audience reaching tens of thousands of online users annually, seeking knowledge and support.</p>
           </div>
 
         </div>
