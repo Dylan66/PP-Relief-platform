@@ -1,0 +1,247 @@
+/* frontend/src/components/Auth/LoginForm.css */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif; /* Or your preferred font */
+    background-color: #fff; /* Assuming a white background for the page */
+}
+
+.login-form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.login-logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px; /* Space between logo area and form */
+}
+
+/* Placeholder for actual logo graphic */
+.logo-placeholder-graphic {
+    width: 150px; /* Adjust as needed */
+    height: 150px; /* Adjust as needed */
+    background-color: #e0e0e0; /* Placeholder color */
+    border-radius: 50%; /* If it's a circular logo placeholder */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+    /* You'll replace this with an <img> tag and style that */
+}
+
+.login-logo-image {
+    max-width: 180px; /* Adjust as per your logo */
+    margin-bottom: 10px;
+}
+
+.login-title-text {
+    font-size: 2.5em; /* Adjust as needed */
+    font-weight: bold;
+    color: #333; /* Blackish/dark grey text */
+    letter-spacing: 2px; /* Approximate from image */
+    /* Add custom font if you have one */
+    text-shadow: 1px 1px 0px #FBCFE8, -1px -1px 0px #FBCFE8, 1px -1px 0px #FBCFE8, -1px 1px 0px #FBCFE8; /* Pink outline */
+    margin: 0; 
+}
+
+.login-form-container {
+    width: 100%;
+    max-width: 400px; /* Adjust as needed */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); Optional: for a slight shadow on the form */
+}
+
+.login-welcome-text {
+    font-size: 1.8em; /* Adjust as needed */
+    font-weight: bold;
+    color: #333;
+    text-align: left;
+    margin-bottom: 25px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.login-input-group {
+    margin-bottom: 20px;
+    position: relative; /* For password toggle icon */
+}
+
+.login-input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.login-input::placeholder {
+    color: #aaa;
+}
+
+.password-visibility-toggle {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+    font-size: 1.2em;
+}
+
+.login-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 0.9em;
+}
+
+.login-remember-me {
+    display: flex;
+    align-items: center;
+    color: #555;
+}
+
+.login-remember-me input[type="checkbox"] {
+    margin-right: 8px;
+    /* Add custom styling for checkbox if needed */
+}
+
+.login-forgot-password {
+    color: #007bff; /* Standard link blue, adjust if needed */
+    text-decoration: none;
+}
+
+.login-forgot-password:hover {
+    text-decoration: underline;
+}
+
+.login-button-submit {
+    background-color: #FECDD3; /* Light pink from image */
+    color: #333; /* Black text */
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-bottom: 30px;
+}
+
+.login-button-submit:hover {
+    background-color: #FBBFCA; /* Slightly darker pink */
+}
+
+.login-button-submit:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+}
+
+.login-divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #aaa;
+}
+
+.login-divider::before,
+.login-divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #eee;
+}
+
+.login-divider-text {
+    padding: 0 15px;
+    font-size: 0.9em;
+}
+
+.login-social-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Space between social buttons */
+    margin-bottom: 30px;
+}
+
+.login-social-button {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.login-social-button .social-icon {
+    margin-right: 10px;
+    font-size: 1.2em; /* Adjust if using actual icons/SVGs */
+    /* Add styling for actual icons if you use them */
+}
+
+.login-social-button.facebook {
+    background-color: #1877F2; /* Facebook blue */
+    color: white;
+    border-color: #1877F2;
+}
+
+.login-social-button.facebook:hover {
+    background-color: #166FE5; /* Slightly darker Facebook blue */
+}
+
+.login-social-button.google {
+    background-color: #fff;
+    color: #444; /* Google text color */
+    border-color: #ccc;
+}
+
+.login-social-button.google:hover {
+    background-color: #f8f8f8;
+}
+
+.login-signup-link {
+    text-align: center;
+    font-size: 0.95em;
+    color: #333;
+}
+
+.login-signup-link a {
+    color: #007bff; /* Standard link blue */
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.login-signup-link a:hover {
+    text-decoration: underline;
+}
+
+.login-error-message {
+    color: red;
+    background-color: #ffe0e0;
+    border: 1px solid red;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 0.9em;
+} 
