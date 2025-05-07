@@ -12,6 +12,8 @@
     width: 100%;
     padding: 60px 20px; /* Vertical and horizontal padding */
     display: flex;
+    align-items: center; /* Added for vertical alignment */
+    gap: 30px; /* Added for spacing between image and text, increased from 20 to 30 for more space */
     /* justify-content: center; Default removed, will be set by modifiers */
     box-sizing: border-box;
 }
@@ -22,11 +24,23 @@
 
 .heroSectionAlignRight {
     justify-content: flex-end;
+    flex-direction: row-reverse; /* Added to place image on the right */
 }
 
 .heroContent {
     max-width: 700px; /* Max width for the content within hero sections */
     /* text-align: left; Already default for block elements, but can be kept for explicitness if desired */
+    flex-grow: 1; /* Added to allow content to take available space */
+}
+
+/* New styles for hero images */
+.heroImage {
+    width: 350px; /* Specific width for the image */
+    height: auto; /* Maintain aspect ratio */
+    max-height: 350px; /* Prevent image from becoming too tall */
+    object-fit: cover; /* Cover the area, might crop to fit dimensions */
+    border-radius: 8px; /* Optional: for rounded corners */
+    flex-shrink: 0; /* Prevents image from shrinking */
 }
 
 .heroSectionPink {

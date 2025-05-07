@@ -1,5 +1,6 @@
 // frontend/src/pages/RequestPage.jsx
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import './RequestPage.css'; // Import the CSS file
 import Footer from '../components/common/Footer'; // Import the Footer component
 import whoWeDoItForImage from '../assets/images/who_we_do_it_for.jpeg'; // Import the image
@@ -8,6 +9,16 @@ import whenWeDoItImage from '../assets/images/when_we_do_it.jpeg';   // Import n
 import howWeDoItImage from '../assets/images/how_we_do_it.jpeg';     // Import new image
 
 function RequestPage() {
+    const navigate = useNavigate(); // Initialize navigate
+
+    const handleRegisterClick = () => {
+        navigate('/register'); // Navigate to the register page
+    };
+
+    const handleDonateClick = () => {
+        navigate('/donations'); // Navigate to the donations page
+    };
+
     return (
         <div className="request-page-container">
             {/* Navigation Bar */}
@@ -72,8 +83,8 @@ function RequestPage() {
 
             {/* Buttons Section */}
             <section className="buttons-section">
-                <button className="button-base register-button">Register</button>
-                <button className="button-base donate-button">Donate</button>
+                <button className="button-base register-button" onClick={handleRegisterClick}>Register</button>
+                <button className="button-base donate-button" onClick={handleDonateClick}>donations</button>
             </section>
 
             <Footer /> {/* Use the new Footer component */}

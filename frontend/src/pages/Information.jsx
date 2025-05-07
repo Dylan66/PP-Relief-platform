@@ -1,12 +1,22 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import styles from './Information.module.css'; // CSS module for this page
 import Footer from '../components/common/Footer'; // Import the new Footer component
+import endometImage from '../assets/images/endomet.jpeg'; // Import the first image
+import endomet2Image from '../assets/images/endomet2.jpeg'; // Import the second image
 
 const Information = () => {
+  const navigate = useNavigate(); // Initialize navigate
+
+  const handleLearnMoreClick = () => {
+    navigate('/register'); // Navigate to the register page
+  };
+
   return (
     <div className={styles.pageContainer}>
       {/* Section 1: Hero - Aligned Left */}
       <div className={`${styles.heroSection} ${styles.heroSectionAlignLeft}`}>
+        <img src={endometImage} alt="Endometriosis awareness" className={styles.heroImage} />
         <div className={styles.heroContent}>
           <h1 className={styles.heroHeading}>
             Empowering Women through Menstrual Health Awareness
@@ -17,12 +27,13 @@ const Information = () => {
             envision a world where every woman has access to safe and hygienic
             menstrual products.
           </p>
-          <button className={styles.learnMoreButton}>Learn More</button>
+          <button className={styles.learnMoreButton} onClick={handleLearnMoreClick}>Learn More</button>
         </div>
       </div>
 
       {/* Section 2: Pink Background Section - Aligned Right */}
       <div className={`${styles.heroSection} ${styles.heroSectionPink} ${styles.heroSectionAlignRight}`}>
+        <img src={endomet2Image} alt="Endometriosis awareness" className={styles.heroImage} />
         <div className={styles.heroContent}>
           <h1 className={styles.heroHeading}>
             Empowering Women through Menstrual Health Awareness
@@ -33,7 +44,7 @@ const Information = () => {
             envision a world where every woman has access to safe and hygienic
             menstrual products.
           </p>
-          <button className={styles.learnMoreButton}>Learn More</button>
+          <button className={styles.learnMoreButton} onClick={handleLearnMoreClick}>Learn More</button>
         </div>
       </div>
 
@@ -62,7 +73,7 @@ const Information = () => {
           </div>
           {/* Article 3 */}
           <div className={styles.articleCard}>
-            <h3 className={styles.articleTitle}>Understanding Endometriosis: More Than Just Bad Cramp</h3>
+            <h3 className={styles.articleTitle}>Understanding Endometriosis: More Than Just Bad Cramps</h3>
             <p className={styles.articleText}>
             Severe period pain can sometimes be a sign of something more. 
             Endometriosis is a common but often misunderstood condition that affects millions. Learn about its symptoms, impact on health, and why early diagnosis and support are crucial. 

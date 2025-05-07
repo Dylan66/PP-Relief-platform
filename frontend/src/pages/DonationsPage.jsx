@@ -1,5 +1,6 @@
 import React from 'react';
 import Footer from '../components/common/Footer';
+import donorsImage from '../assets/images/donors.jpeg';
 
 const DonationsPage = () => {
   return (
@@ -8,39 +9,69 @@ const DonationsPage = () => {
 
       <main style={styles.mainContent}>
         <section style={styles.heroSection}>
-          <h1 style={styles.heroTitle}>Empowering Women <br /> through Menstrual <br /> Health Awareness</h1>
-          <p style={styles.heroSubtitle}>
-            Our mission is to raise awareness about menstrual health and empower
-            women with the knowledge and resources they need. We envision a
-            world where every woman has access to safe and hygienic menstrual
-            products.
-          </p>
-          <button style={styles.learnMoreButton}>Learn More</button>
+          <h1 style={styles.heroTitle}>How You <br /> Can Create <br /> Impact</h1>
+          <div style={styles.heroContentRow}>
+            <div style={styles.heroTextContainer}>
+              <p style={styles.heroSubtitle}>
+                Your support directly advances menstrual dignity and health across Kenya. You can join us in this vital work by:
+              </p>
+              <ul style={{ listStyleType: 'disc', paddingLeft: '20px', maxWidth: '550px', marginBottom: '20px' }}>
+                <li style={{ marginBottom: '10px', fontSize: 'clamp(1em, 2vw, 1.1em)', color: '#4A4A4A', lineHeight: '1.6' }}>Donating Funds: Your financial gift enables us to purchase products, run workshops, and sustain our operations.</li>
+                <li style={{ marginBottom: '10px', fontSize: 'clamp(1em, 2vw, 1.1em)', color: '#4A4A4A', lineHeight: '1.6' }}>Donating Products: Contribute sanitary pads, reusable options, or other menstrual supplies directly.</li>
+                <li style={{ marginBottom: '10px', fontSize: 'clamp(1em, 2vw, 1.1em)', color: '#4A4A4A', lineHeight: '1.6' }}>Sharing Expertise: Volunteer your professional knowledge in menstrual health education or program development.</li>
+                <li style={{ fontSize: 'clamp(1em, 2vw, 1.1em)', color: '#4A4A4A', lineHeight: '1.6' }}>Providing Space: Help us establish or support a distribution center by donating or offering space and resources.</li>
+              </ul>
+              <p style={styles.heroSubtitle}>
+                Every contribution, big or small, helps us make a real difference.
+              </p>
+              <a href="/donor-registration" style={styles.learnMoreButton}>Learn More</a>
+            </div>
+            <div style={styles.heroImageContainer}>
+              <img src={donorsImage} alt="Donors contributing to the cause" style={styles.heroImage} />
+            </div>
+          </div>
         </section>
 
         <section style={styles.articlesSection}>
           <div style={styles.articleCard}>
-            <h5 style={styles.articleCardTitle}>ARTICLE TITLE</h5>
+            <h5 style={styles.articleCardTitle}>Gift of Dignity: Directly Providing Menstrual Essentials Across Kenya</h5>
             <p style={styles.articleCardText}>
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
-              diam nonummy nibh euismod tincidunt ut laoreet dolore magna
-              aliquam erat volutpat.
+            When you donate, you directly place essential menstrual products into the hands of 
+            someone in need right here in Kenya. Your generosity means a student in a rural school
+             can stay in class, a woman in an urban centre can attend work, and an individual can manage their period hygienically and without shame. 
+             So far, your support has helped us distribute over 20,000 product packs,
+             reaching more than 10,000 individuals across various Kenyan communities. 
+             Your gift isn't just a product; it's a restoration of dignity and a fundamental step 
+             towards enabling participation and well-being for fellow Kenyans. 
+            Thank you for making dignity possible in our communities.
             </p>
           </div>
           <div style={styles.articleCard}>
-            <h5 style={styles.articleCardTitle}>ARTICLE TITLE</h5>
+            <h5 style={styles.articleCardTitle}>Investing in Empowerment: Fueling Menstrual Health Knowledge in Kenya</h5>
             <p style={styles.articleCardText}>
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
-              diam nonummy nibh euismod tincidunt ut laoreet dolore magna
-              aliquam erat volutpat.
+            Your contribution does more than provide immediate relief; 
+            it empowers futures within Kenya. By supporting our educational programs and 
+            resource development, you are helping to break cycles of misinformation and
+             stigma in schools and communities across the country. 
+             Through our workshops and online resources, we've educated over 5,000 Kenyans, 
+             providing vital knowledge that challenges myths and promotes healthy practices. 
+             You are giving individuals the knowledge to understand their bodies, 
+             make informed health choices, and advocate for themselves. 
+             Your investment in knowledge is an investment in long-term health, 
+            confidence, and independence for individuals across Kenya.
             </p>
           </div>
           <div style={styles.articleCard}>
-            <h5 style={styles.articleCardTitle}>ARTICLE TITLE</h5>
+            <h5 style={styles.articleCardTitle}>Joining a Local Movement: Your Impact Creates Change Here in Kenya</h5>
             <p style={styles.articleCardText}>
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed
-              diam nonummy nibh euismod tincidunt ut laoreet dolore magna
-              aliquam erat volutpat.
+            Your support extends beyond individual supplies or single workshops. 
+            You are joining a vital local movement dedicated to ending period poverty 
+            and championing menstrual health equity across Kenya. 
+            Operating through 15 distribution points and partnering with numerous community groups, 
+            your donation helps us reach underserved areas and advocate for systemic change right here 
+            in the country. 
+            You are a vital part of building a future where menstruation 
+            is never a barrier for anyone in Kenya.
             </p>
           </div>
         </section>
@@ -117,18 +148,46 @@ const styles = {
     flexGrow: 1,
   },
   heroSection: {
-    textAlign: 'left',
-    padding: '80px 0px', // Generous vertical padding, no extra horizontal padding here
+    padding: '80px 0px', // Generous vertical padding
     backgroundColor: '#f8f9fa', // Off-white background for this section
     display: 'flex',
+    flexDirection: 'column', // Changed from row to column
+    alignItems: 'flex-start', // Align items (H1 and heroContentRow) to the start
+    // justifyContent: 'space-between', // Removed as it's not typical for column
+    // gap: '40px', // Removed, H1 margin-bottom will handle spacing
+  },
+  heroContentRow: { // New style for the row containing text and image
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-start', // Key for aligning paragraph and image tops
+    justifyContent: 'space-between', // To space out text and image blocks
+    gap: '40px', // Horizontal gap between text and image
+    width: '100%', // Ensure it takes full width
+    marginTop: '25px', // Space below the H1, was heroTitle.marginBottom
+  },
+  heroTextContainer: {
+    flex: 1, // Allow text container to take up available space in heroContentRow
+    display: 'flex',
     flexDirection: 'column',
-    alignItems: 'flex-start',
+    alignItems: 'flex-start', // Keep text aligned to the start
+  },
+  heroImageContainer: {
+    flex: 1, // Allow image container to take up available space in heroContentRow
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  heroImage: {
+    maxWidth: '100%',
+    maxHeight: '400px', // Constrain image height
+    borderRadius: '8px',
+    objectFit: 'cover',
   },
   heroTitle: {
     fontSize: 'clamp(2.5em, 5vw, 3.8em)', // Responsive font size
     fontWeight: 'bold',
     color: '#000',
-    marginBottom: '25px',
+    marginBottom: '0px', // Adjusted as heroContentRow now has marginTop
     lineHeight: '1.1',
   },
   heroSubtitle: {
@@ -148,6 +207,7 @@ const styles = {
     borderRadius: '5px',
     cursor: 'pointer',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    textDecoration: 'none', // Ensure no underline for the link
   },
   articlesSection: {
     display: 'grid',

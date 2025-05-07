@@ -19,7 +19,7 @@ const Navbar = () => {
       <div className={styles.navbarContainer}> {/* Container for content */}
         {/* Site Title or Logo - Links to Home */}
         <Link to="/" className={styles.navbarBrand}>
-          Her Ubuntu Platform
+          Her Ubuntu
         </Link>
 
         {/* Navigation Links */}
