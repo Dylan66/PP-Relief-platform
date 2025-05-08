@@ -19,13 +19,12 @@ const Information = () => {
         <img src={endometImage} alt="Endometriosis awareness" className={styles.heroImage} />
         <div className={styles.heroContent}>
           <h1 className={styles.heroHeading}>
-            Empowering Women through Menstrual Health Awareness
+          Understanding Endometriosis: More Than Just Bad Cramps
           </h1>
           <p className={styles.heroParagraph}>
-            Our mission is to raise awareness about menstrual health and
-            empower women with the knowledge and resources they need. We
-            envision a world where every woman has access to safe and hygienic
-            menstrual products.
+          Severe period pain can sometimes be a sign of something more. 
+            Endometriosis is a common but often misunderstood condition that affects millions. Learn about its symptoms, impact on health, and why early diagnosis and support are crucial. 
+            Your health matters, and understanding the signs is key
           </p>
           <button className={styles.learnMoreButton} onClick={handleLearnMoreClick}>Learn More</button>
         </div>

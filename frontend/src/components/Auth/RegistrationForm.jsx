@@ -5,9 +5,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import { FaEye, FaEyeSlash, FaFacebook, FaGoogle } from 'react-icons/fa';
 
-const RegistrationForm = () => {
-  // Keep userType state for now, default to 'individual' as per image
-  const [userType, setUserType] = useState('individual');
+const RegistrationForm = ({ userRole }) => {
+  // Removed userType state, as role comes from props
+  // const [userType, setUserType] = useState('individual'); 
   const [formData, setFormData] = useState({
     fullName: '', // "Enter Your Name"
     email: '',
@@ -87,10 +87,11 @@ const RegistrationForm = () => {
     };
     
     console.log("RegistrationForm: Data object being sent to AuthContext register:", registrationAttemptData);
+    console.log("RegistrationForm: Role being sent to AuthContext register:", userRole);
 
     try {
-      console.log("RegistrationForm: Calling register function with:", registrationAttemptData);
-      await register(registrationAttemptData, userType); // Pass userType if needed
+      console.log("RegistrationForm: Calling register function with data and role.");
+      await register(registrationAttemptData, userRole); // Pass userRole as the second argument
 
       // --- Handle successful registration ---
       // The RegisterPage.jsx handles redirection on isAuthenticated change.

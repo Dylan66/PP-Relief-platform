@@ -3,12 +3,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import { FaEye, FaEyeSlash, FaFacebook, FaGoogle } from 'react-icons/fa';
 
-const OrganizationRegistrationForm = () => {
+const OrganizationRegistrationForm = ({ userRole }) => {
   const [formData, setFormData] = useState({
     companyName: '',
     companyEmail: '',
     businessRegNumber: '',
     estimatedWomenOrGirls: '',
+    adminFirstName: '',
+    adminLastName: '',
+    phoneNumber: '',
     password: '',
     confirmPassword: '',
   });
@@ -39,6 +42,18 @@ const OrganizationRegistrationForm = () => {
         setError("Please enter the company email.");
         return;
     }
+    if (!formData.adminFirstName.trim()) {
+        setError("Please enter the admin's first name.");
+        return;
+    }
+    if (!formData.adminLastName.trim()) {
+        setError("Please enter the admin's last name.");
+        return;
+    }
+    if (formData.phoneNumber && !/^\d{10,15}$/.test(formData.phoneNumber)) {
+        setError("Phone number must be 10 to 15 digits.");
+        return;
+    }
     // Add other specific validations for organization form if needed here
     // e.g., for businessRegNumber or estimatedWomenOrGirls
 
@@ -59,19 +74,51 @@ const OrganizationRegistrationForm = () => {
     setIsLoading(true);
 
     const registrationAttemptData = {
-      organization_name: formData.companyName,
-      email: formData.companyEmail,
-      username: formData.companyEmail,
-      business_registration_number: formData.businessRegNumber,
-      estimated_beneficiaries: formData.estimatedWomenOrGirls,
-      password: formData.password,
-      password2: formData.confirmPassword,
+      // organization_name: formData.companyName, // Keep for now, but backend doesn't handle
+      email: formData.companyEmail, // User's email, also used as username
+      username: formData.companyEmail, // Standard field
+      // business_registration_number: formData.businessRegNumber, // Keep for now
+      // estimated_beneficiaries: formData.estimatedWomenOrGirls, // Keep for now
+      password: formData.password, // Standard field
+      password2: formData.confirmPassword, // Standard field
+      // It's common to also send first_name/last_name for the admin user of the org
+      // For example, from a separate input or derived from a contact person field.
+      // If companyName is meant for the User model's first_name/last_name, adjust accordingly.
+      // For now, assuming these org-specific fields are handled differently or later.
+      // Backend RegisterSerializer expects: username, email, password, password2, first_name, last_name, role
+      // We are providing username, email, password, password2, and role (as second arg).
+      // first_name and last_name for the org admin user are missing here.
+      // Consider adding inputs for the admin user's name if needed.
     };
     
-    console.log("OrganizationRegistrationForm: Data for submission:", registrationAttemptData);
+    // Add specific organization fields that might be part of the payload
+    // if your AuthContext's register function or backend is adapted for them.
+    // For now, sticking to what RegisterSerializer expects for the User model.
+    const payloadForUserCreation = {
+        username: formData.companyEmail,
+        email: formData.companyEmail,
+        password: formData.password,
+        password2: formData.confirmPassword,
+        first_name: formData.adminFirstName,
+        last_name: formData.adminLastName,
+        phone_number: formData.phoneNumber,
+    };
+
+    // The extra organization details might be passed differently or handled post-registration
+    const organizationSpecificDetails = {
+        organization_name: formData.companyName,
+        business_registration_number: formData.businessRegNumber,
+        estimated_beneficiaries: formData.estimatedWomenOrGirls,
+    };
+
+    console.log("OrganizationRegistrationForm: User creation data:", payloadForUserCreation);
+    console.log("OrganizationRegistrationForm: Organization specific details:", organizationSpecificDetails);
+    console.log("OrganizationRegistrationForm: Role for submission:", userRole);
 
     try {
-      await register(registrationAttemptData, 'organization'); 
+      // Pass only the user creation data and role to the current register function
+      // How organizationSpecificDetails are saved needs further backend logic
+      await register(payloadForUserCreation, userRole); 
 
       // On successful registration, RegisterPage.jsx handles redirect via useAuth
       // No need to navigate or alert here if global state handles it.
@@ -156,13 +203,22 @@ const OrganizationRegistrationForm = () => {
           <input type="text" name="companyName" placeholder="Name of Company" value={formData.companyName} onChange={handleInputChange} required style={styles.input} />
         </div>
         <div style={styles.formGroup}>
-          <input type="email" name="companyEmail" placeholder="Company Email" value={formData.companyEmail} onChange={handleInputChange} required style={styles.input} autoComplete="email" />
+          <input type="email" name="companyEmail" placeholder="Company Email (Admin's Login)" value={formData.companyEmail} onChange={handleInputChange} required style={styles.input} autoComplete="email" />
         </div>
         <div style={styles.formGroup}>
-          <input type="text" name="businessRegNumber" placeholder="Business Registration Number" value={formData.businessRegNumber} onChange={handleInputChange} style={styles.input} />
+          <input type="text" name="adminFirstName" placeholder="Admin First Name" value={formData.adminFirstName} onChange={handleInputChange} required style={styles.input} />
         </div>
         <div style={styles.formGroup}>
-          <input type="number" name="estimatedWomenOrGirls" placeholder="Estimated Number of Women or Girls" value={formData.estimatedWomenOrGirls} onChange={handleInputChange} style={styles.input} min="0" />
+          <input type="text" name="adminLastName" placeholder="Admin Last Name" value={formData.adminLastName} onChange={handleInputChange} required style={styles.input} />
+        </div>
+        <div style={styles.formGroup}>
+          <input type="tel" name="phoneNumber" placeholder="Admin Phone Number (Optional)" value={formData.phoneNumber} onChange={handleInputChange} style={styles.input} autoComplete="tel" />
+        </div>
+        <div style={styles.formGroup}>
+          <input type="text" name="businessRegNumber" placeholder="Business Registration Number (Optional)" value={formData.businessRegNumber} onChange={handleInputChange} style={styles.input} />
+        </div>
+        <div style={styles.formGroup}>
+          <input type="number" name="estimatedWomenOrGirls" placeholder="Estimated Beneficiaries (Optional)" value={formData.estimatedWomenOrGirls} onChange={handleInputChange} style={styles.input} min="0" />
         </div>
         <div style={styles.formGroupPassword}>
           <input type={showPassword ? "text" : "password"} name="password" placeholder="Password" value={formData.password} onChange={handleInputChange} required style={styles.inputPassword} autoComplete="new-password" />

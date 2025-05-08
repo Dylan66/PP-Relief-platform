@@ -71,13 +71,12 @@ function App() {
             <Route path="/information" element={<Information />} /> {/* Add the route for the Information page */}
             <Route path="/request-products" element={<RequestPage />} /> {/* Add the route for the RequestPage */}
             <Route path="/donations" element={<DonationsPage />} />
-            <Route path="/product-request" element={<ProductRequestPage />} /> {/* Moved for public review */}
             <Route path="/donate-now" element={<DonateNowPage />} /> {/* Add the route for the DonateNowPage */}
 
-            {/* Temp public routes for organization pages review */}
-            <Route path="/organization-services" element={<OrganizationServicesPage />} />
-            <Route path="/book-talk" element={<BookTalkPage />} />
-            <Route path="/volunteer-activities" element={<VolunteerActivitiesPage />} />
+            {/* Temp public routes for organization pages review - TO BE MOVED BACK TO PROTECTED */}
+            {/* <Route path="/organization-services" element={<OrganizationServicesPage />} /> */}
+            {/* <Route path="/book-talk" element={<BookTalkPage />} /> */}
+            {/* <Route path="/volunteer-activities" element={<VolunteerActivitiesPage />} /> */}
 
             {/* Add other potential public routes here (e.g., About, Contact) */}
 
@@ -94,6 +93,12 @@ function App() {
               <Route path="/dashboard/*" element={<DashboardRouter />} />
 
               {/* Add other routes that require login INSIDE this wrapper */}
+              {/* MOVED BACK ROUTES: */}
+              <Route path="/product-request" element={<ProductRequestPage />} />
+              <Route path="/organization-services" element={<OrganizationServicesPage />} />
+              <Route path="/book-talk" element={<BookTalkPage />} />
+              <Route path="/volunteer-activities" element={<VolunteerActivitiesPage />} />
+              
               {/* Example:
               <Route path="/profile" element={<UserProfilePage />} />
               <Route path="/settings" element={<UserSettingsPage />} />

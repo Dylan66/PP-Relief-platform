@@ -229,8 +229,8 @@ const styles = {
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   },
   donateNowButton: {
-    backgroundColor: '#4CAF50',
-    color: '#ffffff',
+    backgroundColor: '#B8AEE5',
+    color: '#000000',
     border: 'none',
     padding: '18px 35px',
     fontSize: 'clamp(1em, 2vw, 1.1em)',

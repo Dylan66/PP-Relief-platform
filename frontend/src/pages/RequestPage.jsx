@@ -84,7 +84,7 @@ function RequestPage() {
             {/* Buttons Section */}
             <section className="buttons-section">
                 <button className="button-base register-button" onClick={handleRegisterClick}>Register</button>
-                <button className="button-base donate-button" onClick={handleDonateClick}>donations</button>
+                <button className="button-base donate-button" onClick={handleDonateClick}>donate</button>
             </section>
 
             <Footer /> {/* Use the new Footer component */}

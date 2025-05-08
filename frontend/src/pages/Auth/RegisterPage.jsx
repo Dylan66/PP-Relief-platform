@@ -9,24 +9,22 @@ import useAuth from '../../hooks/useAuth'; // Import useAuth
 
 const RegisterPage = () => {
   // Get the isAuthenticated state from AuthContext
-  const { isAuthenticated, isLoading } = useAuth(); // Also get isLoading for safety
+  const { isAuthenticated, isLoading, user } = useAuth(); // Also get user if needed
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('Individual'); // To manage active tab
 
   // --- Effect to redirect if user becomes authenticated ---
-  // This useEffect will run when the component mounts and whenever isAuthenticated or isLoading changes.
+  // This effect is NO LONGER needed for redirection if AuthContext handles it globally.
   useEffect(() => {
      // Check if the user is authenticated and loading is false (meaning the auth check is complete)
     console.log("RegisterPage useEffect check auth state:", { isAuthenticated, isLoading });
     if (!isLoading && isAuthenticated) {
-      console.log("RegisterPage: User is authenticated, redirecting to /dashboard.");
-      // Redirect to the dashboard.
-      // Use replace: true so the user can't navigate back to the registration page
-      // using the browser's back button after being redirected.
-      navigate('/dashboard', { replace: true });
+      // COMMENT OUT the redirect here to let AuthContext handle it based on role
+      // console.log("RegisterPage: User is authenticated, AuthContext should handle redirect based on role.");
+      // navigate('/dashboard', { replace: true }); 
     }
     // Dependencies: Re-run this effect if isAuthenticated or isLoading changes
-  }, [isAuthenticated, isLoading, navigate]); // include navigate as dependency for best practice
+  }, [isAuthenticated, isLoading, navigate]); // Keep dependencies, but action is commented
 
 
   // --- Render Logic ---
@@ -39,6 +37,22 @@ const RegisterPage = () => {
 
   // If not loading and not authenticated, render the registration page content
   console.log("RegisterPage: User is not authenticated or still loading, rendering appropriate form.");
+
+  const getRoleForTab = (tabName) => {
+    switch (tabName) {
+      case 'Individual':
+        return 'individual';
+      case 'Organization':
+        return 'organization_admin'; // Assuming this maps to organization admin
+      case 'Donor':
+        return 'donor';
+      default:
+        return 'individual'; // Fallback, though should not happen with current tabs
+    }
+  };
+
+  const currentRole = getRoleForTab(activeTab);
+
   return (
     <div style={styles.pageContainer}>
       <div style={styles.logoContainer}>
@@ -59,9 +73,9 @@ const RegisterPage = () => {
       </div>
 
       <div style={styles.formWrapper}>
-        {activeTab === 'Individual' && <RegistrationForm />}
-        {activeTab === 'Organization' && <OrganizationRegistrationForm />}
-        {activeTab === 'Donor' && <DonorRegistrationForm />}
+        {activeTab === 'Individual' && <RegistrationForm userRole={currentRole} />}
+        {activeTab === 'Organization' && <OrganizationRegistrationForm userRole={currentRole} />}
+        {activeTab === 'Donor' && <DonorRegistrationForm userRole={currentRole} />}
       </div>
 
     </div>

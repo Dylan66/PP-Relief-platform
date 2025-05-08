@@ -1,17 +1,17 @@
 // src/context/AuthContext.jsx
 
 import React, { createContext, useState, useEffect, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const AuthContext = createContext(undefined);
 
+// Keep apiClient setup as it might be imported elsewhere, but its calls will be disabled
 const apiClient = axios.create({
-  baseURL: '/api', // Base URL for all API requests relative to the domain
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  withCredentials: true, // This tells Axios to send cookies (like csrftoken) with cross-origin requests
+  baseURL: '/api',
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true,
 });
 
 apiClient.interceptors.request.use(
@@ -19,25 +19,20 @@ apiClient.interceptors.request.use(
         const csrfToken = Cookies.get('csrftoken');
         if (csrfToken && ['post', 'put', 'patch', 'delete'].includes(config.method)) {
             config.headers['X-CSRFToken'] = csrfToken;
-            // console.log(`Axios Interceptor: Adding X-CSRFToken header: ${csrfToken ? csrfToken.substring(0, 5) + '...' : 'none'}`); // Reduce frequency if needed
-        } else {
-             // console.log(`Axios Interceptor: No X-CSRFToken added for method ${config.method}. csrfToken exists: ${!!csrfToken}`);
         }
         return config;
     },
-    (error) => {
-        console.error("Axios Interceptor: Request Error:", error);
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
 );
-
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('authToken') || null);
-  const [isLoading, setIsLoading] = useState(true); // Context's loading state
+  const [token, setToken] = useState(null); // Start with null, checkAuthStatus will populate from localStorage
+  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialAuthCheckDone, setIsInitialAuthCheckDone] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation(); // Get location
 
-  // --- Fetch CSRF Cookie (Keep existing) ---
   const fetchCsrfCookie = useCallback(async () => {
       console.log("AuthContext: Attempting to fetch CSRF cookie...");
       try {
@@ -45,223 +40,191 @@ export const AuthProvider = ({ children }) => {
            console.log("AuthContext: CSRF cookie fetched/set.");
       } catch (error) {
            console.error("AuthContext: Failed to fetch CSRF cookie:", error);
-           // Decide how to handle failure
       }
-  }, [apiClient]); // Dependency on apiClient (stable)
+  }, [apiClient]);
 
-
-  // --- Fetch Logged-in User Data (Dependencies Refined) ---
   const fetchUser = useCallback(async () => {
-     console.log("AuthContext: Attempting to fetch user...");
-     // Check token existence here explicitly before setting isLoading = true
+    console.log("AuthContext: fetchUser - ACTUAL called.");
     if (!apiClient.defaults.headers.common['Authorization']) {
-       console.log("AuthContext: fetchUser - No auth header in defaults, skipping fetchUser logic.");
-       setUser(null);
-       setIsLoading(false);
+      console.log("AuthContext: fetchUser - No auth header...");
+      setUser(null); setIsLoading(false);
+      if (!isInitialAuthCheckDone) setIsInitialAuthCheckDone(true);
        return;
      }
-
-    setIsLoading(true); // Set context loading true specifically for user fetch
+    console.log("AuthContext: fetchUser - Token exists, attempting fetch...");
+    setIsLoading(true);
     try {
       const response = await apiClient.get('/auth/user/');
-      console.log("AuthContext: User fetched successfully:", response.data);
       setUser(response.data);
     } catch (error) {
-      console.error('AuthContext: Failed to fetch user. Token might be invalid.', error.response?.data || error.message);
-      // If fetching user fails (e.g., invalid token), clear the token and user
-      setUser(null);
-      setToken(null); // This triggers the useEffect [token] below
+      console.error('AuthContext: Failed fetch user:', error);
+      setUser(null); setToken(null); 
     } finally {
       setIsLoading(false);
-      console.log(`AuthContext: fetchUser finished. AuthContext isLoading state set to ${false}.`); // Avoid logging 'user' here if user state update is async
+      if (!isInitialAuthCheckDone) setIsInitialAuthCheckDone(true);
     }
-     // Dependencies: apiClient (stable), setToken, setUser, setIsLoading (React guarantees stable setters)
-     // No need for 'user' as a dependency if only used in the final log value
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiClient, setToken, setUser, setIsLoading]);
+  }, [apiClient, setToken, setUser, setIsLoading, isInitialAuthCheckDone]);
 
-
-  // --- Configure Axios/LocalStorage when token changes (Refactored) ---
-  // This useEffect runs whenever the `token` state changes (null -> value, value -> null, value1 -> value2)
-  useEffect(() => {
-    console.count('AuthContext useEffect [token]'); // *** DEBUG COUNT ***
-    console.log("AuthContext useEffect [token] triggered. Token is present:", !!token);
-
+  useEffect(() => { // Token effect
     if (token) {
       localStorage.setItem('authToken', token);
       apiClient.defaults.headers.common['Authorization'] = `Token ${token}`;
-       console.log("AuthContext: Token set in localStorage and Axios headers.");
-       // *** FIX: Call fetchUser *directly* when token becomes available ***
-       // checkAuthStatus is no longer needed here.
        fetchUser();
     } else {
-      // If token becomes null, clear localStorage and headers, and set user/isLoading
       localStorage.removeItem('authToken');
       delete apiClient.defaults.headers.common['Authorization'];
-       console.log("AuthContext: Token removed from localStorage and Axios headers.");
-       // *** FIX: When token is explicitly removed, set user and isLoading here ***
        setUser(null);
-       setIsLoading(false); // Loading is finished when token is known to be absent
+      setIsLoading(false); 
+      if (!isInitialAuthCheckDone) setIsInitialAuthCheckDone(true);
     }
-    // Dependencies: token changes, fetchUser is stable, apiClient is stable.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, fetchUser, apiClient]); // List dependencies
+  }, [token, apiClient, fetchUser, setUser, setIsLoading, isInitialAuthCheckDone]);
 
-
-  // --- Auth Check Function (Keep existing) ---
-  // This function is now only called on initial load.
    const checkAuthStatus = useCallback(async () => {
-        console.log("AuthContext: checkAuthStatus called.");
-        const currentToken = localStorage.getItem('authToken'); // Check storage directly
-        console.log("AuthContext: checkAuthStatus - localStorage token exists:", !!currentToken);
-        // If a token is found in storage on initial load, set the state.
-        // The useEffect([token]) will then trigger fetchUser.
-        if (currentToken) {
-             console.log("AuthContext: checkAuthStatus - Token found in storage, setting token state.");
-             setToken(currentToken); // Setting token state triggers useEffect([token])
-             // setIsLoading(true); // Loading will be set by fetchUser
-        } else {
-             // If no token in storage, set user null and loading false immediately
-             console.log("AuthContext: checkAuthStatus - No token found in storage, setting user null and isLoading false.");
-             setUser(null);
-             setIsLoading(false); // Loading is finished
-        }
-   }, [setToken, setUser, setIsLoading, apiClient]); // Dependencies: state setters and apiClient
+    const currentToken = localStorage.getItem('authToken');
+    if (currentToken) setToken(currentToken);
+    else { setUser(null); setToken(null); setIsInitialAuthCheckDone(true); setIsLoading(false); }
+  }, [setToken, setUser, setIsLoading]);
 
+  useEffect(() => { // Initial effect
+    setIsLoading(true);
+    fetchCsrfCookie().finally(() => checkAuthStatus());
+  }, [fetchCsrfCookie, checkAuthStatus]);
 
-  // --- Initial Auth Check on Application Load (Refactored) ---
-  // This useEffect runs once when the AuthProvider component mounts
-  useEffect(() => {
-     console.count('AuthContext useEffect Initial'); // *** DEBUG COUNT ***
-     console.log("AuthContext: Initializing - fetching CSRF cookie then checking auth status.")
-     // Set loading to true initially before checking status from storage and fetching cookie
-     setIsLoading(true); // Ensure loading is true at the very start
-
-     // Fetch CSRF cookie FIRST
-     fetchCsrfCookie().then(() => {
-          // Then, check authentication status from localStorage
-          checkAuthStatus();
-     }).catch(() => {
-         // If fetching CSRF fails, still attempt to check auth status, but loading should eventually stop
-         console.error("AuthContext: Initial CSRF fetch failed, proceeding with auth check.");
-         checkAuthStatus(); // Proceed with auth check even if cookie fetch failed
-     });
-
-     // Dependencies: fetchCsrfCookie and checkAuthStatus are stable via useCallback
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchCsrfCookie, checkAuthStatus]); // Dependencies
-
-
-  // --- Register Function (Keep existing with fixes) ---
-  const register = useCallback(async (userData) => {
-    // ... (keep existing register logic) ...
-    console.log('AuthContext: Attempting registration with form data:', userData);
+  const register = useCallback(async (userData, role) => { 
+    console.log('AuthContext: ACTUAL register called...');
     setIsLoading(true);
     try {
-      const backendData = { username: userData.username,email: userData.email,
-        
-        password: userData.password, password2: userData.password2, /* ... */ };
-      console.log('AuthContext: Sending data to backend:', backendData);
+      const backendData = {
+        username: userData.username,
+        email: userData.email,
+        password: userData.password,
+        password2: userData.password2,
+        first_name: userData.first_name || '',
+        last_name: userData.last_name || '',
+        phone_number: userData.phone_number || '',
+        role: role,
+      };
       const response = await apiClient.post('/auth/registration/', backendData);
-      console.log('AuthContext: Registration API call successful:', response.data);
-
       if (response.data.key) {
-         console.log("AuthContext: Registration response included token (likely auto-login). Calling setToken.");
-         setToken(response.data.key); // Triggers useEffect [token] -> fetchUser
+         setToken(response.data.key); // Triggers user fetch and navigation effect
       } else {
-         console.log("AuthContext: Registration response did NOT include token (auto-login is false or failed).");
-         setIsLoading(false); // Registration API call is done
-         // If auto-login is false, the form component should redirect to login page.
+         setIsLoading(false); 
+         navigate('/login'); // RE-ENABLE navigate for no-token case
       }
       return response.data;
     } catch (error) {
-       // ... (keep error handling) ...
-        console.error('AuthContext: Registration failed! Response Details:', error.response?.data || error.message);
+        console.error('AuthContext: Registration failed:', error);
         setIsLoading(false);
         throw error;
     }
-  }, [apiClient, setToken, setIsLoading]); // Dependencies: apiClient, state setters
+  }, [apiClient, setToken, setIsLoading, navigate]); // RE-ENABLE navigate dependency
 
-
-  // --- Login Function (Keep existing) ---
   const login = useCallback(async (credentials) => {
-    console.log("AuthContext: Attempting login with credentials:", credentials);
+    console.log("AuthContext: ACTUAL login called.");
     setIsLoading(true);
     try {
         const response = await apiClient.post('/auth/login/', credentials);
-        const { key } = response.data;
-        console.log("AuthContext: Login successful, received token.");
-        // Set token state, which triggers useEffect [token] -> fetchUser
-        setToken(key);
-        console.log("AuthContext: login success -> setToken called. useEffect [token] will run shortly.");
-        // DO NOT set setIsLoading(false) here. useEffect([token]).fetchUser.finally handles it.
-        return response.data;
+        if (response.data.key) {
+          setToken(response.data.key); // Triggers token effect -> fetchUser -> nav effect
+        } else {
+          // Should not happen with dj-rest-auth login unless customized
+          setIsLoading(false);
+          throw new Error("Login response did not include a token.");
+        }
+        return response.data; // Return full response if needed
     } catch (error) {
-       // ... (keep error handling) ...
-        console.error('AuthContext: Login failed! Response Details:', error.response?.data || error.message);
-        setIsLoading(false);
-        setUser(null);
-        setToken(null); // Trigger useEffect [token] to clear state fully
-        throw error;
+        console.error('AuthContext: Login failed:', error);
+        setIsLoading(false); // Ensure loading is false on error
+        setUser(null);     // Clear user state
+        setToken(null);    // Clear token state
+        throw error;       // Re-throw for the form to handle
     }
-  }, [apiClient, setToken, setUser, setIsLoading]); // Dependencies: apiClient, state setters
+  }, [apiClient, setToken, setUser, setIsLoading]); // Dependencies
 
-
-  // --- Logout Function (Keep existing) ---
   const logout = useCallback(async () => {
-    console.log("AuthContext: Attempting logout.");
-    setIsLoading(true); // Set context loading (optional)
+    console.log("AuthContext: ACTUAL logout called.");
+    // Indicate loading if desired, though logout is usually quick
+    // setIsLoading(true); 
     try {
         if (token) {
+           // Optimistically clear state before API call for faster UI response
+           setUser(null);
+           setToken(null); 
+           navigate('/login', { replace: true }); // Navigate immediately
            await apiClient.post('/auth/logout/');
            console.log("AuthContext: Backend logout successful.");
         } else {
-            console.log("AuthContext: No token found, skipping backend logout call.");
+           // If no token, just ensure state is clear and navigate
+           setUser(null);
+           setToken(null); 
+           navigate('/login', { replace: true });
         }
     } catch (error) {
-        console.error("AuthContext: Backend logout failed (ignored):", error.response?.data || error.message);
+        console.error("AuthContext: Backend logout failed (ignored):", error);
+        // Frontend state is already cleared, navigation already happened
     } finally {
-        // Always clear state and token on the frontend
-        setUser(null);
-        setToken(null); // This triggers useEffect [token] to clear storage/headers and set isLoading=false
-        // setIsLoading(false); // Let useEffect handle final isLoading=false
-        console.log("AuthContext: Frontend state cleared for logout.");
+        // Ensure loading state is false if it was set
+        // setIsLoading(false);
     }
-    // Dependencies: apiClient for the post call, token to decide if to call backend
-  }, [apiClient, token, setUser, setToken, setIsLoading]); // Dependencies
+  }, [apiClient, token, setUser, setToken, navigate]); // RE-ENABLE navigate dependency
 
+  // --- Effect for Role-Based Navigation (REVISED LOGIC) ---
+  useEffect(() => {
+    const currentPath = location.pathname; // Get current path from location object
+    console.log('AuthContext NavEffect (REVISED): ', { path: currentPath, userRole: user?.role, isAuthenticated: !!user, isLoading, isInitialAuthCheckDone });
+
+    if (typeof navigate !== 'function') {
+      console.warn("AuthContext NavEffect: navigate function not available.");
+      return;
+    }
+
+    // Conditions for attempting initial redirect:
+    if (isInitialAuthCheckDone && !isLoading && user) {
+      let targetPath = '/dashboard'; // Default fallback
+      if (user.role === 'individual') targetPath = '/product-request';
+      else if (user.role === 'organization_admin') targetPath = '/organization-services';
+      else if (user.role === 'donor') targetPath = '/donations';
+      else if (user.role === 'center_admin') targetPath = '/dashboard';
+      else console.warn(`AuthContext NavEffect: Unknown user role '${user.role}'`);
+
+      // Paths we ALWAYS redirect FROM if authenticated and not already at the target
+      const redirectFromPaths = ['/login', '/register', '/']; // Add other public paths if needed
+
+      if (redirectFromPaths.includes(currentPath) && currentPath !== targetPath) {
+        console.log(`AuthContext NavEffect: User authenticated (Role: ${user.role}). Current path (${currentPath}) requires initial redirect. Navigating to ${targetPath}...`);
+        navigate(targetPath, { replace: true });
+      } else {
+        // If already authenticated and NOT on a 'redirectFrom' path, do nothing.
+        console.log(`AuthContext NavEffect: User authenticated. Current path (${currentPath}) does not require initial redirect. No automatic navigation.`);
+      }
+    } else {
+      console.log("AuthContext NavEffect: Conditions NOT met for navigation check (InitialCheckDone, !isLoading, user).");
+    }
+  // Depend on user, location.pathname, isLoading, isInitialAuthCheckDone, navigate
+  }, [user, location.pathname, isLoading, isInitialAuthCheckDone, navigate]); // Added location.pathname dependency
 
   const contextValue = {
-    user,
-    token,
-    isLoading, // Context's loading state
-    login,
-    register,
-    logout,
-    checkAuthStatus, // Expose if manual refresh is needed
-
-    isAuthenticated: !!user, // Derived state
-
+    user, token, isLoading, isInitialAuthCheckDone, 
+    login, // ACTUAL
+    register, // ACTUAL
+    logout, // ACTUAL
+    checkAuthStatus, // Actual
+    fetchUser, // Actual
+    isAuthenticated: !!user, 
     isSystemAdmin: !!user?.is_staff || !!user?.is_superuser,
     isOrgAdmin: user?.role === 'organization_admin',
     isCenterAdmin: user?.role === 'center_admin',
     isDonor: user?.role === 'donor',
     isIndividualRecipient: user?.role === 'individual',
-
     linkedOrganizationId: user?.linked_organization_id || null,
     linkedCenterId: user?.linked_center_id || null,
     profileId: user?.profile_id || null,
-
-    apiClient, // Expose the apiClient
+    apiClient, 
   };
 
+  console.log("AuthProvider rendering. isLoading:", isLoading, "isInitialAuthCheckDone:", isInitialAuthCheckDone, "Token:", token, "User:", user?.username);
   return (
     <AuthContext.Provider value={contextValue}>
-       {/*
-        Optionally render a full-page loading spinner here based on context.isLoading
-        for the initial app load or when user data is being fetched.
-        Alternatively, let ProtectedRoute handle the loading state for protected pages.
-      */}
        {children}
     </AuthContext.Provider>
   );

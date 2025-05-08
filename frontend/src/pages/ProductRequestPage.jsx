@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/common/Footer';
+import useAuth from '../hooks/useAuth';
 
 // Placeholder for product data
 const availableProducts = [
@@ -46,6 +47,7 @@ const kenyanLocations = [
 
 const ProductRequestPage = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const locationInputRef = useRef(null);
   
   const [currentSelectedProductId, setCurrentSelectedProductId] = useState(availableProducts[0]?.id || '');
@@ -147,6 +149,11 @@ const ProductRequestPage = () => {
     // navigate('/');
   };
 
+  const handleExploreOrgServicesClick = () => {
+    console.log("Explore Org Services button clicked. Is Authenticated:", isAuthenticated);
+    navigate('/organization-services');
+  };
+
   return (
     <div style={styles.pageContainer}>
       <main style={styles.mainContent}>
@@ -235,6 +242,17 @@ const ProductRequestPage = () => {
             Submit Full Request
           </button>
         </form>
+
+        <div style={styles.promoSection}>
+            <p style={styles.promoText}>
+                Are you requesting on behalf of an organization or group? 
+                Discover additional services and resources tailored for organizations.
+            </p>
+            <button onClick={handleExploreOrgServicesClick} style={styles.promoButton}>
+                Explore Organization Services
+            </button>
+        </div>
+
       </main>
       <Footer />
     </div>
@@ -435,6 +453,35 @@ const styles = {
     cursor: 'pointer',
     boxShadow: '0 2px 5px rgba(0,0,0,0.15)',
     transition: 'background-color 0.2s ease',
+  },
+  promoSection: {
+    marginTop: '40px',
+    padding: '25px',
+    backgroundColor: '#e9e9ff', // Light purple background
+    borderRadius: '8px',
+    textAlign: 'center',
+    border: '1px solid #d0d0e0',
+  },
+  promoText: {
+    fontSize: 'clamp(0.95em, 1.5vw, 1.1em)',
+    color: '#444',
+    lineHeight: '1.6',
+    marginBottom: '20px',
+  },
+  promoButton: {
+    padding: '12px 30px',
+    fontSize: 'clamp(0.9em, 1.6vw, 1em)',
+    fontWeight: '600',
+    color: '#fff',
+    backgroundColor: '#6a4cad', // A distinct purple
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s ease',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+  },
+  'promoButton:hover': {
+      backgroundColor: '#5A3C9D', // Darker shade on hover
   },
   'addButton:hover': {
     backgroundColor: '#7024B7', // Darker vibrant purple

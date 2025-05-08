@@ -1,7 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // Restore Link import
 
 const OrganizationServicesPage = () => {
+  // Restore original styles
   const styles = {
     pageContainer: { padding: '20px 30px', fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', maxWidth: '960px', margin: '20px auto', backgroundColor: '#fff', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' },
     header: { fontSize: 'clamp(1.7em, 3vw, 2.2em)', color: '#2c3e50', marginBottom: '25px', borderBottom: '2px solid #eaeaea', paddingBottom: '10px', textAlign: 'center' },
@@ -38,6 +39,7 @@ const OrganizationServicesPage = () => {
     backLink: { display: 'inline-block', marginTop: '30px', padding: '10px 18px', backgroundColor: '#7f8c8d', color: 'white', textDecoration: 'none', borderRadius: '5px', transition: 'background-color 0.2s ease' }
   };
   
+  // Restore hover handlers
   const applyNavButtonHover = (e, hover) => {
     e.currentTarget.style.backgroundColor = hover ? '#483D8B' : '#5A4CAD';
     e.currentTarget.style.transform = hover ? 'scale(1.03)' : 'scale(1)';
@@ -48,6 +50,7 @@ const OrganizationServicesPage = () => {
   };
 
   return (
+    // Restore original JSX content
     <div style={styles.pageContainer}>
       <h1 style={styles.header}>Welcome, Partner Organization!</h1>
       
@@ -120,7 +123,7 @@ const OrganizationServicesPage = () => {
         </ul>
       </section>
 
-      {/* The back link might not be needed if this is the main dashboard view for orgs */}
+      {/* Restore optional back link if needed */}
       {/* <Link 
         to="/dashboard/organization" 
         style={styles.backLink} 

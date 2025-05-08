@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import { FaEye, FaEyeSlash, FaFacebook, FaGoogle } from 'react-icons/fa';
 
-const DonorRegistrationForm = () => {
+const DonorRegistrationForm = ({ userRole }) => {
   const [formData, setFormData] = useState({
     fullName: '', // "Enter Your Name"
     email: '',
@@ -74,13 +74,14 @@ const DonorRegistrationForm = () => {
       password2: formData.confirmPassword,
       first_name: formData.fullName.split(' ')[0] || '',
       last_name: formData.fullName.split(' ').slice(1).join(' ') || '',
-      phone_number: formData.phoneNumber, 
+      phone_number: formData.phoneNumber, // Include phone number
     };
 
     console.log("DonorRegistrationForm: Data for submission:", registrationAttemptData);
+    console.log("DonorRegistrationForm: Role for submission:", userRole);
 
     try {
-      await register(registrationAttemptData, 'donor');
+      await register(registrationAttemptData, userRole); // Use userRole prop
     } catch (err) {
       console.error("DonorRegistrationForm: Registration error", err);
       let errorMsg = 'Registration failed. Please check your input.';
