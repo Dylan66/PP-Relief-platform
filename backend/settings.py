@@ -91,7 +91,7 @@ CORS_ALLOW_CREDENTIALS = True # Needed if you use cookies or authentication head
 # --- CSRF Settings (Add/Update these) ---
 # Set CSRF cookie to be accessible by JavaScript
 CSRF_COOKIE_HTTPONLY = False # <-- ADD/ENSURE THIS IS FALSE IN DEVELOPMENT
-# Set CSRF cookie to be secure (True in production, can be False for http in dev)
+# Set CSRF cookie to be secure (Trues in production, can be False for http in dev)
 CSRF_COOKIE_SECURE = True # MODIFIED for production (HTTPS)
 
 # Explicitly trust your frontend development origin for CSRF checks (Keep this, it might help)

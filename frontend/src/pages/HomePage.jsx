@@ -4,6 +4,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import Footer from '../components/common/Footer'; // Import the new Footer component
+import howWeDoIt from '../assets/images/art2.jpg';
+import whoWeDoItFor from '../assets/images/art3.jpg';
+import whereWeDoIt from '../assets/images/art1.jpg';
 
 import styles from './HomePage.module.css';
 
@@ -39,7 +42,7 @@ const HomePage = () => {
 
           {/* Article Box 1 */}
           <div className={styles.articleBox}>
-            <div className={styles.articleImagePlaceholder}></div> {/* Image Placeholder */}
+            <img src={howWeDoIt} alt="Menstrual Product Distribution" className={styles.articleImage} />
             <p className={styles.articleCategory}>CATEGORY</p>
             <h3 className={styles.articleTitle}>Delivering Dignity: Menstrual Product Distribution</h3>
             <p className={styles.articleDescription}>So far, we've distributed thousands of essential menstrual product packs to individuals in need across diverse communities globally. 
@@ -50,7 +53,7 @@ const HomePage = () => {
 
           {/* Article Box 2 */}
           <div className={styles.articleBox}>
-            <div className={styles.articleImagePlaceholder}></div> {/* Image Placeholder */}
+            <img src={whoWeDoItFor} alt="Empowering Through Education" className={styles.articleImage} />
             <p className={styles.articleCategory}>CATEGORY</p>
             <h3 className={styles.articleTitle}>Sharing Knowledge: Empowering Through Education</h3>
             <p className={styles.articleDescription}>We've conducted dozens of workshops and created 
@@ -63,7 +66,7 @@ const HomePage = () => {
 
           {/* Article Box 3 */}
           <div className={styles.articleBox}>
-            <div className={styles.articleImagePlaceholder}></div> {/* Image Placeholder */}
+            <img src={whereWeDoIt} alt="Expanding Access to Information" className={styles.articleImage} />
             <p className={styles.articleCategory}>CATEGORY</p>
             <h3 className={styles.articleTitle}> Building Reach: Expanding Access to Information</h3>
             <p className={styles.articleDescription}>Beyond direct sessions, we've developed a growing library of online resources, 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom'; // Import Link
 import styles from './AboutUs.module.css'; // Import the CSS module
 import Footer from '../components/common/Footer'; // Import the new Footer component
+import herUbuntuImage from '../assets/images/HER UBUNTU.png'; // Import the her ubuntu image
 
 const AboutUs = () => {
   return (
@@ -34,7 +35,7 @@ const AboutUs = () => {
         </div>
         {/* Graphic Container (Right) */}
         <div className={styles.heroGraphicContainer}>
-          <img src="/images/her-ubuntu.svg" alt="Her Ubuntu" className={styles.heroImage} />
+          <img src={herUbuntuImage} alt="Her Ubuntu" className={styles.heroImage} />
         </div>
       </div>
 
