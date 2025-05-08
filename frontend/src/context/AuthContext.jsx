@@ -7,9 +7,12 @@ import Cookies from 'js-cookie';
 
 const AuthContext = createContext(undefined);
 
+// Determine the base URL from environment variables for AuthContext's apiClient
+const AUTH_API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+
 // Keep apiClient setup as it might be imported elsewhere, but its calls will be disabled
 const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: AUTH_API_BASE_URL, // Use the environment variable
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 });
