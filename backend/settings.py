@@ -68,11 +68,10 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    # Optional: CORS middleware
-    # 'corsheaders.middleware.CorsMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
@@ -83,7 +82,8 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://pp-relief-platform-cg1m.vercel.app", # Add Vercel frontend URL
+    "https://pp-relief-platform-cg1m.vercel.app",
+    "https://pp-relief-platform-cg1m-git-master-dylan66s-projects.vercel.app", # Add Vercel preview URL from error
 ]
 
 CORS_ALLOW_CREDENTIALS = True # Needed if you use cookies or authentication headers (like your token)
@@ -98,7 +98,8 @@ CSRF_COOKIE_SECURE = True # MODIFIED for production (HTTPS)
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://pp-relief-platform-cg1m.vercel.app", # Add Vercel frontend URL
+    "https://pp-relief-platform-cg1m.vercel.app",
+    "https://pp-relief-platform-cg1m-git-master-dylan66s-projects.vercel.app", # Add Vercel preview URL from error
 ]
 ROOT_URLCONF = 'backend.urls'
 
