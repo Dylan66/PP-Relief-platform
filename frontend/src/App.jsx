@@ -14,6 +14,7 @@ import AboutUs from './pages/AboutUs.jsx'; // Import the new AboutUs page using 
 import Information from './pages/Information.jsx'; // Import the Information page
 import RequestPage from './pages/RequestPage.jsx'; // Import the RequestPage
 import DonationsPage from './pages/DonationsPage.jsx'; // Import the DonationsPage
+import ProductRequestPage from './pages/ProductRequestPage.jsx'; // Import the ProductRequestPage
 
 // Import the Dashboard Router Component (create this as discussed previously)
 // Ensure this file exists at this exact path
@@ -64,6 +65,7 @@ function App() {
             <Route path="/information" element={<Information />} /> {/* Add the route for the Information page */}
             <Route path="/request-products" element={<RequestPage />} /> {/* Add the route for the RequestPage */}
             <Route path="/donations" element={<DonationsPage />} />
+            <Route path="/product-request" element={<ProductRequestPage />} /> {/* Moved for public review */}
 
             {/* Add other potential public routes here (e.g., About, Contact) */}
 

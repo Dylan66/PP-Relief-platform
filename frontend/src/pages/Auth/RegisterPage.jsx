@@ -14,28 +14,20 @@ const RegisterPage = () => {
   const [activeTab, setActiveTab] = useState('Individual'); // To manage active tab
 
   // --- Effect to redirect if user becomes authenticated ---
+  // This useEffect will run when the component mounts and whenever isAuthenticated or isLoading changes.
   useEffect(() => {
+     // Check if the user is authenticated and loading is false (meaning the auth check is complete)
     console.log("RegisterPage useEffect check auth state:", { isAuthenticated, isLoading });
     if (!isLoading && isAuthenticated) {
       console.log("RegisterPage: User is authenticated, redirecting to /dashboard.");
+      // Redirect to the dashboard.
+      // Use replace: true so the user can't navigate back to the registration page
+      // using the browser's back button after being redirected.
       navigate('/dashboard', { replace: true });
     }
-  }, [isAuthenticated, isLoading, navigate]);
+    // Dependencies: Re-run this effect if isAuthenticated or isLoading changes
+  }, [isAuthenticated, isLoading, navigate]); // include navigate as dependency for best practice
 
-  // --- Effect to set active tab based on URL hash ---
-  useEffect(() => {
-    const hash = window.location.hash.substring(1); // Remove #
-    if (hash === 'donor') {
-      setActiveTab('Donor');
-    } else if (hash === 'organization') {
-      setActiveTab('Organization');
-    } else if (hash === 'individual') {
-      // Explicitly set for clarity, though it's the default
-      setActiveTab('Individual');
-    }
-    // If hash is empty or doesn't match known tabs, 
-    // activeTab remains its initial value ('Individual').
-  }, []); // Empty dependency array: run once on mount
 
   // --- Render Logic ---
   // Optionally, you could show a loading state here if context is loading initially,

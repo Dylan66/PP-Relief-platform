@@ -1,8 +1,15 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Footer from '../components/common/Footer';
 import donorsImage from '../assets/images/donors.jpeg';
 
 const DonationsPage = () => {
+  const navigate = useNavigate();
+
+  const handleLearnMoreClick = () => {
+    navigate('/register');
+  };
+
   return (
     <div style={styles.pageContainer}>
       
@@ -24,7 +31,7 @@ const DonationsPage = () => {
               <p style={styles.heroSubtitle}>
                 Every contribution, big or small, helps us make a real difference.
               </p>
-              <a href="/donor-registration" style={styles.learnMoreButton}>Learn More</a>
+              <button style={styles.learnMoreButton} onClick={handleLearnMoreClick}>Learn More</button>
             </div>
             <div style={styles.heroImageContainer}>
               <img src={donorsImage} alt="Donors contributing to the cause" style={styles.heroImage} />
@@ -207,7 +214,6 @@ const styles = {
     borderRadius: '5px',
     cursor: 'pointer',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-    textDecoration: 'none', // Ensure no underline for the link
   },
   articlesSection: {
     display: 'grid',
