@@ -2,11 +2,15 @@
 
 import axios from 'axios';
 
+// Determine the base URL from environment variables
+// For production, Vercel will provide VITE_API_BASE_URL.
+// For local development, if VITE_API_BASE_URL is not set in .env.local,
+// it will fall back to '/api' to use the Vite proxy.
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+
 // Create an Axios instance
-// The proxy in vite.config.js handles directing '/api' requests
-// to http://127.0.0.1:8000 during development.
 const apiClient = axios.create({
-  baseURL: '/api', // Use the proxy path
+  baseURL: API_BASE_URL, 
   headers: {
     'Content-Type': 'application/json',
   },
