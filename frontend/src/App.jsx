@@ -15,6 +15,7 @@ import Information from './pages/Information.jsx'; // Import the Information pag
 import RequestPage from './pages/RequestPage.jsx'; // Import the RequestPage
 import DonationsPage from './pages/DonationsPage.jsx'; // Import the DonationsPage
 import ProductRequestPage from './pages/ProductRequestPage.jsx'; // Import the ProductRequestPage
+import DonateNowPage from './pages/DonateNowPage.jsx'; // Import the DonateNowPage
 
 // Organization specific pages for review
 import OrganizationServicesPage from './pages/Organization/OrganizationServicesPage.jsx';
@@ -71,6 +72,7 @@ function App() {
             <Route path="/request-products" element={<RequestPage />} /> {/* Add the route for the RequestPage */}
             <Route path="/donations" element={<DonationsPage />} />
             <Route path="/product-request" element={<ProductRequestPage />} /> {/* Moved for public review */}
+            <Route path="/donate-now" element={<DonateNowPage />} /> {/* Add the route for the DonateNowPage */}
 
             {/* Temp public routes for organization pages review */}
             <Route path="/organization-services" element={<OrganizationServicesPage />} />

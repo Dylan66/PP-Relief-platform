@@ -10,6 +10,10 @@ const DonationsPage = () => {
     navigate('/register');
   };
 
+  const handleDonateNowClick = () => {
+    navigate('/donate-now');
+  };
+
   return (
     <div style={styles.pageContainer}>
       
@@ -31,7 +35,10 @@ const DonationsPage = () => {
               <p style={styles.heroSubtitle}>
                 Every contribution, big or small, helps us make a real difference.
               </p>
-              <button style={styles.learnMoreButton} onClick={handleLearnMoreClick}>Learn More</button>
+              <div style={styles.buttonsContainer}>
+                <button style={styles.learnMoreButton} onClick={handleLearnMoreClick}>Learn More</button>
+                <button style={styles.donateNowButton} onClick={handleDonateNowClick}>Donate Now</button>
+              </div>
             </div>
             <div style={styles.heroImageContainer}>
               <img src={donorsImage} alt="Donors contributing to the cause" style={styles.heroImage} />
@@ -204,9 +211,26 @@ const styles = {
     lineHeight: '1.6',
     maxWidth: '550px',
   },
+  buttonsContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: '15px',
+    marginTop: '20px',
+  },
   learnMoreButton: {
-    backgroundColor: '#D4C2FF', // Light purple from image (approximated)
+    backgroundColor: '#D4C2FF',
     color: '#000000',
+    border: 'none',
+    padding: '18px 35px',
+    fontSize: 'clamp(1em, 2vw, 1.1em)',
+    fontWeight: 'bold',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+  },
+  donateNowButton: {
+    backgroundColor: '#4CAF50',
+    color: '#ffffff',
     border: 'none',
     padding: '18px 35px',
     fontSize: 'clamp(1em, 2vw, 1.1em)',
