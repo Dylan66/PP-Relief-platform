@@ -180,6 +180,8 @@ class CustomUserDetailsSerializer(ModelSerializer):
     is_superuser = serializers.BooleanField(read_only=True)
     role = serializers.SerializerMethodField()
     location = serializers.CharField(source='profile.location', read_only=True, allow_null=True, allow_blank=True)
+    phone_number = serializers.CharField(source='profile.phone_number', read_only=True, allow_null=True, allow_blank=True)
+    organization_name = serializers.SerializerMethodField()
     linked_organization_id = serializers.PrimaryKeyRelatedField(source='profile.managed_organization', read_only=True, allow_null=True)
     linked_center_id = serializers.PrimaryKeyRelatedField(source='profile.managed_distribution_center', read_only=True, allow_null=True)
     profile_id = serializers.PrimaryKeyRelatedField(source='profile', read_only=True, allow_null=True)
@@ -192,6 +194,8 @@ class CustomUserDetailsSerializer(ModelSerializer):
             'is_staff', 'is_superuser',
             'role',
             'location',
+            'phone_number',
+            'organization_name',
             'profile_id',
             'linked_organization_id', 'linked_center_id'
         ]
@@ -202,3 +206,13 @@ class CustomUserDetailsSerializer(ModelSerializer):
             return obj.profile.role
         except UserProfile.DoesNotExist:
             return 'individual'
+
+    def get_organization_name(self, obj):
+        try:
+            if obj.profile and obj.profile.managed_organization:
+                return obj.profile.managed_organization.name
+        except UserProfile.DoesNotExist:
+            pass
+        except Organization.DoesNotExist:
+            pass
+        return None

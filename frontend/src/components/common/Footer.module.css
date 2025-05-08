@@ -1,13 +1,44 @@
 .footer {
-  text-align: left; /* text-center */
+  /* text-align: left; */ /* text-center - Overridden by flex */
   padding-top: 2rem; /* pt-8 */
   padding-bottom: 2rem; /* pb-8 */
-  padding-left: 5%; /* Added horizontal padding */
-  padding-right: 5%; /* Added horizontal padding */
+  padding-left: 5%;
+  padding-right: 5%;
   border-top: 1px solid #e5e7eb; /* border-t border-gray-200 */
   margin-top: 4rem; /* mt-16 */
-  width: 100%; /* Ensure the footer takes full available width */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  width: 100%;
+  box-sizing: border-box;
+  /* Removed text-align: left; as flex will manage alignment */
+}
+
+/* New styles for overall footer content layout */
+.footerContent {
+  display: flex;
+  flex-direction: row; /* Default, map on left, text on right */
+  justify-content: space-between; /* Puts space between map and text */
+  align-items: flex-start; /* Align items to the top */
+  gap: 2rem; /* Space between map and text column */
+}
+
+/* Container for the contact text and social links (LEFT SIDE) */
+.contactInfo {
+  flex: 1; /* Takes up 1 part of the space */
+  text-align: left; /* Ensure text within this div is left-aligned */
+  padding-right: 1rem; /* Optional: add some padding if map is too close */
+}
+
+/* Container for the map image (RIGHT SIDE) */
+.mapContainer {
+  flex: 2; /* Takes up 2 parts of the space, making it wider */
+  max-width: 60%; /* Allow map to take up to 60% of footer width */
+  /* min-width: 300px; */ /* Optional: ensure it has a decent minimum width */
+}
+
+.mapImage {
+  width: 100%;
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 4px; /* Optional: if you want rounded corners for the map image */
+  border: 1px solid #ddd; /* Optional: light border around the map */
 }
 
 .footerText {
@@ -22,23 +53,49 @@
 
 .socialLinks {
   display: flex;
-  justify-content: left; /* jusltify-center */
-  gap: 1.5rem; /* space-x-6 (gap is more modern for flex) */
+  justify-content: left; /* justify-center - Keep social links left-aligned within contactInfo */
+  gap: 1rem; /* Reduced gap for social icons */
+  margin-top: 1rem; /* Add some space above social icons */
 }
 
 .socialLinks > a:not(:last-child) {
   /* This can be removed if using gap property in .socialLinks */
-  /* margin-right: 1.5rem; */ /* For older browser support if not using gap */
+  /* margin-right: 1.5rem; */
 }
 
-/* Ensure SVGs in links are sized and colored appropriately */
 .socialLinks a svg {
   width: 1.5rem; /* w-6 (24px) */
   height: 1.5rem; /* h-6 (24px) */
-  fill: #4b5563; /* text-gray-600, or a specific icon color */
+  fill: #4b5563;
   transition: fill 0.3s;
 }
 
 .socialLinks a:hover svg {
-  fill: #1f2937; /* text-gray-800, or a darker hover color */
+  fill: #1f2937;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .footerContent {
+    flex-direction: column-reverse; /* Stack map on TOP of text */
+    align-items: center; /* Center items when stacked */
+    text-align: center; /* Center text for the whole footer on small screens */
+  }
+
+  .mapContainer {
+    max-width: 90%; /* Allow map to be wider on small screens */
+    width:100%; /* ensure it tries to fill the container */
+    margin-bottom: 1.5rem; /* Add space below map when stacked */
+    order: -1; /* Explicitly make map appear first when stacked */
+  }
+
+  .contactInfo {
+    text-align: center; /* Center the contact text block */
+    width: 100%; /* Allow contact info to take full width */
+    padding-right: 0; /* Reset padding */
+  }
+
+  .socialLinks {
+    justify-content: center; /* Center social links when stacked */
+  }
 } 

@@ -33,6 +33,8 @@ class UserProfile(models.Model):
     )
     # *** END ADD EXPLICIT ROLE FIELD ***
 
+    phone_number = models.CharField(max_length=20, blank=True, null=True, help_text="User\'s primary contact phone number")
+
     # *** ADD LOCATION FIELD TO USERPROFILE ***
     location = models.CharField(
         max_length=255,

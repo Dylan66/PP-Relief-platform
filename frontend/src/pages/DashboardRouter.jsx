@@ -7,6 +7,7 @@ import useAuth from '../hooks/useAuth'; // Import useAuth hook
 // Import all your specific dashboard components
 import IndividualDashboard from './Dashboard/IndividualDashboard';
 import OrganizationDashboard from './Dashboard/OrganizationDashboard';
+import OrganizationServicesPage from './Organization/OrganizationServicesPage'; // Import the new primary page for orgs
 import DonorDashboard from './Dashboard/DonorDashboard';
 import DistributionCenterDashboard from './Dashboard/DistributionCenterDashboard'; // Assuming this component exists
 import AdminDashboard from './Dashboard/AdminDashboard'; // Assuming this component exists
@@ -79,8 +80,9 @@ const DashboardRouter = () => {
   }
 
   if (isOrgAdmin) { // Checks user?.role === 'organization_admin'
-    console.log("DashboardRouter: User is Organization Admin, rendering Organization Dashboard.");
-    return <OrganizationDashboard />;
+    console.log("DashboardRouter: User is Organization Admin, rendering Organization Services Page as primary.");
+    return <OrganizationServicesPage />;
+    // return <OrganizationDashboard />; // Old: rendering the general org dashboard
   }
 
   if (isCenterAdmin) { // Checks user?.role === 'center_admin'

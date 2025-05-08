@@ -16,6 +16,11 @@ import RequestPage from './pages/RequestPage.jsx'; // Import the RequestPage
 import DonationsPage from './pages/DonationsPage.jsx'; // Import the DonationsPage
 import ProductRequestPage from './pages/ProductRequestPage.jsx'; // Import the ProductRequestPage
 
+// Organization specific pages for review
+import OrganizationServicesPage from './pages/Organization/OrganizationServicesPage.jsx';
+import BookTalkPage from './pages/Organization/BookTalkPage.jsx';
+import VolunteerActivitiesPage from './pages/Organization/VolunteerActivitiesPage.jsx';
+
 // Import the Dashboard Router Component (create this as discussed previously)
 // Ensure this file exists at this exact path
 import DashboardRouter from './pages/DashboardRouter.jsx';
@@ -66,6 +71,11 @@ function App() {
             <Route path="/request-products" element={<RequestPage />} /> {/* Add the route for the RequestPage */}
             <Route path="/donations" element={<DonationsPage />} />
             <Route path="/product-request" element={<ProductRequestPage />} /> {/* Moved for public review */}
+
+            {/* Temp public routes for organization pages review */}
+            <Route path="/organization-services" element={<OrganizationServicesPage />} />
+            <Route path="/book-talk" element={<BookTalkPage />} />
+            <Route path="/volunteer-activities" element={<VolunteerActivitiesPage />} />
 
             {/* Add other potential public routes here (e.g., About, Contact) */}
 
