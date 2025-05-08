@@ -29,8 +29,8 @@
 
 /* Container for the map image (RIGHT SIDE) */
 .mapContainer {
-  flex: 2; /* Takes up 2 parts of the space, making it wider */
-  max-width: 60%; /* Allow map to take up to 60% of footer width */
+  flex: 2; /* Still keep it flexible relative to contactInfo */
+  max-width: 45%; /* Reduced from 60% to make the map smaller */
   /* min-width: 300px; */ /* Optional: ensure it has a decent minimum width */
 }
 
