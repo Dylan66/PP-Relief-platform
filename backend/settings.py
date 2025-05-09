@@ -29,6 +29,9 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
     'pp-relief-platform-cg1m.vercel.app', # Add Vercel frontend domain
+    '127.0.0.1',
+    'localhost',
+    'pp-relief-backend.onrender.com', # Add Render backend domain
 ]
 
 # If RENDER_EXTERNAL_HOSTNAME is set, add it to ALLOWED_HOSTS
@@ -84,6 +87,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "https://pp-relief-platform-cg1m.vercel.app",
     "https://pp-relief-platform-cg1m-git-master-dylan66s-projects.vercel.app", # Add Vercel preview URL from error
+    "https://pp-relief-backend.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True # Needed if you use cookies or authentication headers (like your token)
@@ -100,6 +104,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
     "https://pp-relief-platform-cg1m.vercel.app",
     "https://pp-relief-platform-cg1m-git-master-dylan66s-projects.vercel.app", # Add Vercel preview URL from error
+    "https://pp-relief-backend.onrender.com",
 ]
 ROOT_URLCONF = 'backend.urls'
 
