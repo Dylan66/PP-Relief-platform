@@ -68,14 +68,14 @@ export const logoutUser = async () => {
   } catch (error) {
     console.error('Logout error:', error);
     // Still remove the token even if the API call fails
-    localStorage.removeItem('authToken');
+   localStorage.removeItem('authToken');
     throw error;
   }
 };
 
 export const getCurrentUser = async () => {
   try {
-    const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem('authToken');
     if (!token) return null;
     
     const response = await apiClient.get('/auth/user/');
