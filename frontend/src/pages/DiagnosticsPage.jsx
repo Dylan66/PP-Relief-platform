@@ -11,8 +11,8 @@ function DiagnosticsPage() {
   const [detailedResults, setDetailedResults] = useState('');
 
   useEffect(() => {
-    // Display the API_BASE_URL from environment with trailing slash
-    const baseUrl = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/?$/, '/');
+    // Remove trailing slash to prevent double slashes in URL concatenation
+    const baseUrl = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '');
     setApiBaseUrl(baseUrl);
   }, []);
 
@@ -21,7 +21,7 @@ function DiagnosticsPage() {
     try {
       // We're using a basic endpoint that doesn't require auth
       const response = await axios.get(`${apiBaseUrl}/product-types/`, {
-        timeout: 5000 // 5 second timeout
+        timeout: 15000 // Increase timeout to 15 seconds
       });
       setApiStatus(`Success (${response.status}): ${response.data.length} product types retrieved`);
       appendResults('API Connection', 'Success', response);
@@ -35,7 +35,7 @@ function DiagnosticsPage() {
     setCorsStatus('Testing...');
     try {
       const response = await axios.options(`${apiBaseUrl}/product-types/`, {
-        timeout: 5000 // 5 second timeout
+        timeout: 15000 // Increase timeout to 15 seconds
       });
       setCorsStatus(`Success (${response.status}): CORS headers received`);
       appendResults('CORS Check', 'Success', response);
@@ -50,7 +50,7 @@ function DiagnosticsPage() {
     try {
       const response = await axios.get(`${apiBaseUrl}/csrf/`, {
         withCredentials: true,
-        timeout: 5000 // 5 second timeout
+        timeout: 15000 // Increase timeout to 15 seconds
       });
       setCsrfStatus(`Success (${response.status}): CSRF cookie set`);
       appendResults('CSRF Test', 'Success', response);
@@ -76,7 +76,7 @@ function DiagnosticsPage() {
           'Authorization': `Token ${token}`
         },
         withCredentials: true,
-        timeout: 5000 // 5 second timeout
+        timeout: 15000 // Increase timeout to 15 seconds
       });
       setAuthStatus(`Success (${response.status}): Authenticated as ${response.data.username}`);
       appendResults('Auth Test', 'Success', response);

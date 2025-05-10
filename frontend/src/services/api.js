@@ -6,7 +6,8 @@ import axios from 'axios';
 // For production, Vercel will provide VITE_API_BASE_URL.
 // For local development, if VITE_API_BASE_URL is not set in .env.local,
 // it will fall back to '/api' to use the Vite proxy.
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/?$/, '/');
+// Remove trailing slash to prevent double slashes in URL concatenation
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '');
 
 // Create an Axios instance
 const apiClient = axios.create({
@@ -15,6 +16,7 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
   withCredentials: true, // Include credentials for CORS
+  timeout: 15000, // Increase timeout to 15 seconds
 });
 
 // === Add Authentication Token Interceptor ===
