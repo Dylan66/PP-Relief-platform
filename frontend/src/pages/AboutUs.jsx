@@ -96,7 +96,7 @@ const AboutUs = () => {
         <div className={styles.articlesGrid}> {/* Increased gap */}
           {/* Article 1 */}
           <div className={styles.articleCard}>
-            <img src={distroImage} alt="Menstrual Product Distribution" className={styles.articleImage} />
+            <img src={dignityimage} alt="Menstrual Product Distribution" className={styles.articleImage} />
             <h3 className={styles.articleHeading}>Delivering Dignity: Menstrual Product Distribution</h3>
             <p className={styles.articleText}>
             So far, we've distributed thousands of essential menstrual product packs to individuals in need across diverse communities globally. 
@@ -120,7 +120,7 @@ const AboutUs = () => {
           </div>
           {/* Article 3 */}
           <div className={styles.articleCard}>
-            <img src={dignityImage} alt="Menstrual Health Information Access" className={styles.articleImage} />
+            <img src={distroImage} alt="Menstrual Health Information Access" className={styles.articleImage} />
             <h3 className={styles.articleHeading}>Building Reach: Expanding Access to Information</h3>
             <p className={styles.articleText}>
             Beyond direct sessions, we've developed a growing library of online resources, 
