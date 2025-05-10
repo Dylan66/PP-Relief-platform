@@ -11,8 +11,8 @@ function DiagnosticsPage() {
   const [detailedResults, setDetailedResults] = useState('');
 
   useEffect(() => {
-    // Display the API_BASE_URL from environment
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || '/api';
+    // Display the API_BASE_URL from environment with trailing slash
+    const baseUrl = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/?$/, '/');
     setApiBaseUrl(baseUrl);
   }, []);
 
