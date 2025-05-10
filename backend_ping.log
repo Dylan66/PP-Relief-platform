@@ -1,0 +1,4 @@
+[2025-05-10 12:47:58] Starting backend keep-alive script
+[2025-05-10 12:47:58] Will ping https://pp-relief-backend.onrender.com/api/product-types/ every 14 minutes
+[2025-05-10 12:47:59] Backend is alive! Response time: 1.09 seconds, Status: 200
+[2025-05-10 13:02:00] Backend is alive! Response time: 0.50 seconds, Status: 200

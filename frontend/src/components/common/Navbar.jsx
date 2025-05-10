@@ -31,7 +31,6 @@ const Navbar = () => {
            <Link to="/information" className={styles.navLink}>Learn More</Link> {/* Updated Link to Information page */}
            <Link to="/request-products" className={styles.navLink}>Receive Products</Link> {/* Link to Receive Products info/form page (needs route/component) */}
            <Link to="/donations" className={styles.navLink}>Donate Now</Link> {/* Link to Donate page (needs route/component) */}
-           <Link to="/diagnostics" className={styles.navLink}>API Diagnostics</Link> {/* Add link to Diagnostics page */}
           {/* === End New Public Links === */}
         </div>
 
