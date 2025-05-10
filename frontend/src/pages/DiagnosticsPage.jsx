@@ -9,21 +9,31 @@ function DiagnosticsPage() {
   const [csrfStatus, setCsrfStatus] = useState('Not checked yet');
   const [authStatus, setAuthStatus] = useState('Not checked yet');
   const [detailedResults, setDetailedResults] = useState('');
+  
+  // Store actual URLs to display them
+  const [productTypesUrl, setProductTypesUrl] = useState('');
+  const [csrfUrl, setCsrfUrl] = useState('');
+  const [authUrl, setAuthUrl] = useState('');
 
   useEffect(() => {
     // Remove trailing slash to prevent double slashes in URL concatenation
     const baseUrl = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/+$/, '');
     setApiBaseUrl(baseUrl);
+    
+    // Set the actual URLs for endpoints
+    setProductTypesUrl(`${baseUrl}/product-types/`);
+    setCsrfUrl(`${baseUrl}/csrf/`);
+    setAuthUrl(`${baseUrl}/auth/user/`);
   }, []);
 
   const testApiConnection = async () => {
     setApiStatus('Testing...');
     try {
       // We're using a basic endpoint that doesn't require auth
-      const response = await axios.get(`${apiBaseUrl}/product-types/`, {
+      const response = await axios.get(productTypesUrl, {
         timeout: 15000 // Increase timeout to 15 seconds
       });
-      setApiStatus(`Success (${response.status}): ${response.data.length} product types retrieved`);
+      setApiStatus(`Success (${response.status}): ${response.data.length || JSON.stringify(response.data).length} bytes received`);
       appendResults('API Connection', 'Success', response);
     } catch (error) {
       setApiStatus(`Failed: ${error.message}`);
@@ -34,7 +44,7 @@ function DiagnosticsPage() {
   const testCors = async () => {
     setCorsStatus('Testing...');
     try {
-      const response = await axios.options(`${apiBaseUrl}/product-types/`, {
+      const response = await axios.options(productTypesUrl, {
         timeout: 15000 // Increase timeout to 15 seconds
       });
       setCorsStatus(`Success (${response.status}): CORS headers received`);
@@ -48,7 +58,7 @@ function DiagnosticsPage() {
   const testCsrf = async () => {
     setCsrfStatus('Testing...');
     try {
-      const response = await axios.get(`${apiBaseUrl}/csrf/`, {
+      const response = await axios.get(csrfUrl, {
         withCredentials: true,
         timeout: 15000 // Increase timeout to 15 seconds
       });
@@ -71,7 +81,7 @@ function DiagnosticsPage() {
         return;
       }
 
-      const response = await axios.get(`${apiBaseUrl}/auth/user/`, {
+      const response = await axios.get(authUrl, {
         headers: {
           'Authorization': `Token ${token}`
         },
@@ -102,6 +112,9 @@ function DiagnosticsPage() {
         <h2>Environment Settings</h2>
         <p><strong>API Base URL:</strong> {apiBaseUrl}</p>
         <p><strong>Current URL:</strong> {window.location.href}</p>
+        <p><strong>Product Types URL:</strong> {productTypesUrl}</p>
+        <p><strong>CSRF URL:</strong> {csrfUrl}</p>
+        <p><strong>Auth URL:</strong> {authUrl}</p>
       </div>
 
       <div style={{ marginBottom: '20px' }}>
