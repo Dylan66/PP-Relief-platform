@@ -17,6 +17,7 @@ import DonationsPage from './pages/DonationsPage.jsx'; // Import the DonationsPa
 import ProductRequestPage from './pages/ProductRequestPage.jsx'; // Import the ProductRequestPage
 import DonateNowPage from './pages/DonateNowPage.jsx'; // Import the DonateNowPage
 import DiagnosticsPage from './pages/DiagnosticsPage.jsx'; // Import the Diagnostics page
+import LoginTest from './pages/Auth/LoginTest.jsx'; // Import the LoginTest component
 
 // Organization specific pages for review
 import OrganizationServicesPage from './pages/Organization/OrganizationServicesPage.jsx';
@@ -74,6 +75,7 @@ function App() {
             <Route path="/donations" element={<DonationsPage />} />
             <Route path="/donate-now" element={<DonateNowPage />} /> {/* Add the route for the DonateNowPage */}
             <Route path="/diagnostics" element={<DiagnosticsPage />} /> {/* Add the route for the DiagnosticsPage */}
+            <Route path="/login-test" element={<LoginTest />} /> {/* Add the route for the LoginTest component */}
 
             {/* Temp public routes for organization pages review - TO BE MOVED BACK TO PROTECTED */}
             {/* <Route path="/organization-services" element={<OrganizationServicesPage />} /> */}

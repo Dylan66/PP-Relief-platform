@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom'; // Import Link
 import styles from './AboutUs.module.css'; // Import the CSS module
 import Footer from '../components/common/Footer'; // Import the new Footer component
 import herUbuntuImage from '../assets/images/HER UBUNTU.png'; // Import the her ubuntu image
+import dignityImage from '../assets/images/dignity.jpg'; // Import dignity image
+import distroImage from '../assets/images/distro.jpg'; // Import distribution image
+import workshopImage from '../assets/images/workshop m.jpg'; // Import workshop image
 
 const AboutUs = () => {
   return (
@@ -93,7 +96,7 @@ const AboutUs = () => {
         <div className={styles.articlesGrid}> {/* Increased gap */}
           {/* Article 1 */}
           <div className={styles.articleCard}>
-            <div className={styles.articleImagePlaceholder}></div>
+            <img src={distroImage} alt="Menstrual Product Distribution" className={styles.articleImage} />
             <h3 className={styles.articleHeading}>Delivering Dignity: Menstrual Product Distribution</h3>
             <p className={styles.articleText}>
             So far, we've distributed thousands of essential menstrual product packs to individuals in need across diverse communities globally. 
@@ -105,7 +108,7 @@ const AboutUs = () => {
           </div>
           {/* Article 2 */}
           <div className={styles.articleCard}>
-            <div className={styles.articleImagePlaceholder}></div>
+            <img src={workshopImage} alt="Menstrual Health Education Workshop" className={styles.articleImage} />
             <h3 className={styles.articleHeading}>Sharing Knowledge: Empowering Through Education</h3>
             <p className={styles.articleText}>
             We've conducted dozens of workshops and created 
@@ -117,7 +120,7 @@ const AboutUs = () => {
           </div>
           {/* Article 3 */}
           <div className={styles.articleCard}>
-            <div className={styles.articleImagePlaceholder}></div>
+            <img src={dignityImage} alt="Menstrual Health Information Access" className={styles.articleImage} />
             <h3 className={styles.articleHeading}>Building Reach: Expanding Access to Information</h3>
             <p className={styles.articleText}>
             Beyond direct sessions, we've developed a growing library of online resources, 
