@@ -96,7 +96,7 @@ const AboutUs = () => {
         <div className={styles.articlesGrid}> {/* Increased gap */}
           {/* Article 1 */}
           <div className={styles.articleCard}>
-            <img src={dignityimage} alt="Menstrual Product Distribution" className={styles.articleImage} />
+            <img src={dignityImage} alt="Menstrual Product Distribution" className={styles.articleImage} />
             <h3 className={styles.articleHeading}>Delivering Dignity: Menstrual Product Distribution</h3>
             <p className={styles.articleText}>
             So far, we've distributed thousands of essential menstrual product packs to individuals in need across diverse communities globally. 
