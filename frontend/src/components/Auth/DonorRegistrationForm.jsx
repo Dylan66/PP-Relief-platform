@@ -43,7 +43,7 @@ const DonorRegistrationForm = ({ userRole }) => {
       return;
     }
     if (!formData.email.trim()) {
-      setError("Please enter your email.");
+      setError("Please enter your email address.");
       return;
     }
     // Phone number validation (optional field in this form, but if filled, validate)

@@ -9,7 +9,7 @@ const Footer = () => {
       <div className={styles.footerContent}>
         {/* Contact Info on the LEFT */}
         <div className={styles.contactInfo}>
-          <p className={styles.footerText}><strong>Address:</strong> Her Ubuntu Initiative, 123 Uhuru Highway, Nairobi, Kenya</p>
+          <p className={styles.footerText}><strong>Address:</strong> Her Ubuntu Initiatives, 123 Uhuru Highway, Nairobi, Kenya</p>
           <p className={styles.footerText}><strong>Contact:</strong> info@herubuntu.org</p>
           <p className={styles.footerTextLast}>+254 700 123 456</p>
           {/* Social Media Icons */}
